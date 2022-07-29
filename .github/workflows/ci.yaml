@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+
+  ci:
+    strategy:
+      matrix:
+        go-version: [1.17.x, 1.18.x]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+
+    - name: Install Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: ${{ matrix.go-version }}
+
+    - name: Checkout code
+      uses: actions/checkout@v2
+    
+    - name: Verify dependencies
+      run: go mod verify
+
+    - name: Run go vet
+      run: go vet ./...
+
+    - name: Build
+      run: go build -v ./...
+
+    - name: Install staticcheck
+      run: go install honnef.co/go/tools/cmd/staticcheck@latest
+
+    - name: Run staticcheck
+      run: staticcheck ./...
+
+    - name: Install golint
+      run: go install golang.org/x/lint/golint@latest
+
+    - name: Run golint
+      run: golint ./...
+
+    - name: Run tests
+      run: go test -mod=vendor -v -vet=off  -covermode=count -coverprofile cover.out ./...
+    # - name: Convert coverage.out to coverage.lcov
+    #   uses: jandelgado/gcov2lcov-action@v1.0.6
+    # - name: Coveralls
+    #   uses: coverallsapp/github-action@v1.1.2
+    #   with:
+    #     github-token: ${{ secrets.github_token }}
+    #     path-to-lcov: coverage.lcov
