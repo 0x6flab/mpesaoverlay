@@ -26,4 +26,10 @@ var (
 
 	// ErrInvalidCommandID indicates the CommandID is invalid.
 	ErrInvalidCommandID = errors.New("invalid command id")
+
+	// ErrInvalidTrxCode indicates invalid transaction type
+	ErrInvalidTrxCode = errors.New("invalid transaction type")
+
+	// ErrInvalidTransactionType indicates invalid transaction type
+	ErrInvalidTransactionType = ErrInvalidTrxCode
 )

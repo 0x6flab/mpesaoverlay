@@ -7,6 +7,7 @@ import (
 	"crypto/x509"
 	"encoding/base64"
 	"encoding/pem"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -89,11 +90,10 @@ func (sdk mSDK) sendRequest(req *http.Request) ([]byte, error) {
 		return nil, err
 	}
 	if token.AccessToken != "" {
-		req.Header.Set("Bearer", token.AccessToken)
+		req.Header.Set("Authorization", "Bearer "+token.AccessToken)
 	}
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Cache-Control", "no-cache")
-
 	resp, err := sdk.client.Do(req)
 	if err != nil {
 		return nil, err
@@ -104,6 +104,12 @@ func (sdk mSDK) sendRequest(req *http.Request) ([]byte, error) {
 	}
 	defer resp.Body.Close()
 	return body, nil
+}
+
+func (sdk mSDK) generateTimestampAndPassword(shortcode, passkey string) (string, string) {
+	timestamp := time.Now().Local().Format("20060102150405")
+	password := fmt.Sprintf("%s%s%s", shortcode, passkey, timestamp)
+	return timestamp, base64.StdEncoding.EncodeToString([]byte(password))
 }
 
 // GetSecurityCredential generates a security credential

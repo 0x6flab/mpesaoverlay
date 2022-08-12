@@ -20,16 +20,20 @@ func main() {
 		MaxIdleConns: 10,
 	}
 	mp := mpesa.NewSDK(conf)
-	qrReq := mpesa.QRReq{
-		MerchantName: "Safaricom LTD",
-		RefNo:        "rf38f04",
-		Amount:       "20000",
-		TrxCode:      "BG",
-		CPI:          "17408",
+	qrReq := mpesa.ExpressSimulateReq{
+		BusinessShortCode: "174379",
+		TransactionType:   "CustomerPayBillOnline",
+		PhoneNumber:       "",
+		Amount:            "10",
+		PartyA:            "",
+		PartyB:            "174379",
+		CallBackURL:       "rodneyosodo.com",
+		AccountReference:  "Test",
+		TransactionDesc:   "Test",
 	}
-	qrcode, err := mp.GenerateQR(qrReq)
+	resp, err := mp.ExpressSimulate(qrReq)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(qrcode.QRCode)
+	fmt.Println(resp)
 }

@@ -17,12 +17,25 @@ type ExpressSimulateReq struct {
 	TransactionDesc   string `json:"TransactionDesc,omitempty"`
 }
 
+// Validate validate the ExpressSimulateReq Request
+func (esr ExpressSimulateReq) Validate() error {
+	if esr.TransactionType != "CustomerPayBillOnline" && esr.TransactionType != "CustomerBuyGoodsOnline" {
+		return errors.ErrInvalidTransactionType
+	}
+	return nil
+}
+
 // ExpressQueryReq struct
 type ExpressQueryReq struct {
 	BusinessShortCode string `json:"BusinessShortCode,omitempty"` // This is organizations shortcode (Paybill or Buygoods - A 5 to 7 digit account number) used to identify an organization and receive the transaction.
 	Password          string `json:"Password,omitempty"`          // This is the password used for encrypting the request sent: A base64 encoded string.
 	Timestamp         string `json:"Timestamp,omitempty"`         // This is the Timestamp of the transaction, normaly in the formart of YEAR+MONTH+DATE+HOUR+MINUTE+SECOND (YYYYMMDDHHMMSS)
 	CheckoutRequestID string `json:"CheckoutRequestID,omitempty"` // This is a global unique identifier of the processed checkout transaction request.
+}
+
+// Validate validate the ExpressQueryReq Request
+func (eqr ExpressQueryReq) Validate() error {
+	return nil
 }
 
 // QRReq struct
@@ -32,6 +45,14 @@ type QRReq struct {
 	Amount       string `json:"Amount,omitempty"`       //  The total amount for the sale/transaction
 	TrxCode      string `json:"TrxCode,omitempty"`      // Transaction Type
 	CPI          string `json:"CPI,omitempty"`          // Credit Party Identifier. Can be a Mobile Number, Business Number, Agent Till, Paybill or Business number, Merchant Buy Goods.
+}
+
+// Validate validate the QRReq Request
+func (qr QRReq) Validate() error {
+	if qr.TrxCode == "SB" || qr.TrxCode == "SM" || qr.TrxCode == "PB" || qr.TrxCode == "WA" || qr.TrxCode == "BG" {
+		return nil
+	}
+	return errors.ErrInvalidTrxCode
 }
 
 // C2BRegisterURLReq struct
