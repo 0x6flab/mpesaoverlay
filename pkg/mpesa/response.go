@@ -3,7 +3,7 @@ package mpesa
 // TokenResp struct
 type TokenResp struct {
 	AccessToken string `json:"access_token,omitempty"`
-	Expiry      uint64 `json:"expires_in,omitempty"`
+	Expiry      string `json:"expires_in,omitempty"`
 }
 
 // ErrorResp struct

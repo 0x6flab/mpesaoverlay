@@ -18,7 +18,6 @@ func (sdk mSDK) GenerateQR(qReq QRReq) (QRResp, error) {
 
 	url := fmt.Sprintf("%s/%s", sdk.baseURL, qrCodeEndpoint)
 	req, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(data))
-
 	if err != nil {
 		return QRResp{}, err
 	}
@@ -26,7 +25,6 @@ func (sdk mSDK) GenerateQR(qReq QRReq) (QRResp, error) {
 	if err != nil {
 		return QRResp{}, err
 	}
-
 	var qrr QRResp
 	if err := json.Unmarshal(resp, &qrr); err != nil {
 		return QRResp{}, err

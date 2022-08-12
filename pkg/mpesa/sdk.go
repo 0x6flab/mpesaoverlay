@@ -57,15 +57,15 @@ type mSDK struct {
 
 // Config contains sdk configuration parameters.
 type Config struct {
-	BaseURL         string
-	AppKey          string
-	AppSecret       string
-	MaxIdleConns    int
-	IdleConnTimeout time.Duration
+	BaseURL      string
+	AppKey       string
+	AppSecret    string
+	MaxIdleConns int
 }
 
 // NewSDK returns new mpesa SDK instance.
 func NewSDK(conf Config) SDK {
+	d, _ := time.ParseDuration("30s")
 	return &mSDK{
 		baseURL:   conf.BaseURL,
 		appKey:    conf.AppKey,
@@ -76,7 +76,7 @@ func NewSDK(conf Config) SDK {
 					InsecureSkipVerify: false,
 				},
 				MaxIdleConns:    conf.MaxIdleConns,
-				IdleConnTimeout: conf.IdleConnTimeout,
+				IdleConnTimeout: d,
 			},
 			Timeout: 60 * time.Second,
 		},
