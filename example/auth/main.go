@@ -1,10 +1,10 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"os"
 
-	"github.com/mpesaoverlay/pkg/mpesa"
+	mpesa "github.com/mpesaoverlay/pkg"
 )
 
 var (
@@ -19,10 +19,13 @@ func main() {
 		AppSecret:    cSecret,
 		MaxIdleConns: 10,
 	}
-	mp := mpesa.NewSDK(conf)
+	mp, err := mpesa.NewSDK(conf)
+	if err != nil {
+		log.Fatal(err)
+	}
 	token, err := mp.GetToken()
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 	}
-	fmt.Println(token.AccessToken)
+	log.Println(token.AccessToken)
 }

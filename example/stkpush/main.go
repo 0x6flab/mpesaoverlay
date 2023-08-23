@@ -1,10 +1,10 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"os"
 
-	"github.com/mpesaoverlay/pkg/mpesa"
+	mpesa "github.com/mpesaoverlay/pkg"
 )
 
 var (
@@ -19,7 +19,10 @@ func main() {
 		AppSecret:    cSecret,
 		MaxIdleConns: 10,
 	}
-	mp := mpesa.NewSDK(conf)
+	mp, err := mpesa.NewSDK(conf)
+	if err != nil {
+		log.Fatal(err)
+	}
 	qrReq := mpesa.ExpressSimulateReq{
 		BusinessShortCode: "174379",
 		TransactionType:   "CustomerPayBillOnline",
@@ -33,7 +36,7 @@ func main() {
 	}
 	resp, err := mp.ExpressSimulate(qrReq)
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 	}
-	fmt.Println(resp)
+	log.Println(resp)
 }

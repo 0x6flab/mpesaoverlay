@@ -1,10 +1,10 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"os"
 
-	"github.com/mpesaoverlay/pkg/mpesa"
+	mpesa "github.com/mpesaoverlay/pkg"
 )
 
 var (
@@ -19,7 +19,10 @@ func main() {
 		AppSecret:    cSecret,
 		MaxIdleConns: 10,
 	}
-	mp := mpesa.NewSDK(conf)
+	mp, err := mpesa.NewSDK(conf)
+	if err != nil {
+		log.Fatal(err)
+	}
 	qrReq := mpesa.QRReq{
 		MerchantName: "Safaricom LTD",
 		RefNo:        "rf38f04",
@@ -29,7 +32,7 @@ func main() {
 	}
 	qrcode, err := mp.GenerateQR(qrReq)
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 	}
-	fmt.Println(qrcode.QRCode)
+	log.Println(qrcode.QRCode)
 }
