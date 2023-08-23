@@ -1,4 +1,4 @@
-package mpesa
+package pkg
 
 import (
 	"crypto/rand"
@@ -8,10 +8,23 @@ import (
 	"encoding/base64"
 	"encoding/pem"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 	"time"
+)
+
+const (
+	defaultTimeout = 1 * time.Minute
+
+	authEndpoint        = "oauth/v1/generate?grant_type=client_credentials"
+	b2cEndpoint         = "mpesa/b2c/v1/paymentrequest"
+	accbalanceEndpoint  = "mpesa/accountbalance/v1/query"
+	c2bEndpoint         = "mpesa/c2b/v1"
+	qrCodeEndpoint      = "mpesa/qrcode/v1/generate"
+	expressEndpoint     = "mpesa/stkpush/v1"
+	reversalEndpoint    = "mpesa/reversal/v1/request"
+	transactionEndpoint = "mpesa/transactionstatus/v1/query"
 )
 
 var _ SDK = (*mSDK)(nil)
@@ -64,9 +77,36 @@ type Config struct {
 	MaxIdleConns int
 }
 
+func (cfg Config) validate() error {
+	if cfg.BaseURL == "" {
+		return fmt.Errorf("base url is required")
+	}
+
+	if cfg.BaseURL != "https://api.safaricom.co.ke" && cfg.BaseURL != "https://sandbox.safaricom.co.ke" {
+		return fmt.Errorf("base url must be either https://api.safaricom.co.ke or https://sandbox.safaricom.co.ke")
+	}
+
+	if cfg.AppKey == "" {
+		return fmt.Errorf("app key is required")
+	}
+
+	if cfg.AppSecret == "" {
+		return fmt.Errorf("app secret is required")
+	}
+
+	if cfg.MaxIdleConns == 0 {
+		cfg.MaxIdleConns = 10 //nolint:staticcheck
+	}
+
+	return nil
+}
+
 // NewSDK returns new mpesa SDK instance.
-func NewSDK(conf Config) SDK {
-	d, _ := time.ParseDuration("30s")
+func NewSDK(conf Config) (SDK, error) {
+	if err := conf.validate(); err != nil {
+		return nil, err
+	}
+
 	return &mSDK{
 		baseURL:   conf.BaseURL,
 		appKey:    conf.AppKey,
@@ -76,12 +116,11 @@ func NewSDK(conf Config) SDK {
 				TLSClientConfig: &tls.Config{
 					InsecureSkipVerify: false,
 				},
-				MaxIdleConns:    conf.MaxIdleConns,
-				IdleConnTimeout: d,
+				MaxIdleConns: conf.MaxIdleConns,
 			},
-			Timeout: 60 * time.Second,
+			Timeout: defaultTimeout,
 		},
-	}
+	}, nil
 }
 
 func (sdk mSDK) sendRequest(req *http.Request) ([]byte, error) {
@@ -89,55 +128,66 @@ func (sdk mSDK) sendRequest(req *http.Request) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	if token.AccessToken != "" {
 		req.Header.Set("Authorization", "Bearer "+token.AccessToken)
 	}
+
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Cache-Control", "no-cache")
+
 	resp, err := sdk.client.Do(req)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to send request: %w", err)
 	}
-	body, err := ioutil.ReadAll(resp.Body)
+
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to read response body: %w", err)
 	}
 	defer resp.Body.Close()
+
 	return body, nil
 }
 
 func (sdk mSDK) generateTimestampAndPassword(shortcode, passkey string) (string, string) {
 	timestamp := time.Now().Local().Format("20060102150405")
 	password := fmt.Sprintf("%s%s%s", shortcode, passkey, timestamp)
+
 	return timestamp, base64.StdEncoding.EncodeToString([]byte(password))
 }
 
-// GetSecurityCredential generates a security credential
+// GetSecurityCredential generates a security credential.
 func (sdk mSDK) GetSecurityCredential(password string) (string, error) {
 	fileName := "https://developer.safaricom.co.ke/sites/default/files/cert/cert_prod/cert.cer"
 	if strings.Contains(sdk.baseURL, "sandbox") {
 		fileName = "https://developer.safaricom.co.ke/sites/default/files/cert/cert_sandbox/cert.cer"
 	}
+
 	resp, err := http.Get(fileName)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("failed to get certificate: %w", err)
 	}
 	defer resp.Body.Close()
 
-	data, err := ioutil.ReadAll(resp.Body)
+	data, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("failed to read certificate: %w", err)
 	}
 
 	cBlock, _ := pem.Decode(data)
+
 	cert, err := x509.ParseCertificate(cBlock.Bytes)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("failed to parse certificate: %w", err)
 	}
+
 	pubKey := cert.PublicKey.(*rsa.PublicKey)
+
 	cipher, err := rsa.EncryptPKCS1v15(rand.Reader, pubKey, []byte(password))
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("failed to encrypt password: %w", err)
 	}
+
 	return base64.StdEncoding.EncodeToString(cipher), nil
 }
