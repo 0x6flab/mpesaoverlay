@@ -1,6 +1,7 @@
 package pkg
 
 import (
+	"context"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/tls"
@@ -63,6 +64,7 @@ type SDK interface {
 }
 
 type mSDK struct {
+	ctx       context.Context
 	baseURL   string
 	appKey    string
 	appSecret string
@@ -71,6 +73,7 @@ type mSDK struct {
 
 // Config contains sdk configuration parameters.
 type Config struct {
+	CTX          context.Context
 	BaseURL      string
 	AppKey       string
 	AppSecret    string
@@ -94,20 +97,16 @@ func (cfg Config) validate() error {
 		return fmt.Errorf("app secret is required")
 	}
 
-	if cfg.MaxIdleConns == 0 {
-		cfg.MaxIdleConns = 10 //nolint:staticcheck
-	}
-
 	return nil
 }
 
 // NewSDK returns new mpesa SDK instance.
-func NewSDK(conf Config) (SDK, error) {
+func NewSDK(conf Config, opts ...SDKOption) (SDK, error) {
 	if err := conf.validate(); err != nil {
 		return nil, err
 	}
 
-	return &mSDK{
+	sdk := &mSDK{
 		baseURL:   conf.BaseURL,
 		appKey:    conf.AppKey,
 		appSecret: conf.AppSecret,
@@ -120,7 +119,13 @@ func NewSDK(conf Config) (SDK, error) {
 			},
 			Timeout: defaultTimeout,
 		},
-	}, nil
+	}
+
+	for _, opt := range opts {
+		opt(&conf)
+	}
+
+	return sdk, nil
 }
 
 func (sdk mSDK) sendRequest(req *http.Request) ([]byte, error) {
@@ -135,6 +140,8 @@ func (sdk mSDK) sendRequest(req *http.Request) ([]byte, error) {
 
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Cache-Control", "no-cache")
+
+	req = req.WithContext(sdk.ctx)
 
 	resp, err := sdk.client.Do(req)
 	if err != nil {
