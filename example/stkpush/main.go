@@ -19,10 +19,12 @@ func main() {
 		AppSecret:    cSecret,
 		MaxIdleConns: 10,
 	}
+	
 	mp, err := mpesa.NewSDK(conf)
 	if err != nil {
 		log.Fatal(err)
 	}
+	
 	qrReq := mpesa.ExpressSimulateReq{
 		BusinessShortCode: "174379",
 		TransactionType:   "CustomerPayBillOnline",
@@ -34,9 +36,11 @@ func main() {
 		AccountReference:  "Test",
 		TransactionDesc:   "Test",
 	}
+	
 	resp, err := mp.ExpressSimulate(qrReq)
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	log.Println(resp)
 }

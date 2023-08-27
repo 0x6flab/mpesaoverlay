@@ -19,13 +19,16 @@ func main() {
 		AppSecret:    cSecret,
 		MaxIdleConns: 10,
 	}
+
 	mp, err := mpesa.NewSDK(conf)
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	token, err := mp.GetToken()
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	log.Println(token.AccessToken)
 }
