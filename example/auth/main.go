@@ -30,5 +30,5 @@ func main() {
 		log.Fatal(err)
 	}
 
-	log.Println(token.AccessToken)
+	log.Printf("Token: %+v\n", token)
 }

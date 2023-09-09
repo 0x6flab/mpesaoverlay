@@ -19,24 +19,25 @@ func main() {
 		AppSecret:    cSecret,
 		MaxIdleConns: 10,
 	}
-	
+
 	mp, err := mpesa.NewSDK(conf)
 	if err != nil {
 		log.Fatal(err)
 	}
-	
+
 	qrReq := mpesa.QRReq{
-		MerchantName: "Safaricom LTD",
-		RefNo:        "rf38f04",
-		Amount:       "20000",
+		MerchantName: "Test Supermarket",
+		RefNo:        "Invoice No",
+		Amount:       2000,
 		TrxCode:      "BG",
-		CPI:          "17408",
+		CPI:          "174379",
+		Size:         "300",
 	}
-	
+
 	qrcode, err := mp.GenerateQR(qrReq)
 	if err != nil {
 		log.Fatal(err)
 	}
-	
-	log.Println(qrcode.QRCode)
+
+	log.Printf("QR Code: %+v\n", qrcode)
 }

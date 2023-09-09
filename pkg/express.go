@@ -12,7 +12,7 @@ func (sdk mSDK) ExpressSimulate(eReq ExpressSimulateReq) (ExpressSimulateResp, e
 		return ExpressSimulateResp{}, err
 	}
 
-	eReq.Timestamp, eReq.Password = sdk.generateTimestampAndPassword(eReq.BusinessShortCode, sdk.appKey)
+	eReq.Timestamp, eReq.Password = sdk.generateTimestampAndPassword(eReq.BusinessShortCode, eReq.PassKey)
 
 	data, err := json.Marshal(eReq)
 	if err != nil {
