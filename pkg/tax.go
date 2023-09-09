@@ -7,38 +7,38 @@ import (
 	"net/http"
 )
 
-func (sdk mSDK) Reverse(rReq ReversalReq) (ReversalResp, error) {
+func (sdk mSDK) RemitTax(rReq RemitTax) (RemitTaxResp, error) {
 	if err := rReq.validate(); err != nil {
-		return ReversalResp{}, err
+		return RemitTaxResp{}, err
 	}
 
 	var err error
 	rReq.SecurityCredential, err = sdk.generateSecurityCredential(rReq.InitiatorPassword)
 	if err != nil {
-		return ReversalResp{}, err
+		return RemitTaxResp{}, err
 	}
 
 	data, err := json.Marshal(rReq)
 	if err != nil {
-		return ReversalResp{}, err
+		return RemitTaxResp{}, err
 	}
 
-	url := fmt.Sprintf("%s/%s", sdk.baseURL, reversalEndpoint)
+	url := fmt.Sprintf("%s/%s", sdk.baseURL, taxEndpoint)
 
 	req, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(data))
 	if err != nil {
-		return ReversalResp{}, err
+		return RemitTaxResp{}, err
 	}
 
 	resp, err := sdk.sendRequest(req)
 	if err != nil {
-		return ReversalResp{}, err
+		return RemitTaxResp{}, err
 	}
 
-	var rr ReversalResp
-	if err := json.Unmarshal(resp, &rr); err != nil {
-		return ReversalResp{}, err
+	var tr RemitTaxResp
+	if err := json.Unmarshal(resp, &tr); err != nil {
+		return RemitTaxResp{}, err
 	}
 
-	return rr, nil
+	return tr, nil
 }

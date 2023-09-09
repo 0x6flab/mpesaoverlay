@@ -30,6 +30,10 @@ func (sdk mSDK) GetToken() (TokenResp, error) {
 	}
 	defer resp.Body.Close()
 
+	if resp.StatusCode != http.StatusOK {
+		return TokenResp{}, fmt.Errorf("failed to get token: %s", string(body))
+	}
+
 	var tr TokenResp
 	if err := json.Unmarshal(body, &tr); err != nil {
 		return TokenResp{}, err

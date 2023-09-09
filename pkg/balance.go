@@ -12,6 +12,12 @@ func (sdk mSDK) AccountBalance(abReq AccBalanceReq) (AccBalanceResp, error) {
 		return AccBalanceResp{}, err
 	}
 
+	var err error
+	abReq.SecurityCredential, err = sdk.generateSecurityCredential(abReq.InitiatorPassword)
+	if err != nil {
+		return AccBalanceResp{}, err
+	}
+
 	data, err := json.Marshal(abReq)
 	if err != nil {
 		return AccBalanceResp{}, err

@@ -12,6 +12,12 @@ func (sdk mSDK) TransactionStatus(tReq TransactionReq) (TransactionResp, error) 
 		return TransactionResp{}, err
 	}
 
+	var err error
+	tReq.SecurityCredential, err = sdk.generateSecurityCredential(tReq.InitiatorPassword)
+	if err != nil {
+		return TransactionResp{}, err
+	}
+
 	data, err := json.Marshal(tReq)
 	if err != nil {
 		return TransactionResp{}, err

@@ -12,6 +12,12 @@ func (sdk mSDK) B2CPayment(b2cReq B2Creq) (B2CResp, error) {
 		return B2CResp{}, err
 	}
 
+	var err error
+	b2cReq.SecurityCredential, err = sdk.generateSecurityCredential(b2cReq.InitiatorPassword)
+	if err != nil {
+		return B2CResp{}, err
+	}
+
 	data, err := json.Marshal(b2cReq)
 	if err != nil {
 		return B2CResp{}, err

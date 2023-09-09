@@ -44,14 +44,14 @@ func (sdk mSDK) ExpressQuery(eqReq ExpressQueryReq) (ExpressQueryResp, error) {
 		return ExpressQueryResp{}, err
 	}
 
-	eqReq.Timestamp, eqReq.Password = sdk.generateTimestampAndPassword(eqReq.BusinessShortCode, sdk.appKey)
+	eqReq.Timestamp, eqReq.Password = sdk.generateTimestampAndPassword(eqReq.BusinessShortCode, eqReq.PassKey)
 
 	data, err := json.Marshal(eqReq)
 	if err != nil {
 		return ExpressQueryResp{}, err
 	}
 
-	url := fmt.Sprintf("%s/%s/%s", sdk.baseURL, expressEndpoint, "query")
+	url := fmt.Sprintf("%s/%s", sdk.baseURL, queryEndpoint)
 
 	req, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(data))
 	if err != nil {
