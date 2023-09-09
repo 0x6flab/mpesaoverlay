@@ -25,20 +25,13 @@ func main() {
 		log.Fatal(err)
 	}
 
-	qrReq := mpesa.ExpressSimulateReq{
+	qrReq := mpesa.ExpressQueryReq{
 		PassKey:           "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919", // Get this from the developer portal under the test credentials section
 		BusinessShortCode: 174379,
-		TransactionType:   "CustomerPayBillOnline",
-		PhoneNumber:       254720136609, // You can use your own phone number here
-		Amount:            1,
-		PartyA:            254720136609,
-		PartyB:            174379,
-		CallBackURL:       "https://69a2-105-163-2-116.ngrok.io",
-		AccountReference:  "CompanyXLTD",
-		TransactionDesc:   "Payment of X",
+		CheckoutRequestID: "ws_CO_07092023195244460720136609",
 	}
 
-	resp, err := mp.ExpressSimulate(qrReq)
+	resp, err := mp.ExpressQuery(qrReq)
 	if err != nil {
 		log.Fatal(err)
 	}
