@@ -1,6 +1,9 @@
 package pkg
 
-import "errors"
+import (
+	"errors"
+	"net/url"
+)
 
 var (
 	// errInvalidCommandID indicates the CommandID is invalid.
@@ -32,6 +35,9 @@ var (
 
 	// errInvalidIdentifierType indicates invalid identifier type.
 	errInvalidIdentifierType = errors.New("invalid identifier type")
+
+	// errInvalidURL indicates invalid url.
+	errInvalidURL = errors.New("invalid url")
 )
 
 // ExpressSimulateReq struct.
@@ -79,6 +85,9 @@ func (esr ExpressSimulateReq) validate() error {
 	if len(esr.TransactionDesc) > 13 {
 		return errInvalidTransactionDesc
 	}
+	if ok := isValidURL(esr.CallBackURL); !ok {
+		return errInvalidURL
+	}
 
 	return nil
 }
@@ -106,7 +115,7 @@ type QRReq struct {
 	MerchantName string `json:"MerchantName,omitempty"` // Name of the Company/M-Pesa Merchant Name
 	RefNo        string `json:"RefNo,omitempty"`        // Transaction Reference
 	Amount       uint64 `json:"Amount,omitempty"`       // The total amount for the sale/transaction
-	TrxCode      string `json:"TrxCode,omitempty"`      // Transaction Type. Can be SB, WA, PB, SM, SB
+	TrxCode      string `json:"TrxCode,omitempty"`      // Transaction Type. Can be SB, WA, PB, SM, BG
 	CPI          string `json:"CPI,omitempty"`          // Credit Party Identifier. Can be a Mobile Number, Business Number, Agent Till, Paybill or Business number, Merchant Buy Goods.
 	Size         string `json:"Size,omitempty"`         // Size of the QR code image in pixels. QR code image will always be a square image.
 }
@@ -134,6 +143,12 @@ func (c2b C2BRegisterURLReq) validate() error {
 	}
 	if c2b.ResponseType != "Completed" && c2b.ResponseType != "Cancelled" {
 		return errInvalidResponseType
+	}
+	if ok := isValidURL(c2b.ValidationURL); !ok {
+		return errInvalidURL
+	}
+	if ok := isValidURL(c2b.ConfirmationURL); !ok {
+		return errInvalidURL
 	}
 
 	return nil
@@ -186,6 +201,12 @@ func (r B2Creq) validate() error {
 	if ok := isPhoneNumber(r.PartyB); !ok {
 		return errInvalidPhoneNumber
 	}
+	if ok := isValidURL(r.QueueTimeOutURL); !ok {
+		return errInvalidURL
+	}
+	if ok := isValidURL(r.ResultURL); !ok {
+		return errInvalidURL
+	}
 
 	return nil
 }
@@ -223,6 +244,14 @@ func (r TransactionReq) validate() error {
 		return errInvalidIdentifierType
 	}
 
+	if ok := isValidURL(r.QueueTimeOutURL); !ok {
+		return errInvalidURL
+	}
+
+	if ok := isValidURL(r.ResultURL); !ok {
+		return errInvalidURL
+	}
+
 	return nil
 }
 
@@ -249,6 +278,14 @@ func (r AccBalanceReq) validate() error {
 		return errInvalidIdentifierType
 	}
 
+	if ok := isValidURL(r.QueueTimeOutURL); !ok {
+		return errInvalidURL
+	}
+
+	if ok := isValidURL(r.ResultURL); !ok {
+		return errInvalidURL
+	}
+
 	return nil
 }
 
@@ -272,6 +309,14 @@ type ReversalReq struct {
 func (r ReversalReq) validate() error {
 	if r.CommandID != "TransactionReversal" {
 		return errInvalidCommandID
+	}
+
+	if ok := isValidURL(r.QueueTimeOutURL); !ok {
+		return errInvalidURL
+	}
+
+	if ok := isValidURL(r.ResultURL); !ok {
+		return errInvalidURL
 	}
 
 	return nil
@@ -304,6 +349,14 @@ func (r RemitTax) validate() error {
 		return errInvalidRemarks
 	}
 
+	if ok := isValidURL(r.QueueTimeOutURL); !ok {
+		return errInvalidURL
+	}
+
+	if ok := isValidURL(r.ResultURL); !ok {
+		return errInvalidURL
+	}
+
 	return nil
 }
 
@@ -321,6 +374,23 @@ func isPhoneNumber(number uint64) bool {
 // Shortcode (5 to 7 digits) e.g. 654321.
 func isShortCode(number uint64) bool {
 	if number < 10000 || number > 9999999 {
+		return false
+	}
+
+	return true
+}
+
+func isValidURL(inputURL string) bool {
+	parsedURL, err := url.Parse(inputURL)
+	if err != nil {
+		return false
+	}
+
+	if parsedURL.Scheme != "http" && parsedURL.Scheme != "https" {
+		return false
+	}
+
+	if parsedURL.Host == "" {
 		return false
 	}
 

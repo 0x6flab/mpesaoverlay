@@ -120,7 +120,7 @@ type SDK interface {
 	// 		CommandID:                "BusinessPayment",
 	// 		Amount:                   10,
 	// 		PartyA:                   174379,
-	// 		PartyB:                   254720136609,
+	// 		PartyB:                   254712345678,
 	// 		Remarks:                  "Test",
 	// 		QueueTimeOutURL:          "https://69a2-105-163-2-116.ngrok.io",
 	// 		ResultURL:                "https://69a2-105-163-2-116.ngrok.io",
@@ -148,8 +148,8 @@ type SDK interface {
 	// 		CommandID:         "AccountBalance",
 	// 		IdentifierType:    4,
 	// 		PartyA:            600772,
-	// 		QueueTimeOutURL:   "https://8e76-105-163-2-116.ngrok.io",
-	// 		ResultURL:         "https://8e76-105-163-2-116.ngrok.io",
+	// 		QueueTimeOutURL:   "https://example.com/timeout",
+	// 		ResultURL:         "https://example.com/result",
 	// 		Remarks:           "test",
 	// 	}
 	//
@@ -198,7 +198,7 @@ type SDK interface {
 	// 		ShortCode: 174379,
 	// 		CommandID: "CustomerPayBillOnline",
 	// 		Amount: 10,
-	// 		Msisdn: 254720136609,
+	// 		Msisdn: 254712345678,
 	// 		BillRefNumber: "",
 	// 	}
 	//
@@ -247,8 +247,8 @@ type SDK interface {
 	// 		Amount:                 10,
 	// 		ReceiverParty:          600992,
 	// 		RecieverIdentifierType: 11,
-	// 		QueueTimeOutURL:        "https://8e76-105-163-2-116.ngrok.io",
-	// 		ResultURL:              "https://8e76-105-163-2-116.ngrok.io",
+	// 		QueueTimeOutURL:        "https://example.com/timeout",
+	// 		ResultURL:              "https://example.com/result",
 	// 		Remarks:                "test",
 	// 		Occasion:               "test",
 	// 	}
@@ -277,8 +277,8 @@ type SDK interface {
 	// 		IdentifierType:    1,
 	// 		TransactionID:     "RI704KI9RW",
 	// 		PartyA:            254759764065,
-	// 		QueueTimeOutURL:   "https://8e76-105-163-2-116.ngrok.io",
-	// 		ResultURL:         "https://8e76-105-163-2-116.ngrok.io",
+	// 		QueueTimeOutURL:   "https://example.com/timeout",
+	// 		ResultURL:         "https://example.com/result",
 	// 		Remarks:           "test",
 	// 		Occasion:          "test",
 	// 	}
@@ -308,8 +308,8 @@ type SDK interface {
 	// 		PartyA:                 600978,
 	// 		PartyB:                 572572,
 	// 		AccountReference:       "353353",
-	// 		QueueTimeOutURL:        "https://8e76-105-163-2-116.ngrok.io",
-	// 		ResultURL:              "https://8e76-105-163-2-116.ngrok.io",
+	// 		QueueTimeOutURL:        "https://example.com/timeout",
+	// 		ResultURL:              "https://example.com/result",
 	// 		Remarks:                "test",
 	// 	}
 	//
