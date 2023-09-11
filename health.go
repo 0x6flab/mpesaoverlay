@@ -35,6 +35,9 @@ type HealthInfo struct {
 	// Status contains service status.
 	Status string `json:"status"`
 
+	// Service contains service name.
+	Service string `json:"service"`
+
 	// Version contains current service version.
 	Version string `json:"version"`
 
@@ -46,15 +49,17 @@ type HealthInfo struct {
 }
 
 // Health exposes an HTTP handler for retrieving service health.
-func Health(service, instanceID string) http.HandlerFunc {
+func Health(service string) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add(contentType, contentTypeJSON)
 		if r.Method != http.MethodGet && r.Method != http.MethodHead {
 			w.WriteHeader(http.StatusMethodNotAllowed)
+
 			return
 		}
 
 		res := HealthInfo{
+			Service:   service + description,
 			Status:    svcStatus,
 			Version:   Version,
 			Commit:    Commit,
