@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	mpesa "github.com/mpesaoverlay/pkg"
+	mpesa "github.com/0x6flab/mpesaoverlay/pkg"
 )
 
 var (
@@ -29,9 +29,9 @@ func main() {
 		PassKey:           "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919", // Get this from the developer portal under the test credentials section
 		BusinessShortCode: 174379,
 		TransactionType:   "CustomerPayBillOnline",
-		PhoneNumber:       254720136609, // You can use your own phone number here
+		PhoneNumber:       254712345678, // You can use your own phone number here
 		Amount:            1,
-		PartyA:            254720136609,
+		PartyA:            254712345678,
 		PartyB:            174379,
 		CallBackURL:       "https://69a2-105-163-2-116.ngrok.io",
 		AccountReference:  "CompanyXLTD",

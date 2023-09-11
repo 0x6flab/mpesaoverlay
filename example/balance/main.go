@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	mpesa "github.com/mpesaoverlay/pkg"
+	mpesa "github.com/0x6flab/mpesaoverlay/pkg"
 )
 
 var (
@@ -31,8 +31,8 @@ func main() {
 		CommandID:         "AccountBalance",
 		IdentifierType:    4,
 		PartyA:            600772,
-		QueueTimeOutURL:   "https://8e76-105-163-2-116.ngrok.io",
-		ResultURL:         "https://8e76-105-163-2-116.ngrok.io",
+		QueueTimeOutURL:   "https://example.com/timeout",
+		ResultURL:         "https://example.com/result",
 		Remarks:           "test",
 	}
 

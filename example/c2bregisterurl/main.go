@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	mpesa "github.com/mpesaoverlay/pkg"
+	mpesa "github.com/0x6flab/mpesaoverlay/pkg"
 )
 
 var (
@@ -28,8 +28,8 @@ func main() {
 	c2bReq := mpesa.C2BRegisterURLReq{
 		ShortCode:       600981,
 		ResponseType:    "Completed",
-		ConfirmationURL: "https://8e76-105-163-2-116.ngrok.io",
-		ValidationURL:   "https://8e76-105-163-2-116.ngrok.io",
+		ConfirmationURL: "https://example.com/confirmation",
+		ValidationURL:   "https://example.com/validation",
 	}
 
 	resp, err := mp.C2BRegisterURL(c2bReq)
