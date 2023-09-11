@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	mpesa "github.com/mpesaoverlay/pkg"
+	mpesa "github.com/0x6flab/mpesaoverlay/pkg"
 )
 
 var (
@@ -28,7 +28,7 @@ func main() {
 	c2bReq := mpesa.C2BSimulateReq{
 		CommandID:     "CustomerBuyGoodsOnline",
 		Amount:        10,
-		Msisdn:        "254720136609",
+		Msisdn:        "254712345678",
 		BillRefNumber: "",
 		ShortCode:     600986,
 	}

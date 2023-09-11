@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	mpesa "github.com/mpesaoverlay/pkg"
+	mpesa "github.com/0x6flab/mpesaoverlay/pkg"
 )
 
 var (

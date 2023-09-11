@@ -4,8 +4,8 @@ import (
 	"log"
 	"os"
 
+	mpesa "github.com/0x6flab/mpesaoverlay/pkg"
 	"github.com/google/uuid"
-	mpesa "github.com/mpesaoverlay/pkg"
 )
 
 var (
@@ -38,9 +38,9 @@ func main() {
 		CommandID:                "BusinessPayment",
 		Amount:                   10,
 		PartyA:                   600986,
-		PartyB:                   254720136609,
-		QueueTimeOutURL:          "https://8e76-105-163-2-116.ngrok.io",
-		ResultURL:                "https://8e76-105-163-2-116.ngrok.io",
+		PartyB:                   254712345678,
+		QueueTimeOutURL:          "https://example.com/timeout",
+		ResultURL:                "https://example.com/result",
 		Remarks:                  "test",
 		Occasion:                 "test",
 	}
