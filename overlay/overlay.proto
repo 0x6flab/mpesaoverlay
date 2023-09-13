@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package mpesaoverlay.overlay;
+
+option go_package = "./overlay";
+
+import "overlay/requests.proto";
+
+import "overlay/responses.proto";
+
+message Empty {}
+
+service Service {
+    rpc GetToken (Empty) returns (mpesaoverlay.overlay.TokenResp) { }
+
+    rpc ExpressQuery (mpesaoverlay.overlay.ExpressQueryReq) returns (mpesaoverlay.overlay.ExpressQueryResp) { }
+
+    rpc ExpressSimulate (mpesaoverlay.overlay.ExpressSimulateReq) returns (mpesaoverlay.overlay.ExpressSimulateResp) { }
+
+    rpc B2CPayment (mpesaoverlay.overlay.B2Creq) returns (mpesaoverlay.overlay.B2CResp) { }
+
+    rpc AccountBalance (mpesaoverlay.overlay.AccBalanceReq) returns (mpesaoverlay.overlay.AccBalanceResp) { }
+
+    rpc C2BRegisterURL (mpesaoverlay.overlay.C2BRegisterURLReq) returns (mpesaoverlay.overlay.C2BRegisterURLResp) { }
+
+    rpc C2BSimulate (mpesaoverlay.overlay.C2BSimulateReq) returns (mpesaoverlay.overlay.C2BSimulateResp) { }
+
+    rpc GenerateQR (mpesaoverlay.overlay.QRReq) returns (mpesaoverlay.overlay.QRResp) { }
+
+    rpc Reverse (mpesaoverlay.overlay.ReversalReq) returns (mpesaoverlay.overlay.ReversalResp) { }
+
+    rpc TransactionStatus (mpesaoverlay.overlay.TransactionReq) returns (mpesaoverlay.overlay.TransactionResp) { }
+
+    rpc RemitTax (mpesaoverlay.overlay.RemitTax) returns (mpesaoverlay.overlay.RemitTaxResp) { }
+}
