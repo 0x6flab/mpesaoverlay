@@ -1,0 +1,125 @@
+syntax = "proto3";
+package mpesaoverlay.overlay;
+option go_package = "./overlay";
+
+
+message AccBalanceReq {
+  string commandID = 1;
+  uint64 partyA = 2;
+  uint32 identifierType = 3;
+  string remarks = 4;
+  string initiatorName = 5;
+  string initiatorPassword = 6;
+  string securityCredential = 7;
+  string queueTimeOutURL = 8;
+  string resultURL = 9;
+}
+
+message B2Creq {
+  string originatorConversationID = 1;
+  string commandID = 2;
+  uint64 partyA = 3;
+  uint64 partyB = 4;
+  string remarks = 5;
+  string initiatorName = 6;
+  string initiatorPassword = 7;
+  string securityCredential = 8;
+  string queueTimeOutURL = 9;
+  string resultURL = 10;
+  string transactionID = 11;
+  string occasion = 12;
+  uint64 amount = 13;
+}
+
+message C2BRegisterURLReq {
+  string validationURL = 1;
+  string confirmationURL = 2;
+  uint64 shortCode = 3;
+  string responseType = 4;
+}
+
+message C2BSimulateReq {
+  string commandID = 1;
+  string msisdn = 2;
+  string billRefNumber = 3;
+  uint64 amount = 4;
+  uint64 shortCode = 5;
+}
+
+message ExpressQueryReq {
+  string passKey = 1;
+  uint64 businessShortCode = 2;
+  string password = 3;
+  string timestamp = 4;
+  string checkoutRequestID = 5;
+}
+
+message ExpressSimulateReq {
+  string passKey = 1;
+  uint64 businessShortCode = 2;
+  string password = 3;
+  string timestamp = 4;
+  string transactionType = 5;
+  uint64 phoneNumber = 6;
+  uint64 amount = 7;
+  uint64 partyA = 8;
+  uint64 partyB = 9;
+  string callBackURL = 10;
+  string accountReference = 11;
+  string transactionDesc = 12;
+}
+
+message QRReq {
+  string merchantName = 1;
+  string refNo = 2;
+  uint64 amount = 3;
+  string trxCode = 4;
+  string cPI = 5;
+  string size = 6;
+}
+
+message RemitTax {
+  string initiatorName = 1;
+  string initiatorPassword = 2;
+  string securityCredential = 3;
+  string commandID = 4;
+  uint32 senderIdentifierType = 5;
+  uint32 recieverIdentifierType = 6;
+  uint64 amount = 7;
+  uint64 partyA = 8;
+  uint64 partyB = 9;
+  string accountReference = 10;
+  string queueTimeOutURL = 11;
+  string resultURL = 12;
+  string remarks = 13;
+}
+
+message ReversalReq {
+  string commandID = 1;
+  uint64 receiverParty = 2;
+  uint32 recieverIdentifierType = 3;
+  string remarks = 4;
+  string initiatorName = 5;
+  string initiatorPassword = 6;
+  string securityCredential = 7;
+  string queueTimeOutURL = 8;
+  string resultURL = 9;
+  string occasion = 10;
+  uint64 amount = 11;
+  string transactionID = 12;
+}
+
+message TransactionReq {
+  string commandID = 1;
+  uint64 partyA = 2;
+  uint32 identifierType = 3;
+  string remarks = 4;
+  string initiatorName = 5;
+  string initiatorPassword = 6;
+  string securityCredential = 7;
+  string queueTimeOutURL = 8;
+  string resultURL = 9;
+  string transactionID = 10;
+  string occasion = 11;
+}
+

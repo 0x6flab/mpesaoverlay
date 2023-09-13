@@ -1,0 +1,76 @@
+syntax = "proto3";
+package mpesaoverlay.overlay;
+option go_package = "./overlay";
+
+
+message AccBalanceResp {
+  ValidResp validResp = 1;
+}
+
+message B2CResp {
+  ValidResp validResp = 1;
+}
+
+message C2BRegisterURLResp {
+  ValidResp validResp = 1;
+}
+
+message C2BSimulateResp {
+  ValidResp validResp = 1;
+}
+
+message ErrorResp {
+  string requestID = 1;
+  string code = 2;
+  string message = 3;
+}
+
+message ExpressQueryResp {
+  string responseDescription = 1;
+  string responseCode = 2;
+  string merchantRequestID = 3;
+  string checkoutRequestID = 4;
+  string customerMessage = 5;
+  string resultCode = 6;
+  string resultDesc = 7;
+}
+
+message ExpressSimulateResp {
+  string responseDescription = 1;
+  string responseCode = 2;
+  string merchantRequestID = 3;
+  string checkoutRequestID = 4;
+  string customerMessage = 5;
+}
+
+message QRResp {
+  string responseDescription = 1;
+  string responseCode = 2;
+  string requestID = 3;
+  string qRCode = 4;
+}
+
+message RemitTaxResp {
+  ValidResp validResp = 1;
+}
+
+message ReversalResp {
+  ValidResp validResp = 1;
+}
+
+message TokenResp {
+  string accessToken = 1;
+  string expiry = 2;
+}
+
+message TransactionResp {
+  ValidResp validResp = 1;
+}
+
+message ValidResp {
+  string originatorConversationID = 1;
+  string conversationID = 2;
+  string responseDescription = 3;
+  string responseCode = 4;
+}
+
