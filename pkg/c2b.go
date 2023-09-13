@@ -8,7 +8,7 @@ import (
 )
 
 func (sdk mSDK) C2BRegisterURL(c2bReq C2BRegisterURLReq) (C2BRegisterURLResp, error) {
-	if err := c2bReq.validate(); err != nil {
+	if err := c2bReq.Validate(); err != nil {
 		return C2BRegisterURLResp{}, err
 	}
 
@@ -38,7 +38,7 @@ func (sdk mSDK) C2BRegisterURL(c2bReq C2BRegisterURLReq) (C2BRegisterURLResp, er
 }
 
 func (sdk mSDK) C2BSimulate(c2bReq C2BSimulateReq) (C2BSimulateResp, error) {
-	if err := c2bReq.validate(); err != nil {
+	if err := c2bReq.Validate(); err != nil {
 		return C2BSimulateResp{}, err
 	}
 

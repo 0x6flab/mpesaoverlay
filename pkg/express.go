@@ -8,7 +8,7 @@ import (
 )
 
 func (sdk mSDK) ExpressSimulate(eReq ExpressSimulateReq) (ExpressSimulateResp, error) {
-	if err := eReq.validate(); err != nil {
+	if err := eReq.Validate(); err != nil {
 		return ExpressSimulateResp{}, err
 	}
 
@@ -40,7 +40,7 @@ func (sdk mSDK) ExpressSimulate(eReq ExpressSimulateReq) (ExpressSimulateResp, e
 }
 
 func (sdk mSDK) ExpressQuery(eqReq ExpressQueryReq) (ExpressQueryResp, error) {
-	if err := eqReq.validate(); err != nil {
+	if err := eqReq.Validate(); err != nil {
 		return ExpressQueryResp{}, err
 	}
 
