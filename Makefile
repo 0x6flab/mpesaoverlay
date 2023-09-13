@@ -31,3 +31,15 @@ test:
 
 changelog:
 	git log $(shell git describe --tags --abbrev=0)..HEAD --pretty=format:"- %s"
+
+proto:
+	# go install github.com/anjmao/go2proto@latest
+	go2proto -f overlay/ -p pkg/request.go
+	mv overlay/output.proto overlay/requests.proto
+	sed -i 's,package proto;,package mpesaoverlay.overlay;\noption go_package = "./overlay";,g' overlay/requests.proto
+	sed -i 's/uint8/uint32/g' overlay/requests.proto
+	go2proto -f overlay/ -p pkg/response.go
+	mv overlay/output.proto overlay/responses.proto
+	sed -i 's,package proto;,package mpesaoverlay.overlay;\noption go_package = "./overlay";,g' overlay/responses.proto
+	sed -i 's/uint8/uint32/g' overlay/responses.proto
+	protoc -I. --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative overlay/*.proto
