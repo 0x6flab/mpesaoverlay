@@ -389,10 +389,6 @@ func NewSDK(conf Config, opts ...Options) (SDK, error) {
 		},
 	}
 
-	for _, opt := range opts {
-		opt(&conf)
-	}
-
 	return sdk, nil
 }
 
