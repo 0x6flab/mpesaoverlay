@@ -15,6 +15,10 @@ func (sdk mSDK) GetToken() (TokenResp, error) {
 		return TokenResp{}, err
 	}
 
+	if sdk.context != nil {
+		req = req.WithContext(sdk.context)
+	}
+
 	req.SetBasicAuth(sdk.appKey, sdk.appSecret)
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Cache-Control", "no-cache")

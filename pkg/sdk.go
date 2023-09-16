@@ -1,6 +1,7 @@
 package pkg
 
 import (
+	"context"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/tls"
@@ -329,14 +330,17 @@ type mSDK struct {
 	appSecret string
 	certFile  string
 	client    *http.Client
+	context   context.Context
 }
 
 // Config contains sdk configuration parameters.
 type Config struct {
-	BaseURL      string
-	AppKey       string
-	AppSecret    string
-	MaxIdleConns int
+	BaseURL    string
+	AppKey     string
+	AppSecret  string
+	CertFile   string
+	HTTPClient *http.Client
+	Context    context.Context
 }
 
 func (cfg Config) validate() error {
@@ -380,7 +384,6 @@ func NewSDK(conf Config, opts ...Options) (SDK, error) {
 				TLSClientConfig: &tls.Config{
 					InsecureSkipVerify: false,
 				},
-				MaxIdleConns: conf.MaxIdleConns,
 			},
 			Timeout: defaultTimeout,
 		},
@@ -397,6 +400,10 @@ func (sdk mSDK) sendRequest(req *http.Request) ([]byte, error) {
 	token, err := sdk.GetToken()
 	if err != nil {
 		return nil, err
+	}
+
+	if sdk.context != nil {
+		req = req.WithContext(sdk.context)
 	}
 
 	if token.AccessToken != "" {

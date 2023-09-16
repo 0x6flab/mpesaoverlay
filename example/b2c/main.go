@@ -15,10 +15,9 @@ var (
 
 func main() {
 	conf := mpesa.Config{
-		BaseURL:      "https://sandbox.safaricom.co.ke",
-		AppKey:       cKey,
-		AppSecret:    cSecret,
-		MaxIdleConns: 10,
+		BaseURL:   "https://sandbox.safaricom.co.ke",
+		AppKey:    cKey,
+		AppSecret: cSecret,
 	}
 
 	mp, err := mpesa.NewSDK(conf)
