@@ -25,7 +25,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	reverseReq := mpesa.ReversalReq{
+	reverseReq := mpesa.ReverseReq{
 		InitiatorName:          "testapi",
 		InitiatorPassword:      "Safaricom999!*!",
 		CommandID:              "TransactionReversal",

@@ -6,7 +6,7 @@ import (
 )
 
 func QRCode(sdk pkg.SDK) error {
-	var req = pkg.QRReq{}
+	var req = pkg.GenerateQRReq{}
 
 	var qs = []*survey.Question{
 		{

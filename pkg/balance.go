@@ -7,37 +7,37 @@ import (
 	"net/http"
 )
 
-func (sdk mSDK) AccountBalance(abReq AccBalanceReq) (AccBalanceResp, error) {
+func (sdk mSDK) AccountBalance(abReq AccountBalanceReq) (AccountBalanceResp, error) {
 	if err := abReq.validate(); err != nil {
-		return AccBalanceResp{}, err
+		return AccountBalanceResp{}, err
 	}
 
 	var err error
 	abReq.SecurityCredential, err = sdk.generateSecurityCredential(abReq.InitiatorPassword)
 	if err != nil {
-		return AccBalanceResp{}, err
+		return AccountBalanceResp{}, err
 	}
 
 	data, err := json.Marshal(abReq)
 	if err != nil {
-		return AccBalanceResp{}, err
+		return AccountBalanceResp{}, err
 	}
 
 	url := fmt.Sprintf("%s/%s", sdk.baseURL, accbalanceEndpoint)
 
 	req, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(data))
 	if err != nil {
-		return AccBalanceResp{}, err
+		return AccountBalanceResp{}, err
 	}
 
 	resp, err := sdk.sendRequest(req)
 	if err != nil {
-		return AccBalanceResp{}, err
+		return AccountBalanceResp{}, err
 	}
 
-	var abr AccBalanceResp
+	var abr AccountBalanceResp
 	if err := json.Unmarshal(resp, &abr); err != nil {
-		return AccBalanceResp{}, err
+		return AccountBalanceResp{}, err
 	}
 
 	return abr, nil

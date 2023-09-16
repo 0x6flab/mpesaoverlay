@@ -6,7 +6,7 @@ import (
 )
 
 func Balance(sdk pkg.SDK) error {
-	var req = pkg.AccBalanceReq{}
+	var req = pkg.AccountBalanceReq{}
 
 	var qs = []*survey.Question{
 		{

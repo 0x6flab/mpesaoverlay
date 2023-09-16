@@ -25,7 +25,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	trxReq := mpesa.TransactionReq{
+	trxReq := mpesa.TransactionStatusReq{
 		InitiatorName:     "testapi",
 		InitiatorPassword: "Safaricom999!*!",
 		CommandID:         "TransactionStatusQuery",

@@ -25,7 +25,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	balReq := mpesa.AccBalanceReq{
+	balReq := mpesa.AccountBalanceReq{
 		InitiatorName:     "testapi",
 		InitiatorPassword: "Safaricom999!*!",
 		CommandID:         "AccountBalance",

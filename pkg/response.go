@@ -41,8 +41,8 @@ type ExpressQueryResp struct {
 	ResultDesc          string `json:"ResultDesc,omitempty"`          // Response description is an acknowledgment message from the API that gives the status of the request submission usually maps to a specific ResponseCode value. It can be a "Success" submission message or an error description.
 }
 
-// QRResp struct.
-type QRResp struct {
+// GenerateQRResp struct.
+type GenerateQRResp struct {
 	ResponseDescription string `json:"ResponseDescription,omitempty"` // This is a response describing the status of the transaction.
 	ResponseCode        string `json:"ResponseCode,omitempty"`        // Used to return the Transaction Type.
 	RequestID           string `json:"RequestID,omitempty"`
@@ -59,23 +59,23 @@ type C2BSimulateResp struct {
 	ValidResp
 }
 
-// B2CResp struct.
-type B2CResp struct {
+// B2CPaymentResp struct.
+type B2CPaymentResp struct {
 	ValidResp
 }
 
-// TransactionResp struct.
-type TransactionResp struct {
+// TransactionStatusResp struct.
+type TransactionStatusResp struct {
 	ValidResp
 }
 
-// AccBalanceResp struct.
-type AccBalanceResp struct {
+// AccountBalanceResp struct.
+type AccountBalanceResp struct {
 	ValidResp
 }
 
-// ReversalResp struct.
-type ReversalResp struct {
+// ReverseResp struct.
+type ReverseResp struct {
 	ValidResp
 }
 

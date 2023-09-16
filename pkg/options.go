@@ -1,34 +1,26 @@
 package pkg
 
-import "context"
+type Options func(*Config)
 
-type SDKOption func(*Config)
-
-func WithContext(ctx context.Context) SDKOption {
-	return func(cfg *Config) {
-		cfg.CTX = ctx
-	}
-}
-
-func WithBaseURL(url string) SDKOption {
+func WithBaseURL(url string) Options {
 	return func(cfg *Config) {
 		cfg.BaseURL = url
 	}
 }
 
-func WithAppKey(key string) SDKOption {
+func WithAppKey(key string) Options {
 	return func(cfg *Config) {
 		cfg.AppKey = key
 	}
 }
 
-func WithAppSecret(secret string) SDKOption {
+func WithAppSecret(secret string) Options {
 	return func(cfg *Config) {
 		cfg.AppSecret = secret
 	}
 }
 
-func WithMaxIdleConns(conns int) SDKOption {
+func WithMaxIdleConns(conns int) Options {
 	return func(cfg *Config) {
 		cfg.MaxIdleConns = conns
 	}

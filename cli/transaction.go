@@ -6,7 +6,7 @@ import (
 )
 
 func TransactionStatus(sdk pkg.SDK) error {
-	var req = pkg.TransactionReq{}
+	var req = pkg.TransactionStatusReq{}
 
 	var qs = []*survey.Question{
 		{

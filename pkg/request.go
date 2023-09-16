@@ -110,8 +110,8 @@ func (eqr ExpressQueryReq) validate() error {
 	return nil
 }
 
-// QRReq struct.
-type QRReq struct {
+// GenerateQRReq struct.
+type GenerateQRReq struct {
 	MerchantName string `json:"MerchantName,omitempty"` // Name of the Company/M-Pesa Merchant Name
 	RefNo        string `json:"RefNo,omitempty"`        // Transaction Reference
 	Amount       uint64 `json:"Amount,omitempty"`       // The total amount for the sale/transaction
@@ -120,8 +120,8 @@ type QRReq struct {
 	Size         string `json:"Size,omitempty"`         // Size of the QR code image in pixels. QR code image will always be a square image.
 }
 
-// Validate validate the QRReq Request.
-func (qr QRReq) validate() error {
+// Validate validate the GenerateQRReq Request.
+func (qr GenerateQRReq) validate() error {
 	if qr.TrxCode != "SB" && qr.TrxCode != "SM" && qr.TrxCode != "PB" && qr.TrxCode != "WA" && qr.TrxCode != "BG" {
 		return errInvalidTransactionType
 	}
@@ -171,8 +171,8 @@ func (c2b C2BSimulateReq) validate() error {
 	return nil
 }
 
-// B2Creq struct.
-type B2Creq struct {
+// B2CPaymentReq struct.
+type B2CPaymentReq struct {
 	OriginatorConversationID string `json:"OriginatorConversationID,omitempty"` // This is a unique string you specify for every API request you simulate.
 	CommandID                string `json:"CommandID,omitempty"`                // This is a unique command that specifies B2C transaction type.
 	PartyA                   uint64 `json:"PartyA,omitempty"`                   // This is the B2C organization shortcode from which the money is sent from.
@@ -189,7 +189,7 @@ type B2Creq struct {
 }
 
 // Validate validate the struct.
-func (r B2Creq) validate() error {
+func (r B2CPaymentReq) validate() error {
 	if r.CommandID != "BusinessPayment" && r.CommandID != "SalaryPayment" && r.CommandID != "PromotionPayment" {
 		return errInvalidCommandID
 	}
@@ -211,8 +211,8 @@ func (r B2Creq) validate() error {
 	return nil
 }
 
-// TransactionReq struct.
-type TransactionReq struct {
+// TransactionStatusReq struct.
+type TransactionStatusReq struct {
 	CommandID          string `json:"CommandID,omitempty"`          // Takes only the 'TransactionStatusQuery' Command ID.
 	PartyA             uint64 `json:"PartyA,omitempty"`             // Organization/MSISDN receiving the transaction
 	IdentifierType     uint8  `json:"IdentifierType,omitempty"`     // Type of organization receiving the transaction
@@ -227,7 +227,7 @@ type TransactionReq struct {
 }
 
 // Validate validate the struct.
-func (r TransactionReq) validate() error {
+func (r TransactionStatusReq) validate() error {
 	if r.CommandID != "TransactionStatusQuery" {
 		return errInvalidCommandID
 	}
@@ -255,8 +255,8 @@ func (r TransactionReq) validate() error {
 	return nil
 }
 
-// AccBalanceReq struct.
-type AccBalanceReq struct {
+// AccountBalanceReq struct.
+type AccountBalanceReq struct {
 	CommandID          string `json:"CommandID,omitempty"`
 	PartyA             uint64 `json:"PartyA,omitempty"`             // Type of organization receiving the transaction
 	IdentifierType     uint8  `json:"IdentifierType,omitempty"`     // Type of organization querying for the account balance.
@@ -269,7 +269,7 @@ type AccBalanceReq struct {
 }
 
 // Validate validate the struct.
-func (r AccBalanceReq) validate() error {
+func (r AccountBalanceReq) validate() error {
 	if r.CommandID != "AccountBalance" {
 		return errInvalidCommandID
 	}
@@ -289,8 +289,8 @@ func (r AccBalanceReq) validate() error {
 	return nil
 }
 
-// ReversalReq struct.
-type ReversalReq struct {
+// ReverseReq struct.
+type ReverseReq struct {
 	CommandID              string `json:"CommandID,omitempty"`              // Takes only the 'TransactionReversal' Command id.
 	ReceiverParty          uint64 `json:"ReceiverParty,omitempty"`          // The organization that receives the transaction.
 	RecieverIdentifierType uint8  `json:"RecieverIdentifierType,omitempty"` // Type of organization that receives the transaction.
@@ -306,7 +306,7 @@ type ReversalReq struct {
 }
 
 // Validate validate the struct.
-func (r ReversalReq) validate() error {
+func (r ReverseReq) validate() error {
 	if r.CommandID != "TransactionReversal" {
 		return errInvalidCommandID
 	}
@@ -322,8 +322,8 @@ func (r ReversalReq) validate() error {
 	return nil
 }
 
-// RemitTax struct.
-type RemitTax struct {
+// RemitTaxReq struct.
+type RemitTaxReq struct {
 	InitiatorName          string `json:"Initiator,omitempty"`              // The name of Initiator to initiating  the request
 	InitiatorPassword      string `json:"InitiatorPassword,omitempty"`      // The password of the API user. This is the same password used while creating the API user.
 	SecurityCredential     string `json:"SecurityCredential,omitempty"`     // Encrypted Credential of user getting transaction amoun
@@ -340,7 +340,7 @@ type RemitTax struct {
 }
 
 // Validate validate the struct.
-func (r RemitTax) validate() error {
+func (r RemitTaxReq) validate() error {
 	if r.CommandID != "PayTaxToKRA" {
 		return errInvalidCommandID
 	}

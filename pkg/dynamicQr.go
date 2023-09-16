@@ -7,31 +7,31 @@ import (
 	"net/http"
 )
 
-func (sdk mSDK) GenerateQR(qReq QRReq) (QRResp, error) {
+func (sdk mSDK) GenerateQR(qReq GenerateQRReq) (GenerateQRResp, error) {
 	if err := qReq.validate(); err != nil {
-		return QRResp{}, err
+		return GenerateQRResp{}, err
 	}
 
 	data, err := json.Marshal(qReq)
 	if err != nil {
-		return QRResp{}, err
+		return GenerateQRResp{}, err
 	}
 
 	url := fmt.Sprintf("%s/%s", sdk.baseURL, qrCodeEndpoint)
 
 	req, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(data))
 	if err != nil {
-		return QRResp{}, err
+		return GenerateQRResp{}, err
 	}
 
 	resp, err := sdk.sendRequest(req)
 	if err != nil {
-		return QRResp{}, err
+		return GenerateQRResp{}, err
 	}
 
-	var qrr QRResp
+	var qrr GenerateQRResp
 	if err := json.Unmarshal(resp, &qrr); err != nil {
-		return QRResp{}, err
+		return GenerateQRResp{}, err
 	}
 
 	return qrr, nil
