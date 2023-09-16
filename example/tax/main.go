@@ -25,7 +25,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	taxReq := mpesa.RemitTax{
+	taxReq := mpesa.RemitTaxReq{
 		InitiatorName:          "testapi",
 		InitiatorPassword:      "Safaricom999!*!",
 		CommandID:              "PayTaxToKRA",

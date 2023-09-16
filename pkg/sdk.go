@@ -1,7 +1,6 @@
 package pkg
 
 import (
-	"context"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/tls"
@@ -113,7 +112,7 @@ type SDK interface {
 	// Documentation: https://developer.safaricom.co.ke/APIs/BusinessToCustomer
 	//
 	// Example:
-	// 	b2cReq := mpesa.B2Creq{
+	// 	b2cReq := mpesa.B2CPaymentReq{
 	//      OriginatorConversationID: uuid.String(),
 	// 		InitiatorName:            "testapi",
 	// 		SecurityCredential:       "Safaricom111!",
@@ -135,14 +134,14 @@ type SDK interface {
 	// 	log.Printf("Resp: %+v\n", resp)
 	// Output:
 	//  2023/09/07 21:12:26 Resp: {ValidResp:{OriginatorConversationID: ConversationID:AG_20230907_2010325b025970fde878 ResponseDescription:Accept the service request successfully. ResponseCode:0}}
-	B2CPayment(b2cReq B2Creq) (B2CResp, error)
+	B2CPayment(b2cReq B2CPaymentReq) (B2CPaymentResp, error)
 
 	// AccountBalance Enquire the balance on an M-Pesa BuyGoods (Till Number)
 	//
 	// Documentation: https://developer.safaricom.co.ke/APIs/AccountBalance
 	//
 	// Example:
-	// 	balReq := mpesa.AccBalanceReq{
+	// 	balReq := mpesa.AccountBalanceReq{
 	// 		InitiatorName:     "testapi",
 	// 		InitiatorPassword: "Safaricom999!*!",
 	// 		CommandID:         "AccountBalance",
@@ -161,7 +160,7 @@ type SDK interface {
 	// 	log.Printf("Resp: %+v\n", resp)
 	// Output:
 	//  2023/09/07 22:05:44 Resp: {ValidResp:{OriginatorConversationID: ConversationID:AG_20230907_201045e9b4e4f9bcb4d6 ResponseDescription:Accept the service request successfully. ResponseCode:0}}
-	AccountBalance(abReq AccBalanceReq) (AccBalanceResp, error)
+	AccountBalance(abReq AccountBalanceReq) (AccountBalanceResp, error)
 
 	// C2BRegisterURL Register validation and confirmation URLs on M-Pesa
 	//
@@ -217,7 +216,7 @@ type SDK interface {
 	// Documentation: https://developer.safaricom.co.ke/APIs/DynamicQRCode
 	//
 	// Example:
-	// 	qrReq := mpesa.QRReq{
+	// 	qrReq := mpesa.GenerateQRReq{
 	// 		MerchantName: "Test Supermarket",
 	// 		RefNo:        "Invoice No",
 	// 		Amount:       "2000",
@@ -232,14 +231,14 @@ type SDK interface {
 	// 	log.Printf("QR Code: %+v\n", qrcode)
 	// Output:
 	//  2023/09/06 23:22:51 QR Code: {ResponseDescription:The service request is processed successfully. ResponseCode:00 RequestID: QRCode:...}
-	GenerateQR(qReq QRReq) (QRResp, error)
+	GenerateQR(qReq GenerateQRReq) (GenerateQRResp, error)
 
 	// Reverse Reverses an M-Pesa transaction.
 	//
 	// Documentation: https://developer.safaricom.co.ke/APIs/Reversal
 	//
 	// Example:
-	// 	rReq := mpesa.ReversalReq{
+	// 	rReq := mpesa.ReverseReq{
 	// 		InitiatorName:          "testapi",
 	// 		InitiatorPassword:      "Safaricom999!*!",
 	// 		CommandID:              "TransactionReversal",
@@ -261,7 +260,7 @@ type SDK interface {
 	// 	log.Printf("Resp: %+v\n", resp)
 	// Output:
 	//  2023/09/07 22:11:13 Resp: {ValidResp:{OriginatorConversationID: ConversationID:AG_20230907_20106204c62f8f1a3f21 ResponseDescription:Accept the service request successfully. ResponseCode:0}}
-	Reverse(rReq ReversalReq) (ReversalResp, error)
+	Reverse(rReq ReverseReq) (ReverseResp, error)
 
 	// TransactionStatus Check the status of a transaction
 	//
@@ -270,7 +269,7 @@ type SDK interface {
 	// Documentation: https://developer.safaricom.co.ke/APIs/TransactionStatus
 	//
 	// Example:
-	// 	tReq := mpesa.TransactionReq{
+	// 	tReq := mpesa.TransactionStatusReq{
 	// 		InitiatorName:     "testapi",
 	// 		InitiatorPassword: "Safaricom999!*!",
 	// 		CommandID:         "TransactionStatusQuery",
@@ -291,7 +290,7 @@ type SDK interface {
 	// 	log.Printf("Resp: %+v\n", resp)
 	// Output:
 	//  2023/09/07 21:56:50 Resp: {ValidResp:{OriginatorConversationID: ConversationID:AG_20230907_20102e33b7103b4f7b0e ResponseDescription:Accept the service request successfully. ResponseCode:0}}
-	TransactionStatus(tReq TransactionReq) (TransactionResp, error)
+	TransactionStatus(tReq TransactionStatusReq) (TransactionStatusResp, error)
 
 	// RemitTax enables businesses to remit tax to Kenya Revenue Authority (KRA).
 	//
@@ -321,11 +320,10 @@ type SDK interface {
 	// 	log.Printf("Resp: %+v\n", resp)
 	// Output:
 	//  2023/09/07 22:30:00 Resp: {ValidResp:{OriginatorConversationID: ConversationID:AG_20230907_201001484b176c67b3fb ResponseDescription:Accept the service request successfully. ResponseCode:0}}
-	RemitTax(rReq RemitTax) (RemitTaxResp, error)
+	RemitTax(rReq RemitTaxReq) (RemitTaxResp, error)
 }
 
 type mSDK struct {
-	ctx       context.Context
 	baseURL   string
 	appKey    string
 	appSecret string
@@ -335,7 +333,6 @@ type mSDK struct {
 
 // Config contains sdk configuration parameters.
 type Config struct {
-	CTX          context.Context
 	BaseURL      string
 	AppKey       string
 	AppSecret    string
@@ -363,7 +360,7 @@ func (cfg Config) validate() error {
 }
 
 // NewSDK returns new mpesa SDK instance.
-func NewSDK(conf Config, opts ...SDKOption) (SDK, error) {
+func NewSDK(conf Config, opts ...Options) (SDK, error) {
 	if err := conf.validate(); err != nil {
 		return nil, err
 	}
@@ -408,10 +405,6 @@ func (sdk mSDK) sendRequest(req *http.Request) ([]byte, error) {
 
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Cache-Control", "no-cache")
-
-	if sdk.ctx != nil {
-		req = req.WithContext(sdk.ctx)
-	}
 
 	resp, err := sdk.client.Do(req)
 	if err != nil {

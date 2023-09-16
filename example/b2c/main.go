@@ -31,7 +31,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	b2cReq := mpesa.B2Creq{
+	b2cReq := mpesa.B2CPaymentReq{
 		OriginatorConversationID: uuid.String(),
 		InitiatorName:            "testapi",
 		InitiatorPassword:        "Safaricom999!*!",

@@ -25,7 +25,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	qrReq := mpesa.QRReq{
+	qrReq := mpesa.GenerateQRReq{
 		MerchantName: "Test Supermarket",
 		RefNo:        "Invoice No",
 		Amount:       2000,

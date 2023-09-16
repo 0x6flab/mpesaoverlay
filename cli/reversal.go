@@ -6,7 +6,7 @@ import (
 )
 
 func Reversal(sdk pkg.SDK) error {
-	var req = pkg.ReversalReq{}
+	var req = pkg.ReverseReq{}
 
 	var qs = []*survey.Question{
 		{

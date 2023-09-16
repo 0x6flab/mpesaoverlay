@@ -7,37 +7,37 @@ import (
 	"net/http"
 )
 
-func (sdk mSDK) TransactionStatus(tReq TransactionReq) (TransactionResp, error) {
+func (sdk mSDK) TransactionStatus(tReq TransactionStatusReq) (TransactionStatusResp, error) {
 	if err := tReq.validate(); err != nil {
-		return TransactionResp{}, err
+		return TransactionStatusResp{}, err
 	}
 
 	var err error
 	tReq.SecurityCredential, err = sdk.generateSecurityCredential(tReq.InitiatorPassword)
 	if err != nil {
-		return TransactionResp{}, err
+		return TransactionStatusResp{}, err
 	}
 
 	data, err := json.Marshal(tReq)
 	if err != nil {
-		return TransactionResp{}, err
+		return TransactionStatusResp{}, err
 	}
 
 	url := fmt.Sprintf("%s/%s", sdk.baseURL, transactionEndpoint)
 
 	req, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(data))
 	if err != nil {
-		return TransactionResp{}, err
+		return TransactionStatusResp{}, err
 	}
 
 	resp, err := sdk.sendRequest(req)
 	if err != nil {
-		return TransactionResp{}, err
+		return TransactionStatusResp{}, err
 	}
 
-	var tr TransactionResp
+	var tr TransactionStatusResp
 	if err := json.Unmarshal(resp, &tr); err != nil {
-		return TransactionResp{}, err
+		return TransactionStatusResp{}, err
 	}
 
 	return tr, nil

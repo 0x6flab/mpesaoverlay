@@ -7,7 +7,7 @@ import (
 )
 
 func B2CPayment(sdk pkg.SDK) error {
-	var req = pkg.B2Creq{}
+	var req = pkg.B2CPaymentReq{}
 
 	var qs = []*survey.Question{
 		{

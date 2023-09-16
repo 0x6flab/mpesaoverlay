@@ -6,7 +6,7 @@ import (
 )
 
 func RemitTax(sdk pkg.SDK) error {
-	var req = pkg.RemitTax{}
+	var req = pkg.RemitTaxReq{}
 
 	var qs = []*survey.Question{
 		{

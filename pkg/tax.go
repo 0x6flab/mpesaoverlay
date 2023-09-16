@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func (sdk mSDK) RemitTax(rReq RemitTax) (RemitTaxResp, error) {
+func (sdk mSDK) RemitTax(rReq RemitTaxReq) (RemitTaxResp, error) {
 	if err := rReq.validate(); err != nil {
 		return RemitTaxResp{}, err
 	}
