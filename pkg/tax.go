@@ -8,7 +8,7 @@ import (
 )
 
 func (sdk mSDK) RemitTax(rReq RemitTaxReq) (RemitTaxResp, error) {
-	if err := rReq.validate(); err != nil {
+	if err := rReq.Validate(); err != nil {
 		return RemitTaxResp{}, err
 	}
 

@@ -8,7 +8,7 @@ import (
 )
 
 func (sdk mSDK) B2CPayment(b2cReq B2CPaymentReq) (B2CPaymentResp, error) {
-	if err := b2cReq.validate(); err != nil {
+	if err := b2cReq.Validate(); err != nil {
 		return B2CPaymentResp{}, err
 	}
 

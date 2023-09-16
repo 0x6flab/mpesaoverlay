@@ -17,19 +17,19 @@ service Service {
 
     rpc ExpressSimulate (mpesaoverlay.overlay.ExpressSimulateReq) returns (mpesaoverlay.overlay.ExpressSimulateResp) { }
 
-    rpc B2CPayment (mpesaoverlay.overlay.B2Creq) returns (mpesaoverlay.overlay.B2CResp) { }
+    rpc B2CPayment (mpesaoverlay.overlay.B2CPaymentReq) returns (mpesaoverlay.overlay.B2CPaymentResp) { }
 
-    rpc AccountBalance (mpesaoverlay.overlay.AccBalanceReq) returns (mpesaoverlay.overlay.AccBalanceResp) { }
+    rpc AccountBalance (mpesaoverlay.overlay.AccountBalanceReq) returns (mpesaoverlay.overlay.AccountBalanceResp) { }
 
     rpc C2BRegisterURL (mpesaoverlay.overlay.C2BRegisterURLReq) returns (mpesaoverlay.overlay.C2BRegisterURLResp) { }
 
     rpc C2BSimulate (mpesaoverlay.overlay.C2BSimulateReq) returns (mpesaoverlay.overlay.C2BSimulateResp) { }
 
-    rpc GenerateQR (mpesaoverlay.overlay.QRReq) returns (mpesaoverlay.overlay.QRResp) { }
+    rpc GenerateQR (mpesaoverlay.overlay.GenerateQRReq) returns (mpesaoverlay.overlay.GenerateQRResp) { }
 
-    rpc Reverse (mpesaoverlay.overlay.ReversalReq) returns (mpesaoverlay.overlay.ReversalResp) { }
+    rpc Reverse (mpesaoverlay.overlay.ReverseReq) returns (mpesaoverlay.overlay.ReverseResp) { }
 
-    rpc TransactionStatus (mpesaoverlay.overlay.TransactionReq) returns (mpesaoverlay.overlay.TransactionResp) { }
+    rpc TransactionStatus (mpesaoverlay.overlay.TransactionStatusReq) returns (mpesaoverlay.overlay.TransactionStatusResp) { }
 
-    rpc RemitTax (mpesaoverlay.overlay.RemitTax) returns (mpesaoverlay.overlay.RemitTaxResp) { }
+    rpc RemitTax (mpesaoverlay.overlay.RemitTaxReq) returns (mpesaoverlay.overlay.RemitTaxResp) { }
 }

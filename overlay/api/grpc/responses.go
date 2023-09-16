@@ -15,11 +15,11 @@ type expressSimulateResp struct {
 }
 
 type b2cResp struct {
-	pkg.B2CResp
+	pkg.B2CPaymentResp
 }
 
 type accountBalanceResp struct {
-	pkg.AccBalanceResp
+	pkg.AccountBalanceResp
 }
 
 type c2bRegisterURLResp struct {
@@ -31,15 +31,15 @@ type c2bSimulateResp struct {
 }
 
 type generateQRResp struct {
-	pkg.QRResp
+	pkg.GenerateQRResp
 }
 
 type reverseResp struct {
-	pkg.ReversalResp
+	pkg.ReverseResp
 }
 
 type transactionStatusResp struct {
-	pkg.TransactionResp
+	pkg.TransactionStatusResp
 }
 
 type remitTaxResp struct {

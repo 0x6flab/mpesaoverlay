@@ -8,7 +8,7 @@ import (
 )
 
 func (sdk mSDK) AccountBalance(abReq AccountBalanceReq) (AccountBalanceResp, error) {
-	if err := abReq.validate(); err != nil {
+	if err := abReq.Validate(); err != nil {
 		return AccountBalanceResp{}, err
 	}
 

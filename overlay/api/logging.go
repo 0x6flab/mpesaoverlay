@@ -66,7 +66,7 @@ func (lm *loggingMiddleware) ExpressSimulate(ctx context.Context, eReq pkg.Expre
 	return lm.svc.ExpressSimulate(ctx, eReq)
 }
 
-func (lm *loggingMiddleware) B2CPayment(ctx context.Context, b2cReq pkg.B2Creq) (resp pkg.B2CResp, err error) {
+func (lm *loggingMiddleware) B2CPayment(ctx context.Context, b2cReq pkg.B2CPaymentReq) (resp pkg.B2CPaymentResp, err error) {
 	defer func(begin time.Time) {
 		lm.logger.Info(
 			"B2CPayment",
@@ -86,7 +86,7 @@ func (lm *loggingMiddleware) B2CPayment(ctx context.Context, b2cReq pkg.B2Creq) 
 	return lm.svc.B2CPayment(ctx, b2cReq)
 }
 
-func (lm *loggingMiddleware) AccountBalance(ctx context.Context, abReq pkg.AccBalanceReq) (resp pkg.AccBalanceResp, err error) {
+func (lm *loggingMiddleware) AccountBalance(ctx context.Context, abReq pkg.AccountBalanceReq) (resp pkg.AccountBalanceResp, err error) {
 	defer func(begin time.Time) {
 		lm.logger.Info(
 			"AccountBalance",
@@ -134,7 +134,7 @@ func (lm *loggingMiddleware) C2BSimulate(ctx context.Context, c2bReq pkg.C2BSimu
 	return lm.svc.C2BSimulate(ctx, c2bReq)
 }
 
-func (lm *loggingMiddleware) GenerateQR(ctx context.Context, qReq pkg.QRReq) (resp pkg.QRResp, err error) {
+func (lm *loggingMiddleware) GenerateQR(ctx context.Context, qReq pkg.GenerateQRReq) (resp pkg.GenerateQRResp, err error) {
 	defer func(begin time.Time) {
 		lm.logger.Info(
 			"GenerateQR",
@@ -151,7 +151,7 @@ func (lm *loggingMiddleware) GenerateQR(ctx context.Context, qReq pkg.QRReq) (re
 	return lm.svc.GenerateQR(ctx, qReq)
 }
 
-func (lm *loggingMiddleware) Reverse(ctx context.Context, rReq pkg.ReversalReq) (resp pkg.ReversalResp, err error) {
+func (lm *loggingMiddleware) Reverse(ctx context.Context, rReq pkg.ReverseReq) (resp pkg.ReverseResp, err error) {
 	defer func(begin time.Time) {
 		lm.logger.Info(
 			"Reverse",
@@ -161,7 +161,7 @@ func (lm *loggingMiddleware) Reverse(ctx context.Context, rReq pkg.ReversalReq) 
 			zap.String("TransactionID", rReq.TransactionID),
 			zap.Uint64("Amount", rReq.Amount),
 			zap.Uint64("ReceiverParty", rReq.ReceiverParty),
-			zap.Uint8("RecieverIdentifierType", rReq.RecieverIdentifierType),
+			zap.Uint8("ReceiverIdentifierType", rReq.ReceiverIdentifierType),
 			zap.String("ResultURL", rReq.ResultURL),
 			zap.String("QueueTimeOutURL", rReq.QueueTimeOutURL),
 		)
@@ -170,7 +170,7 @@ func (lm *loggingMiddleware) Reverse(ctx context.Context, rReq pkg.ReversalReq) 
 	return lm.svc.Reverse(ctx, rReq)
 }
 
-func (lm *loggingMiddleware) TransactionStatus(ctx context.Context, tReq pkg.TransactionReq) (resp pkg.TransactionResp, err error) {
+func (lm *loggingMiddleware) TransactionStatus(ctx context.Context, tReq pkg.TransactionStatusReq) (resp pkg.TransactionStatusResp, err error) {
 	defer func(begin time.Time) {
 		lm.logger.Info(
 			"TransactionStatus",
@@ -188,7 +188,7 @@ func (lm *loggingMiddleware) TransactionStatus(ctx context.Context, tReq pkg.Tra
 	return lm.svc.TransactionStatus(ctx, tReq)
 }
 
-func (lm *loggingMiddleware) RemitTax(ctx context.Context, rReq pkg.RemitTax) (resp pkg.RemitTaxResp, err error) {
+func (lm *loggingMiddleware) RemitTax(ctx context.Context, rReq pkg.RemitTaxReq) (resp pkg.RemitTaxResp, err error) {
 	defer func(begin time.Time) {
 		lm.logger.Info(
 			"RemitTax",
@@ -197,7 +197,7 @@ func (lm *loggingMiddleware) RemitTax(ctx context.Context, rReq pkg.RemitTax) (r
 			zap.String("InitiatorName", rReq.InitiatorName),
 			zap.String("CommandID", rReq.CommandID),
 			zap.Uint8("SenderIdentifierType", rReq.SenderIdentifierType),
-			zap.Uint8("RecieverIdentifierType", rReq.RecieverIdentifierType),
+			zap.Uint8("ReceiverIdentifierType", rReq.ReceiverIdentifierType),
 			zap.Uint64("Amount", rReq.Amount),
 			zap.Uint64("PartyA", rReq.PartyA),
 			zap.Uint64("PartyB", rReq.PartyB),
