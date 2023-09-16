@@ -1,5 +1,10 @@
 package pkg
 
+import (
+	"context"
+	"net/http"
+)
+
 type Options func(*Config)
 
 func WithBaseURL(url string) Options {
@@ -20,8 +25,20 @@ func WithAppSecret(secret string) Options {
 	}
 }
 
-func WithMaxIdleConns(conns int) Options {
+func WithCertFile(certFile string) Options {
 	return func(cfg *Config) {
-		cfg.MaxIdleConns = conns
+		cfg.CertFile = certFile
+	}
+}
+
+func WithContext(ctx context.Context) Options {
+	return func(cfg *Config) {
+		cfg.Context = ctx
+	}
+}
+
+func WithHTTPClient(client *http.Client) Options {
+	return func(cfg *Config) {
+		cfg.HTTPClient = client
 	}
 }

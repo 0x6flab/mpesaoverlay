@@ -14,10 +14,9 @@ var (
 
 func main() {
 	conf := mpesa.Config{
-		BaseURL:      "https://sandbox.safaricom.co.ke",
-		AppKey:       cKey,
-		AppSecret:    cSecret,
-		MaxIdleConns: 10,
+		BaseURL:   "https://sandbox.safaricom.co.ke",
+		AppKey:    cKey,
+		AppSecret: cSecret,
 	}
 
 	mp, err := mpesa.NewSDK(conf)
@@ -32,7 +31,7 @@ func main() {
 		TransactionID:          "RI704KI9RW",
 		Amount:                 10,
 		ReceiverParty:          600992,
-		RecieverIdentifierType: 11,
+		ReceiverIdentifierType: 11,
 		QueueTimeOutURL:        "https://example.com/timeout",
 		ResultURL:              "https://example.com/result",
 		Remarks:                "test",

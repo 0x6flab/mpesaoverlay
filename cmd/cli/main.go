@@ -17,7 +17,6 @@ type Config struct {
 	ConsumerKey    string `env:"MPESA_CONSUMER_KEY"`
 	ConsumerSecret string `env:"MPESA_CONSUMER_SECRET"`
 	BaseURL        string `env:"MPESA_BASE_URL"         envDefault:"https://sandbox.safaricom.co.ke"`
-	MaxIdleConns   int    `env:"MPESA_MAX_IDLE_CONNS"   envDefault:"10"`
 }
 
 var (
@@ -37,11 +36,10 @@ func main() {
 	}
 
 	mpesaCfg := mpesa.Config{
-		CTX:          ctx,
-		BaseURL:      cfg.BaseURL,
-		AppKey:       cfg.ConsumerKey,
-		AppSecret:    cfg.ConsumerSecret,
-		MaxIdleConns: cfg.MaxIdleConns,
+		BaseURL:   cfg.BaseURL,
+		AppKey:    cfg.ConsumerKey,
+		AppSecret: cfg.ConsumerSecret,
+		Context:   ctx,
 	}
 	sdk, err := mpesa.NewSDK(mpesaCfg)
 	if err != nil {
@@ -59,7 +57,6 @@ func main() {
 	mpesaCLI.Flag("consumer-key", "Mpesa Consumer Key").Short('k').Envar("MPESA_CONSUMER_KEY").StringVar(&cfg.ConsumerKey)
 	mpesaCLI.Flag("consumer-secret", "Mpesa Consumer Secret").Short('s').Envar("MPESA_CONSUMER_SECRET").StringVar(&cfg.ConsumerSecret)
 	mpesaCLI.Flag("base-url", "Mpesa Base URL").Short('b').Envar("MPESA_BASE_URL").StringVar(&cfg.BaseURL)
-	mpesaCLI.Flag("max-idle-conns", "Mpesa Max Idle Connections").Short('m').Envar("MPESA_MAX_IDLE_CONNS").IntVar(&cfg.MaxIdleConns)
 
 	cli.AddCommands(mpesaCLI, sdk)
 
