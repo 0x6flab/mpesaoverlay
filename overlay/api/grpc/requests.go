@@ -26,19 +26,19 @@ func (req expressSimulateReq) validate() error {
 }
 
 type b2cReq struct {
-	pkg.B2Creq
+	pkg.B2CPaymentReq
 }
 
 func (req b2cReq) validate() error {
-	return req.B2Creq.Validate()
+	return req.B2CPaymentReq.Validate()
 }
 
 type accountBalanceReq struct {
-	pkg.AccBalanceReq
+	pkg.AccountBalanceReq
 }
 
 func (req accountBalanceReq) validate() error {
-	return req.AccBalanceReq.Validate()
+	return req.AccountBalanceReq.Validate()
 }
 
 type c2bRegisterURLReq struct {
@@ -58,33 +58,33 @@ func (req c2bSimulateReq) validate() error {
 }
 
 type generateQRReq struct {
-	pkg.QRReq
+	pkg.GenerateQRReq
 }
 
 func (req generateQRReq) validate() error {
-	return req.QRReq.Validate()
+	return req.GenerateQRReq.Validate()
 }
 
 type reversalReq struct {
-	pkg.ReversalReq
+	pkg.ReverseReq
 }
 
 func (req reversalReq) validate() error {
-	return req.ReversalReq.Validate()
+	return req.ReverseReq.Validate()
 }
 
 type transactionReq struct {
-	pkg.TransactionReq
+	pkg.TransactionStatusReq
 }
 
 func (req transactionReq) validate() error {
-	return req.TransactionReq.Validate()
+	return req.TransactionStatusReq.Validate()
 }
 
 type remitTaxReq struct {
-	pkg.RemitTax
+	pkg.RemitTaxReq
 }
 
 func (req remitTaxReq) validate() error {
-	return req.RemitTax.Validate()
+	return req.RemitTaxReq.Validate()
 }

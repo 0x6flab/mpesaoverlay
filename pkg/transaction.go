@@ -8,7 +8,7 @@ import (
 )
 
 func (sdk mSDK) TransactionStatus(tReq TransactionStatusReq) (TransactionStatusResp, error) {
-	if err := tReq.validate(); err != nil {
+	if err := tReq.Validate(); err != nil {
 		return TransactionStatusResp{}, err
 	}
 

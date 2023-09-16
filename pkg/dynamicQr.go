@@ -8,7 +8,7 @@ import (
 )
 
 func (sdk mSDK) GenerateQR(qReq GenerateQRReq) (GenerateQRResp, error) {
-	if err := qReq.validate(); err != nil {
+	if err := qReq.Validate(); err != nil {
 		return GenerateQRResp{}, err
 	}
 

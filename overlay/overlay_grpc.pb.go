@@ -39,14 +39,14 @@ type ServiceClient interface {
 	GetToken(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*TokenResp, error)
 	ExpressQuery(ctx context.Context, in *ExpressQueryReq, opts ...grpc.CallOption) (*ExpressQueryResp, error)
 	ExpressSimulate(ctx context.Context, in *ExpressSimulateReq, opts ...grpc.CallOption) (*ExpressSimulateResp, error)
-	B2CPayment(ctx context.Context, in *B2Creq, opts ...grpc.CallOption) (*B2CResp, error)
-	AccountBalance(ctx context.Context, in *AccBalanceReq, opts ...grpc.CallOption) (*AccBalanceResp, error)
+	B2CPayment(ctx context.Context, in *B2CPaymentReq, opts ...grpc.CallOption) (*B2CPaymentResp, error)
+	AccountBalance(ctx context.Context, in *AccountBalanceReq, opts ...grpc.CallOption) (*AccountBalanceResp, error)
 	C2BRegisterURL(ctx context.Context, in *C2BRegisterURLReq, opts ...grpc.CallOption) (*C2BRegisterURLResp, error)
 	C2BSimulate(ctx context.Context, in *C2BSimulateReq, opts ...grpc.CallOption) (*C2BSimulateResp, error)
-	GenerateQR(ctx context.Context, in *QRReq, opts ...grpc.CallOption) (*QRResp, error)
-	Reverse(ctx context.Context, in *ReversalReq, opts ...grpc.CallOption) (*ReversalResp, error)
-	TransactionStatus(ctx context.Context, in *TransactionReq, opts ...grpc.CallOption) (*TransactionResp, error)
-	RemitTax(ctx context.Context, in *RemitTax, opts ...grpc.CallOption) (*RemitTaxResp, error)
+	GenerateQR(ctx context.Context, in *GenerateQRReq, opts ...grpc.CallOption) (*GenerateQRResp, error)
+	Reverse(ctx context.Context, in *ReverseReq, opts ...grpc.CallOption) (*ReverseResp, error)
+	TransactionStatus(ctx context.Context, in *TransactionStatusReq, opts ...grpc.CallOption) (*TransactionStatusResp, error)
+	RemitTax(ctx context.Context, in *RemitTaxReq, opts ...grpc.CallOption) (*RemitTaxResp, error)
 }
 
 type serviceClient struct {
@@ -84,8 +84,8 @@ func (c *serviceClient) ExpressSimulate(ctx context.Context, in *ExpressSimulate
 	return out, nil
 }
 
-func (c *serviceClient) B2CPayment(ctx context.Context, in *B2Creq, opts ...grpc.CallOption) (*B2CResp, error) {
-	out := new(B2CResp)
+func (c *serviceClient) B2CPayment(ctx context.Context, in *B2CPaymentReq, opts ...grpc.CallOption) (*B2CPaymentResp, error) {
+	out := new(B2CPaymentResp)
 	err := c.cc.Invoke(ctx, Service_B2CPayment_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -93,8 +93,8 @@ func (c *serviceClient) B2CPayment(ctx context.Context, in *B2Creq, opts ...grpc
 	return out, nil
 }
 
-func (c *serviceClient) AccountBalance(ctx context.Context, in *AccBalanceReq, opts ...grpc.CallOption) (*AccBalanceResp, error) {
-	out := new(AccBalanceResp)
+func (c *serviceClient) AccountBalance(ctx context.Context, in *AccountBalanceReq, opts ...grpc.CallOption) (*AccountBalanceResp, error) {
+	out := new(AccountBalanceResp)
 	err := c.cc.Invoke(ctx, Service_AccountBalance_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -120,8 +120,8 @@ func (c *serviceClient) C2BSimulate(ctx context.Context, in *C2BSimulateReq, opt
 	return out, nil
 }
 
-func (c *serviceClient) GenerateQR(ctx context.Context, in *QRReq, opts ...grpc.CallOption) (*QRResp, error) {
-	out := new(QRResp)
+func (c *serviceClient) GenerateQR(ctx context.Context, in *GenerateQRReq, opts ...grpc.CallOption) (*GenerateQRResp, error) {
+	out := new(GenerateQRResp)
 	err := c.cc.Invoke(ctx, Service_GenerateQR_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -129,8 +129,8 @@ func (c *serviceClient) GenerateQR(ctx context.Context, in *QRReq, opts ...grpc.
 	return out, nil
 }
 
-func (c *serviceClient) Reverse(ctx context.Context, in *ReversalReq, opts ...grpc.CallOption) (*ReversalResp, error) {
-	out := new(ReversalResp)
+func (c *serviceClient) Reverse(ctx context.Context, in *ReverseReq, opts ...grpc.CallOption) (*ReverseResp, error) {
+	out := new(ReverseResp)
 	err := c.cc.Invoke(ctx, Service_Reverse_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -138,8 +138,8 @@ func (c *serviceClient) Reverse(ctx context.Context, in *ReversalReq, opts ...gr
 	return out, nil
 }
 
-func (c *serviceClient) TransactionStatus(ctx context.Context, in *TransactionReq, opts ...grpc.CallOption) (*TransactionResp, error) {
-	out := new(TransactionResp)
+func (c *serviceClient) TransactionStatus(ctx context.Context, in *TransactionStatusReq, opts ...grpc.CallOption) (*TransactionStatusResp, error) {
+	out := new(TransactionStatusResp)
 	err := c.cc.Invoke(ctx, Service_TransactionStatus_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -147,7 +147,7 @@ func (c *serviceClient) TransactionStatus(ctx context.Context, in *TransactionRe
 	return out, nil
 }
 
-func (c *serviceClient) RemitTax(ctx context.Context, in *RemitTax, opts ...grpc.CallOption) (*RemitTaxResp, error) {
+func (c *serviceClient) RemitTax(ctx context.Context, in *RemitTaxReq, opts ...grpc.CallOption) (*RemitTaxResp, error) {
 	out := new(RemitTaxResp)
 	err := c.cc.Invoke(ctx, Service_RemitTax_FullMethodName, in, out, opts...)
 	if err != nil {
@@ -163,14 +163,14 @@ type ServiceServer interface {
 	GetToken(context.Context, *Empty) (*TokenResp, error)
 	ExpressQuery(context.Context, *ExpressQueryReq) (*ExpressQueryResp, error)
 	ExpressSimulate(context.Context, *ExpressSimulateReq) (*ExpressSimulateResp, error)
-	B2CPayment(context.Context, *B2Creq) (*B2CResp, error)
-	AccountBalance(context.Context, *AccBalanceReq) (*AccBalanceResp, error)
+	B2CPayment(context.Context, *B2CPaymentReq) (*B2CPaymentResp, error)
+	AccountBalance(context.Context, *AccountBalanceReq) (*AccountBalanceResp, error)
 	C2BRegisterURL(context.Context, *C2BRegisterURLReq) (*C2BRegisterURLResp, error)
 	C2BSimulate(context.Context, *C2BSimulateReq) (*C2BSimulateResp, error)
-	GenerateQR(context.Context, *QRReq) (*QRResp, error)
-	Reverse(context.Context, *ReversalReq) (*ReversalResp, error)
-	TransactionStatus(context.Context, *TransactionReq) (*TransactionResp, error)
-	RemitTax(context.Context, *RemitTax) (*RemitTaxResp, error)
+	GenerateQR(context.Context, *GenerateQRReq) (*GenerateQRResp, error)
+	Reverse(context.Context, *ReverseReq) (*ReverseResp, error)
+	TransactionStatus(context.Context, *TransactionStatusReq) (*TransactionStatusResp, error)
+	RemitTax(context.Context, *RemitTaxReq) (*RemitTaxResp, error)
 	mustEmbedUnimplementedServiceServer()
 }
 
@@ -187,10 +187,10 @@ func (UnimplementedServiceServer) ExpressQuery(context.Context, *ExpressQueryReq
 func (UnimplementedServiceServer) ExpressSimulate(context.Context, *ExpressSimulateReq) (*ExpressSimulateResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ExpressSimulate not implemented")
 }
-func (UnimplementedServiceServer) B2CPayment(context.Context, *B2Creq) (*B2CResp, error) {
+func (UnimplementedServiceServer) B2CPayment(context.Context, *B2CPaymentReq) (*B2CPaymentResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method B2CPayment not implemented")
 }
-func (UnimplementedServiceServer) AccountBalance(context.Context, *AccBalanceReq) (*AccBalanceResp, error) {
+func (UnimplementedServiceServer) AccountBalance(context.Context, *AccountBalanceReq) (*AccountBalanceResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AccountBalance not implemented")
 }
 func (UnimplementedServiceServer) C2BRegisterURL(context.Context, *C2BRegisterURLReq) (*C2BRegisterURLResp, error) {
@@ -199,16 +199,16 @@ func (UnimplementedServiceServer) C2BRegisterURL(context.Context, *C2BRegisterUR
 func (UnimplementedServiceServer) C2BSimulate(context.Context, *C2BSimulateReq) (*C2BSimulateResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method C2BSimulate not implemented")
 }
-func (UnimplementedServiceServer) GenerateQR(context.Context, *QRReq) (*QRResp, error) {
+func (UnimplementedServiceServer) GenerateQR(context.Context, *GenerateQRReq) (*GenerateQRResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GenerateQR not implemented")
 }
-func (UnimplementedServiceServer) Reverse(context.Context, *ReversalReq) (*ReversalResp, error) {
+func (UnimplementedServiceServer) Reverse(context.Context, *ReverseReq) (*ReverseResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Reverse not implemented")
 }
-func (UnimplementedServiceServer) TransactionStatus(context.Context, *TransactionReq) (*TransactionResp, error) {
+func (UnimplementedServiceServer) TransactionStatus(context.Context, *TransactionStatusReq) (*TransactionStatusResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method TransactionStatus not implemented")
 }
-func (UnimplementedServiceServer) RemitTax(context.Context, *RemitTax) (*RemitTaxResp, error) {
+func (UnimplementedServiceServer) RemitTax(context.Context, *RemitTaxReq) (*RemitTaxResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RemitTax not implemented")
 }
 func (UnimplementedServiceServer) mustEmbedUnimplementedServiceServer() {}
@@ -279,7 +279,7 @@ func _Service_ExpressSimulate_Handler(srv interface{}, ctx context.Context, dec 
 }
 
 func _Service_B2CPayment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(B2Creq)
+	in := new(B2CPaymentReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -291,13 +291,13 @@ func _Service_B2CPayment_Handler(srv interface{}, ctx context.Context, dec func(
 		FullMethod: Service_B2CPayment_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).B2CPayment(ctx, req.(*B2Creq))
+		return srv.(ServiceServer).B2CPayment(ctx, req.(*B2CPaymentReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Service_AccountBalance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AccBalanceReq)
+	in := new(AccountBalanceReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -309,7 +309,7 @@ func _Service_AccountBalance_Handler(srv interface{}, ctx context.Context, dec f
 		FullMethod: Service_AccountBalance_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).AccountBalance(ctx, req.(*AccBalanceReq))
+		return srv.(ServiceServer).AccountBalance(ctx, req.(*AccountBalanceReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -351,7 +351,7 @@ func _Service_C2BSimulate_Handler(srv interface{}, ctx context.Context, dec func
 }
 
 func _Service_GenerateQR_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QRReq)
+	in := new(GenerateQRReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -363,13 +363,13 @@ func _Service_GenerateQR_Handler(srv interface{}, ctx context.Context, dec func(
 		FullMethod: Service_GenerateQR_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).GenerateQR(ctx, req.(*QRReq))
+		return srv.(ServiceServer).GenerateQR(ctx, req.(*GenerateQRReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Service_Reverse_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ReversalReq)
+	in := new(ReverseReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -381,13 +381,13 @@ func _Service_Reverse_Handler(srv interface{}, ctx context.Context, dec func(int
 		FullMethod: Service_Reverse_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).Reverse(ctx, req.(*ReversalReq))
+		return srv.(ServiceServer).Reverse(ctx, req.(*ReverseReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Service_TransactionStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(TransactionReq)
+	in := new(TransactionStatusReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -399,13 +399,13 @@ func _Service_TransactionStatus_Handler(srv interface{}, ctx context.Context, de
 		FullMethod: Service_TransactionStatus_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).TransactionStatus(ctx, req.(*TransactionReq))
+		return srv.(ServiceServer).TransactionStatus(ctx, req.(*TransactionStatusReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Service_RemitTax_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RemitTax)
+	in := new(RemitTaxReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -417,7 +417,7 @@ func _Service_RemitTax_Handler(srv interface{}, ctx context.Context, dec func(in
 		FullMethod: Service_RemitTax_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).RemitTax(ctx, req.(*RemitTax))
+		return srv.(ServiceServer).RemitTax(ctx, req.(*RemitTaxReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }

@@ -66,7 +66,7 @@ func b2cEndpoint(svc overlay.Service) endpoint.Endpoint {
 			return b2cResp{}, errors.Join(errValidation, err)
 		}
 
-		resp, err := svc.B2CPayment(ctx, req.B2Creq)
+		resp, err := svc.B2CPayment(ctx, req.B2CPaymentReq)
 		if err != nil {
 			return b2cResp{}, err
 		}
@@ -82,7 +82,7 @@ func accountBalanceEndpoint(svc overlay.Service) endpoint.Endpoint {
 			return accountBalanceResp{}, errors.Join(errValidation, err)
 		}
 
-		resp, err := svc.AccountBalance(ctx, req.AccBalanceReq)
+		resp, err := svc.AccountBalance(ctx, req.AccountBalanceReq)
 		if err != nil {
 			return accountBalanceResp{}, err
 		}
@@ -130,7 +130,7 @@ func generateQREndpoint(svc overlay.Service) endpoint.Endpoint {
 			return generateQRResp{}, errors.Join(errValidation, err)
 		}
 
-		resp, err := svc.GenerateQR(ctx, req.QRReq)
+		resp, err := svc.GenerateQR(ctx, req.GenerateQRReq)
 		if err != nil {
 			return generateQRResp{}, err
 		}
@@ -146,7 +146,7 @@ func reverseEndpoint(svc overlay.Service) endpoint.Endpoint {
 			return reverseResp{}, errors.Join(errValidation, err)
 		}
 
-		resp, err := svc.Reverse(ctx, req.ReversalReq)
+		resp, err := svc.Reverse(ctx, req.ReverseReq)
 		if err != nil {
 			return reverseResp{}, err
 		}
@@ -162,7 +162,7 @@ func transactionStatusEndpoint(svc overlay.Service) endpoint.Endpoint {
 			return transactionStatusResp{}, errors.Join(errValidation, err)
 		}
 
-		resp, err := svc.TransactionStatus(ctx, req.TransactionReq)
+		resp, err := svc.TransactionStatus(ctx, req.TransactionStatusReq)
 		if err != nil {
 			return transactionStatusResp{}, err
 		}
@@ -178,7 +178,7 @@ func remitTaxEndpoint(svc overlay.Service) endpoint.Endpoint {
 			return remitTaxResp{}, errors.Join(errValidation, err)
 		}
 
-		resp, err := svc.RemitTax(ctx, req.RemitTax)
+		resp, err := svc.RemitTax(ctx, req.RemitTaxReq)
 		if err != nil {
 			return remitTaxResp{}, err
 		}

@@ -89,7 +89,7 @@ func (eqr ExpressQueryReq) Validate() error {
 }
 
 // Validate validate the GenerateQRReq Request.
-func (qr GenerateQRReq) validate() error {
+func (qr GenerateQRReq) Validate() error {
 	if qr.TrxCode != "SB" && qr.TrxCode != "SM" && qr.TrxCode != "PB" && qr.TrxCode != "WA" && qr.TrxCode != "BG" {
 		return errInvalidTransactionType
 	}
@@ -114,7 +114,7 @@ func (c2b C2BRegisterURLReq) Validate() error {
 	return nil
 }
 
-func (c2b C2BSimulateReq) validate() error {
+func (c2b C2BSimulateReq) Validate() error {
 	if c2b.CommandID != "CustomerPayBillOnline" && c2b.CommandID != "CustomerBuyGoodsOnline" {
 		return errInvalidCommandID
 	}
@@ -123,7 +123,7 @@ func (c2b C2BSimulateReq) validate() error {
 }
 
 // Validate validate the struct.
-func (r B2CPaymentReq) validate() error {
+func (r B2CPaymentReq) Validate() error {
 	if r.CommandID != "BusinessPayment" && r.CommandID != "SalaryPayment" && r.CommandID != "PromotionPayment" {
 		return errInvalidCommandID
 	}
@@ -146,7 +146,7 @@ func (r B2CPaymentReq) validate() error {
 }
 
 // Validate validate the struct.
-func (r TransactionStatusReq) validate() error {
+func (r TransactionStatusReq) Validate() error {
 	if r.CommandID != "TransactionStatusQuery" {
 		return errInvalidCommandID
 	}
@@ -175,7 +175,7 @@ func (r TransactionStatusReq) validate() error {
 }
 
 // Validate validate the struct.
-func (r AccountBalanceReq) validate() error {
+func (r AccountBalanceReq) Validate() error {
 	if r.CommandID != "AccountBalance" {
 		return errInvalidCommandID
 	}
@@ -196,7 +196,7 @@ func (r AccountBalanceReq) validate() error {
 }
 
 // Validate validate the struct.
-func (r ReverseReq) validate() error {
+func (r ReverseReq) Validate() error {
 	if r.CommandID != "TransactionReversal" {
 		return errInvalidCommandID
 	}
@@ -213,7 +213,7 @@ func (r ReverseReq) validate() error {
 }
 
 // Validate validate the struct.
-func (r RemitTaxReq) validate() error {
+func (r RemitTaxReq) Validate() error {
 	if r.CommandID != "PayTaxToKRA" {
 		return errInvalidCommandID
 	}

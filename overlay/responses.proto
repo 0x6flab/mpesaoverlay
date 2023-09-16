@@ -3,11 +3,11 @@ package mpesaoverlay.overlay;
 option go_package = "./overlay";
 
 
-message AccBalanceResp {
+message AccountBalanceResp {
   ValidResp validResp = 1;
 }
 
-message B2CResp {
+message B2CPaymentResp {
   ValidResp validResp = 1;
 }
 
@@ -43,7 +43,7 @@ message ExpressSimulateResp {
   string customerMessage = 5;
 }
 
-message QRResp {
+message GenerateQRResp {
   string responseDescription = 1;
   string responseCode = 2;
   string requestID = 3;
@@ -54,7 +54,7 @@ message RemitTaxResp {
   ValidResp validResp = 1;
 }
 
-message ReversalResp {
+message ReverseResp {
   ValidResp validResp = 1;
 }
 
@@ -63,7 +63,7 @@ message TokenResp {
   string expiry = 2;
 }
 
-message TransactionResp {
+message TransactionStatusResp {
   ValidResp validResp = 1;
 }
 

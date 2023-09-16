@@ -172,19 +172,19 @@ func encodeExpressSimulateResponse(_ context.Context, grpcRes interface{}) (inte
 	return res.ExpressSimulateResp, nil
 }
 
-func (s *grpcServer) B2CPayment(ctx context.Context, req *overlay.B2Creq) (*overlay.B2CResp, error) {
+func (s *grpcServer) B2CPayment(ctx context.Context, req *overlay.B2CPaymentReq) (*overlay.B2CPaymentResp, error) {
 	_, res, err := s.b2c.ServeGRPC(ctx, req)
 	if err != nil {
 		return nil, encodeError(err)
 	}
 
-	return res.(*overlay.B2CResp), nil
+	return res.(*overlay.B2CPaymentResp), nil
 }
 
 func decodeB2CRequest(_ context.Context, grpcReq interface{}) (interface{}, error) {
-	req := grpcReq.(*overlay.B2Creq)
+	req := grpcReq.(*overlay.B2CPaymentReq)
 
-	return b2cReq{B2Creq: pkg.B2Creq{
+	return b2cReq{B2CPaymentReq: pkg.B2CPaymentReq{
 		InitiatorName:      req.InitiatorName,
 		InitiatorPassword:  req.InitiatorPassword,
 		SecurityCredential: req.SecurityCredential,
@@ -202,22 +202,22 @@ func decodeB2CRequest(_ context.Context, grpcReq interface{}) (interface{}, erro
 func encodeB2CResponse(_ context.Context, grpcRes interface{}) (interface{}, error) {
 	res := grpcRes.(b2cResp)
 
-	return res.B2CResp, nil
+	return res.B2CPaymentResp, nil
 }
 
-func (s *grpcServer) AccountBalance(ctx context.Context, req *overlay.AccBalanceReq) (*overlay.AccBalanceResp, error) {
+func (s *grpcServer) AccountBalance(ctx context.Context, req *overlay.AccountBalanceReq) (*overlay.AccountBalanceResp, error) {
 	_, res, err := s.accountBalance.ServeGRPC(ctx, req)
 	if err != nil {
 		return nil, encodeError(err)
 	}
 
-	return res.(*overlay.AccBalanceResp), nil
+	return res.(*overlay.AccountBalanceResp), nil
 }
 
 func decodeAccountBalanceRequest(_ context.Context, grpcReq interface{}) (interface{}, error) {
-	req := grpcReq.(*overlay.AccBalanceReq)
+	req := grpcReq.(*overlay.AccountBalanceReq)
 
-	return accountBalanceReq{AccBalanceReq: pkg.AccBalanceReq{
+	return accountBalanceReq{AccountBalanceReq: pkg.AccountBalanceReq{
 		InitiatorName:      req.InitiatorName,
 		InitiatorPassword:  req.InitiatorPassword,
 		SecurityCredential: req.SecurityCredential,
@@ -233,7 +233,7 @@ func decodeAccountBalanceRequest(_ context.Context, grpcReq interface{}) (interf
 func encodeAccountBalanceResponse(_ context.Context, grpcRes interface{}) (interface{}, error) {
 	res := grpcRes.(accountBalanceResp)
 
-	return res.AccBalanceResp, nil
+	return res.AccountBalanceResp, nil
 }
 
 func (s *grpcServer) C2BRegisterURL(ctx context.Context, req *overlay.C2BRegisterURLReq) (*overlay.C2BRegisterURLResp, error) {
@@ -289,19 +289,19 @@ func encodeC2BSimulateResponse(_ context.Context, grpcRes interface{}) (interfac
 	return res.C2BSimulateResp, nil
 }
 
-func (s *grpcServer) GenerateQRCode(ctx context.Context, req *overlay.QRReq) (*overlay.QRResp, error) {
+func (s *grpcServer) GenerateQRCode(ctx context.Context, req *overlay.GenerateQRReq) (*overlay.GenerateQRResp, error) {
 	_, res, err := s.generateQRCode.ServeGRPC(ctx, req)
 	if err != nil {
 		return nil, encodeError(err)
 	}
 
-	return res.(*overlay.QRResp), nil
+	return res.(*overlay.GenerateQRResp), nil
 }
 
 func decodeGenerateQRCodeRequest(_ context.Context, grpcReq interface{}) (interface{}, error) {
-	req := grpcReq.(*overlay.QRReq)
+	req := grpcReq.(*overlay.GenerateQRReq)
 
-	return generateQRReq{QRReq: pkg.QRReq{
+	return generateQRReq{GenerateQRReq: pkg.GenerateQRReq{
 		MerchantName: req.MerchantName,
 		RefNo:        req.RefNo,
 		Amount:       req.Amount,
@@ -314,25 +314,25 @@ func decodeGenerateQRCodeRequest(_ context.Context, grpcReq interface{}) (interf
 func encodeGenerateQRCodeResponse(_ context.Context, grpcRes interface{}) (interface{}, error) {
 	res := grpcRes.(generateQRResp)
 
-	return res.QRResp, nil
+	return res.GenerateQRResp, nil
 }
 
-func (s *grpcServer) Reverse(ctx context.Context, req *overlay.ReversalReq) (*overlay.ReversalResp, error) {
+func (s *grpcServer) Reverse(ctx context.Context, req *overlay.ReverseReq) (*overlay.ReverseResp, error) {
 	_, res, err := s.reverse.ServeGRPC(ctx, req)
 	if err != nil {
 		return nil, encodeError(err)
 	}
 
-	return res.(*overlay.ReversalResp), nil
+	return res.(*overlay.ReverseResp), nil
 }
 
 func decodeReverseRequest(_ context.Context, grpcReq interface{}) (interface{}, error) {
-	req := grpcReq.(*overlay.ReversalReq)
+	req := grpcReq.(*overlay.ReverseReq)
 
-	return reversalReq{ReversalReq: pkg.ReversalReq{
+	return reversalReq{ReverseReq: pkg.ReverseReq{
 		CommandID:              req.CommandID,
 		ReceiverParty:          req.ReceiverParty,
-		RecieverIdentifierType: uint8(req.RecieverIdentifierType),
+		ReceiverIdentifierType: uint8(req.ReceiverIdentifierType),
 		Remarks:                req.Remarks,
 		InitiatorName:          req.InitiatorName,
 		InitiatorPassword:      req.InitiatorPassword,
@@ -348,22 +348,22 @@ func decodeReverseRequest(_ context.Context, grpcReq interface{}) (interface{}, 
 func encodeReverseResponse(_ context.Context, grpcRes interface{}) (interface{}, error) {
 	res := grpcRes.(reverseResp)
 
-	return res.ReversalResp, nil
+	return res.ReverseResp, nil
 }
 
-func (s *grpcServer) TransactionStatus(ctx context.Context, req *overlay.TransactionReq) (*overlay.TransactionResp, error) {
+func (s *grpcServer) TransactionStatus(ctx context.Context, req *overlay.TransactionStatusReq) (*overlay.TransactionStatusResp, error) {
 	_, res, err := s.transactionStatus.ServeGRPC(ctx, req)
 	if err != nil {
 		return nil, encodeError(err)
 	}
 
-	return res.(*overlay.TransactionResp), nil
+	return res.(*overlay.TransactionStatusResp), nil
 }
 
 func decodeTransactionStatusRequest(_ context.Context, grpcReq interface{}) (interface{}, error) {
-	req := grpcReq.(*overlay.TransactionReq)
+	req := grpcReq.(*overlay.TransactionStatusReq)
 
-	return transactionReq{TransactionReq: pkg.TransactionReq{
+	return transactionReq{TransactionStatusReq: pkg.TransactionStatusReq{
 		CommandID:          req.CommandID,
 		PartyA:             req.PartyA,
 		IdentifierType:     uint8(req.IdentifierType),
@@ -381,10 +381,10 @@ func decodeTransactionStatusRequest(_ context.Context, grpcReq interface{}) (int
 func encodeTransactionStatusResponse(_ context.Context, grpcRes interface{}) (interface{}, error) {
 	res := grpcRes.(transactionStatusResp)
 
-	return res.TransactionResp, nil
+	return res.TransactionStatusResp, nil
 }
 
-func (s *grpcServer) RemitTax(ctx context.Context, req *overlay.RemitTax) (*overlay.RemitTaxResp, error) {
+func (s *grpcServer) RemitTax(ctx context.Context, req *overlay.RemitTaxReq) (*overlay.RemitTaxResp, error) {
 	_, res, err := s.remitTax.ServeGRPC(ctx, req)
 	if err != nil {
 		return nil, encodeError(err)
@@ -394,9 +394,9 @@ func (s *grpcServer) RemitTax(ctx context.Context, req *overlay.RemitTax) (*over
 }
 
 func decodeRemitTaxRequest(_ context.Context, grpcReq interface{}) (interface{}, error) {
-	req := grpcReq.(*overlay.RemitTax)
+	req := grpcReq.(*overlay.RemitTaxReq)
 
-	return remitTaxReq{RemitTax: pkg.RemitTax{
+	return remitTaxReq{RemitTaxReq: pkg.RemitTaxReq{
 		InitiatorName:          req.InitiatorName,
 		InitiatorPassword:      req.InitiatorPassword,
 		SecurityCredential:     req.SecurityCredential,
@@ -406,7 +406,7 @@ func decodeRemitTaxRequest(_ context.Context, grpcReq interface{}) (interface{},
 		PartyB:                 req.PartyB,
 		Remarks:                req.Remarks,
 		SenderIdentifierType:   uint8(req.SenderIdentifierType),
-		RecieverIdentifierType: uint8(req.RecieverIdentifierType),
+		ReceiverIdentifierType: uint8(req.ReceiverIdentifierType),
 		AccountReference:       req.AccountReference,
 		QueueTimeOutURL:        req.QueueTimeOutURL,
 		ResultURL:              req.ResultURL,

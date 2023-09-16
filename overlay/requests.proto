@@ -3,7 +3,7 @@ package mpesaoverlay.overlay;
 option go_package = "./overlay";
 
 
-message AccBalanceReq {
+message AccountBalanceReq {
   string commandID = 1;
   uint64 partyA = 2;
   uint32 identifierType = 3;
@@ -15,7 +15,7 @@ message AccBalanceReq {
   string resultURL = 9;
 }
 
-message B2Creq {
+message B2CPaymentReq {
   string originatorConversationID = 1;
   string commandID = 2;
   uint64 partyA = 3;
@@ -69,7 +69,7 @@ message ExpressSimulateReq {
   string transactionDesc = 12;
 }
 
-message QRReq {
+message GenerateQRReq {
   string merchantName = 1;
   string refNo = 2;
   uint64 amount = 3;
@@ -78,13 +78,13 @@ message QRReq {
   string size = 6;
 }
 
-message RemitTax {
+message RemitTaxReq {
   string initiatorName = 1;
   string initiatorPassword = 2;
   string securityCredential = 3;
   string commandID = 4;
   uint32 senderIdentifierType = 5;
-  uint32 recieverIdentifierType = 6;
+  uint32 receiverIdentifierType = 6;
   uint64 amount = 7;
   uint64 partyA = 8;
   uint64 partyB = 9;
@@ -94,10 +94,10 @@ message RemitTax {
   string remarks = 13;
 }
 
-message ReversalReq {
+message ReverseReq {
   string commandID = 1;
   uint64 receiverParty = 2;
-  uint32 recieverIdentifierType = 3;
+  uint32 receiverIdentifierType = 3;
   string remarks = 4;
   string initiatorName = 5;
   string initiatorPassword = 6;
@@ -109,7 +109,7 @@ message ReversalReq {
   string transactionID = 12;
 }
 
-message TransactionReq {
+message TransactionStatusReq {
   string commandID = 1;
   uint64 partyA = 2;
   uint32 identifierType = 3;

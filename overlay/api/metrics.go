@@ -53,7 +53,7 @@ func (mm *metricsMiddleware) ExpressSimulate(ctx context.Context, eReq pkg.Expre
 	return mm.svc.ExpressSimulate(ctx, eReq)
 }
 
-func (mm *metricsMiddleware) B2CPayment(ctx context.Context, b2cReq pkg.B2Creq) (resp pkg.B2CResp, err error) {
+func (mm *metricsMiddleware) B2CPayment(ctx context.Context, b2cReq pkg.B2CPaymentReq) (resp pkg.B2CPaymentResp, err error) {
 	defer func(begin time.Time) {
 		mm.counter.With("method", "B2CPayment").Add(1)
 		mm.latency.With("method", "B2CPayment").Observe(time.Since(begin).Seconds())
@@ -62,7 +62,7 @@ func (mm *metricsMiddleware) B2CPayment(ctx context.Context, b2cReq pkg.B2Creq) 
 	return mm.svc.B2CPayment(ctx, b2cReq)
 }
 
-func (mm *metricsMiddleware) AccountBalance(ctx context.Context, abReq pkg.AccBalanceReq) (resp pkg.AccBalanceResp, err error) {
+func (mm *metricsMiddleware) AccountBalance(ctx context.Context, abReq pkg.AccountBalanceReq) (resp pkg.AccountBalanceResp, err error) {
 	defer func(begin time.Time) {
 		mm.counter.With("method", "AccountBalance").Add(1)
 		mm.latency.With("method", "AccountBalance").Observe(time.Since(begin).Seconds())
@@ -89,7 +89,7 @@ func (mm *metricsMiddleware) C2BSimulate(ctx context.Context, c2bReq pkg.C2BSimu
 	return mm.svc.C2BSimulate(ctx, c2bReq)
 }
 
-func (mm *metricsMiddleware) GenerateQR(ctx context.Context, qReq pkg.QRReq) (resp pkg.QRResp, err error) {
+func (mm *metricsMiddleware) GenerateQR(ctx context.Context, qReq pkg.GenerateQRReq) (resp pkg.GenerateQRResp, err error) {
 	defer func(begin time.Time) {
 		mm.counter.With("method", "GenerateQR").Add(1)
 		mm.latency.With("method", "GenerateQR").Observe(time.Since(begin).Seconds())
@@ -98,7 +98,7 @@ func (mm *metricsMiddleware) GenerateQR(ctx context.Context, qReq pkg.QRReq) (re
 	return mm.svc.GenerateQR(ctx, qReq)
 }
 
-func (mm *metricsMiddleware) Reverse(ctx context.Context, rReq pkg.ReversalReq) (resp pkg.ReversalResp, err error) {
+func (mm *metricsMiddleware) Reverse(ctx context.Context, rReq pkg.ReverseReq) (resp pkg.ReverseResp, err error) {
 	defer func(begin time.Time) {
 		mm.counter.With("method", "Reverse").Add(1)
 		mm.latency.With("method", "Reverse").Observe(time.Since(begin).Seconds())
@@ -107,7 +107,7 @@ func (mm *metricsMiddleware) Reverse(ctx context.Context, rReq pkg.ReversalReq) 
 	return mm.svc.Reverse(ctx, rReq)
 }
 
-func (mm *metricsMiddleware) TransactionStatus(ctx context.Context, tReq pkg.TransactionReq) (resp pkg.TransactionResp, err error) {
+func (mm *metricsMiddleware) TransactionStatus(ctx context.Context, tReq pkg.TransactionStatusReq) (resp pkg.TransactionStatusResp, err error) {
 	defer func(begin time.Time) {
 		mm.counter.With("method", "TransactionStatus").Add(1)
 		mm.latency.With("method", "TransactionStatus").Observe(time.Since(begin).Seconds())
@@ -116,7 +116,7 @@ func (mm *metricsMiddleware) TransactionStatus(ctx context.Context, tReq pkg.Tra
 	return mm.svc.TransactionStatus(ctx, tReq)
 }
 
-func (mm *metricsMiddleware) RemitTax(ctx context.Context, rReq pkg.RemitTax) (resp pkg.RemitTaxResp, err error) {
+func (mm *metricsMiddleware) RemitTax(ctx context.Context, rReq pkg.RemitTaxReq) (resp pkg.RemitTaxResp, err error) {
 	defer func(begin time.Time) {
 		mm.counter.With("method", "RemitTax").Add(1)
 		mm.latency.With("method", "RemitTax").Observe(time.Since(begin).Seconds())

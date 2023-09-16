@@ -8,7 +8,7 @@ import (
 )
 
 func (sdk mSDK) Reverse(rReq ReverseReq) (ReverseResp, error) {
-	if err := rReq.validate(); err != nil {
+	if err := rReq.Validate(); err != nil {
 		return ReverseResp{}, err
 	}
 

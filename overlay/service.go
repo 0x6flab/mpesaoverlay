@@ -33,12 +33,12 @@ type Service interface {
 	// B2C API is an API used to make payments from a Business to Customers (Pay Outs), also known as Bulk Disbursements.
 	//
 	// Documentation: https://developer.safaricom.co.ke/APIs/BusinessToCustomer
-	B2CPayment(ctx context.Context, b2cReq pkg.B2Creq) (pkg.B2CResp, error)
+	B2CPayment(ctx context.Context, b2cReq pkg.B2CPaymentReq) (pkg.B2CPaymentResp, error)
 
 	// AccountBalance Enquire the balance on an M-Pesa BuyGoods (Till Number)
 	//
 	// Documentation: https://developer.safaricom.co.ke/APIs/AccountBalance
-	AccountBalance(ctx context.Context, abReq pkg.AccBalanceReq) (pkg.AccBalanceResp, error)
+	AccountBalance(ctx context.Context, abReq pkg.AccountBalanceReq) (pkg.AccountBalanceResp, error)
 
 	// C2BRegisterURL Register validation and confirmation URLs on M-Pesa
 	//
@@ -58,18 +58,18 @@ type Service interface {
 	//
 	// Documentation: https://developer.safaricom.co.ke/APIs/DynamicQRCode
 
-	GenerateQR(ctx context.Context, qReq pkg.QRReq) (pkg.QRResp, error)
+	GenerateQR(ctx context.Context, qReq pkg.GenerateQRReq) (pkg.GenerateQRResp, error)
 
 	// Reverse Reverses an M-Pesa transaction.
-	Reverse(ctx context.Context, rReq pkg.ReversalReq) (pkg.ReversalResp, error)
+	Reverse(ctx context.Context, rReq pkg.ReverseReq) (pkg.ReverseResp, error)
 
 	// TransactionStatus Check the status of a transaction
 	//
 	// Check the status of a transaction.
-	TransactionStatus(ctx context.Context, tReq pkg.TransactionReq) (pkg.TransactionResp, error)
+	TransactionStatus(ctx context.Context, tReq pkg.TransactionStatusReq) (pkg.TransactionStatusResp, error)
 
 	// RemitTax enables businesses to remit tax to Kenya Revenue Authority (KRA).
-	RemitTax(ctx context.Context, rReq pkg.RemitTax) (pkg.RemitTaxResp, error)
+	RemitTax(ctx context.Context, rReq pkg.RemitTaxReq) (pkg.RemitTaxResp, error)
 }
 
 type service struct {
@@ -94,11 +94,11 @@ func (s *service) ExpressSimulate(_ context.Context, eReq pkg.ExpressSimulateReq
 	return s.sdk.ExpressSimulate(eReq)
 }
 
-func (s *service) B2CPayment(_ context.Context, b2cReq pkg.B2Creq) (pkg.B2CResp, error) {
+func (s *service) B2CPayment(_ context.Context, b2cReq pkg.B2CPaymentReq) (pkg.B2CPaymentResp, error) {
 	return s.sdk.B2CPayment(b2cReq)
 }
 
-func (s *service) AccountBalance(_ context.Context, abReq pkg.AccBalanceReq) (pkg.AccBalanceResp, error) {
+func (s *service) AccountBalance(_ context.Context, abReq pkg.AccountBalanceReq) (pkg.AccountBalanceResp, error) {
 	return s.sdk.AccountBalance(abReq)
 }
 
@@ -110,18 +110,18 @@ func (s *service) C2BSimulate(_ context.Context, c2bReq pkg.C2BSimulateReq) (pkg
 	return s.sdk.C2BSimulate(c2bReq)
 }
 
-func (s *service) GenerateQR(_ context.Context, qReq pkg.QRReq) (pkg.QRResp, error) {
+func (s *service) GenerateQR(_ context.Context, qReq pkg.GenerateQRReq) (pkg.GenerateQRResp, error) {
 	return s.sdk.GenerateQR(qReq)
 }
 
-func (s *service) Reverse(_ context.Context, rReq pkg.ReversalReq) (pkg.ReversalResp, error) {
+func (s *service) Reverse(_ context.Context, rReq pkg.ReverseReq) (pkg.ReverseResp, error) {
 	return s.sdk.Reverse(rReq)
 }
 
-func (s *service) TransactionStatus(_ context.Context, tReq pkg.TransactionReq) (pkg.TransactionResp, error) {
+func (s *service) TransactionStatus(_ context.Context, tReq pkg.TransactionStatusReq) (pkg.TransactionStatusResp, error) {
 	return s.sdk.TransactionStatus(tReq)
 }
 
-func (s *service) RemitTax(_ context.Context, rReq pkg.RemitTax) (pkg.RemitTaxResp, error) {
+func (s *service) RemitTax(_ context.Context, rReq pkg.RemitTaxReq) (pkg.RemitTaxResp, error) {
 	return s.sdk.RemitTax(rReq)
 }

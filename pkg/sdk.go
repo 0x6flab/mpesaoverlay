@@ -365,28 +365,35 @@ func (cfg Config) validate() error {
 
 // NewSDK returns new mpesa SDK instance.
 func NewSDK(conf Config, opts ...Options) (SDK, error) {
-	if err := conf.validate(); err != nil {
-		return nil, err
+	conf.CertFile = prodCertificate
+	if strings.Contains(conf.BaseURL, "sandbox") {
+		conf.CertFile = sandboxCertificate
 	}
 
-	fileName := prodCertificate
-	if strings.Contains(conf.BaseURL, "sandbox") {
-		fileName = sandboxCertificate
+	conf.HTTPClient = &http.Client{
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{
+				InsecureSkipVerify: false,
+			},
+		},
+		Timeout: defaultTimeout,
+	}
+
+	for _, opt := range opts {
+		opt(&conf)
+	}
+
+	if err := conf.validate(); err != nil {
+		return nil, err
 	}
 
 	sdk := &mSDK{
 		baseURL:   conf.BaseURL,
 		appKey:    conf.AppKey,
 		appSecret: conf.AppSecret,
-		certFile:  fileName,
-		client: &http.Client{
-			Transport: &http.Transport{
-				TLSClientConfig: &tls.Config{
-					InsecureSkipVerify: false,
-				},
-			},
-			Timeout: defaultTimeout,
-		},
+		certFile:  conf.CertFile,
+		client:    conf.HTTPClient,
+		context:   conf.Context,
 	}
 
 	return sdk, nil
