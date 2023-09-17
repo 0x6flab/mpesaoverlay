@@ -42,3 +42,15 @@ func WithHTTPClient(client *http.Client) Options {
 		cfg.HTTPClient = client
 	}
 }
+
+func WithInitiatorName(name string) Options {
+	return func(cfg *Config) {
+		cfg.InitiatorName = name
+	}
+}
+
+func WithInitiatorPassword(password string) Options {
+	return func(cfg *Config) {
+		cfg.InitiatorPassword = password
+	}
+}

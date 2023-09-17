@@ -325,22 +325,26 @@ type SDK interface {
 }
 
 type mSDK struct {
-	baseURL   string
-	appKey    string
-	appSecret string
-	certFile  string
-	client    *http.Client
-	context   context.Context
+	baseURL           string
+	appKey            string
+	appSecret         string
+	certFile          string
+	client            *http.Client
+	context           context.Context
+	initiatorName     string
+	initiatorPassword string
 }
 
 // Config contains sdk configuration parameters.
 type Config struct {
-	BaseURL    string
-	AppKey     string
-	AppSecret  string
-	CertFile   string
-	HTTPClient *http.Client
-	Context    context.Context
+	BaseURL           string
+	AppKey            string
+	AppSecret         string
+	CertFile          string
+	HTTPClient        *http.Client
+	Context           context.Context
+	InitiatorName     string
+	InitiatorPassword string
 }
 
 func (cfg Config) validate() error {
@@ -388,12 +392,14 @@ func NewSDK(conf Config, opts ...Options) (SDK, error) {
 	}
 
 	sdk := &mSDK{
-		baseURL:   conf.BaseURL,
-		appKey:    conf.AppKey,
-		appSecret: conf.AppSecret,
-		certFile:  conf.CertFile,
-		client:    conf.HTTPClient,
-		context:   conf.Context,
+		baseURL:           conf.BaseURL,
+		appKey:            conf.AppKey,
+		appSecret:         conf.AppSecret,
+		certFile:          conf.CertFile,
+		client:            conf.HTTPClient,
+		context:           conf.Context,
+		initiatorName:     conf.InitiatorName,
+		initiatorPassword: conf.InitiatorPassword,
 	}
 
 	return sdk, nil
