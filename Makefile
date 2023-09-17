@@ -1,8 +1,13 @@
+MO_DOCKER_IMAGE_NAME_PREFIX ?= mpesaoverlay
 BUILD_DIR = build
-SERVICES = cli
+SERVICES = cli overlay
+DOCKERS = $(addprefix docker_,$(SERVICES))
+DOCKERS_DEV = $(addprefix docker_dev_,$(SERVICES))
 CGO_ENABLED ?= 0
 GOARCH ?= amd64
 VERSION ?= $(shell git describe --tags --abbrev=0 2>/dev/null || echo "0.1.0")
+COMMIT ?= $(shell git rev-parse HEAD)
+TIME ?= $(shell date +%F_%T)
 
 define compile_service
 	CGO_ENABLED=$(CGO_ENABLED) GOOS=$(GOOS) GOARCH=$(GOARCH) GOARM=$(GOARM) \
@@ -13,12 +18,48 @@ define compile_service
 	-o ${BUILD_DIR}/mpesa-$(1) cmd/$(1)/main.go
 endef
 
+define make_docker
+	$(eval svc=$(subst docker_,,$(1)))
+
+	docker build \
+		--no-cache \
+		--build-arg SVC=$(svc) \
+		--build-arg GOARCH=$(GOARCH) \
+		--build-arg GOARM=$(GOARM) \
+		--build-arg GOOS=$(GOOS) \
+		--build-arg CGO_ENABLED=$(CGO_ENABLED) \
+		--build-arg VERSION=$(VERSION) \
+		--build-arg COMMIT=$(COMMIT) \
+		--build-arg TIME=$(TIME) \
+		--tag=$(MO_DOCKER_IMAGE_NAME_PREFIX)/$(svc) \
+		-f docker/Dockerfile .
+endef
+
+define make_docker_dev
+	$(eval svc=$(subst docker_dev_,,$(1)))
+
+	docker build \
+		--no-cache \
+		--build-arg SVC=$(svc) \
+		--tag=$(MO_DOCKER_IMAGE_NAME_PREFIX)/$(svc) \
+		-f docker/Dockerfile.dev ./build
+endef
+
 $(SERVICES):
 	$(call compile_service,$@)
 
 all: $(SERVICES)
 
-.PHONY: all $(SERVICES)
+.PHONY: all $(SERVICES) dockers dockers_dev
+
+$(DOCKERS):
+	$(call make_docker,$(@),$(GOARCH))
+
+$(DOCKERS_DEV):
+	$(call make_docker_dev,$(@))
+
+dockers: $(DOCKERS)
+dockers_dev: $(DOCKERS_DEV)
 
 clean:
 	rm -rf ${BUILD_DIR}
@@ -43,3 +84,6 @@ proto:
 	sed -i 's,package proto;,package mpesaoverlay.overlay;\noption go_package = "./overlay";,g' overlay/responses.proto
 	sed -i 's/uint8/uint32/g' overlay/responses.proto
 	protoc -I. --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative overlay/*.proto
+
+run:
+	docker-compose -f docker/docker-compose.yml --env-file docker/.env up -d
