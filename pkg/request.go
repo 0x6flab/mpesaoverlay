@@ -101,7 +101,7 @@ type AccountBalanceReq struct {
 type ReverseReq struct {
 	CommandID              string `json:"CommandID,omitempty"`              // Takes only the 'TransactionReversal' Command id.
 	ReceiverParty          uint64 `json:"ReceiverParty,omitempty"`          // The organization that receives the transaction.
-	ReceiverIdentifierType uint8  `json:"ReceiverIdentifierType,omitempty"` // Type of organization that receives the transaction.
+	RecieverIdentifierType uint8  `json:"RecieverIdentifierType,omitempty"` // Type of organization that receives the transaction.
 	Remarks                string `json:"Remarks,omitempty"`                // Comments that are sent along with the transaction.
 	InitiatorName          string `json:"Initiator,omitempty"`              // The name of the initiator to initiate the request.
 	InitiatorPassword      string `json:"InitiatorPassword,omitempty"`      // The password of the API user. This is the same password used while creating the API user.
@@ -120,7 +120,7 @@ type RemitTaxReq struct {
 	SecurityCredential     string `json:"SecurityCredential,omitempty"`     // Encrypted Credential of user getting transaction amoun
 	CommandID              string `json:"CommandID,omitempty"`              // Takes only the 'TransactionStatusQuery' Command ID.
 	SenderIdentifierType   uint8  `json:"SenderIdentifierType,omitempty"`   // The type of shortcode from which money is deducted. For this API, only "4" is allowed.
-	ReceiverIdentifierType uint8  `json:"ReceiverIdentifierType,omitempty"` // The type of shortcode to which money is credited. For this API, only "4" is allowed.
+	RecieverIdentifierType uint8  `json:"RecieverIdentifierType,omitempty"` // The type of shortcode to which money is credited. For this API, only "4" is allowed.
 	Amount                 uint64 `json:"Amount,omitempty"`                 // The amount of money being sent to the customer.
 	PartyA                 uint64 `json:"PartyA,omitempty"`                 // This is your own shortcode from which the money will be deducted.
 	PartyB                 uint64 `json:"PartyB,omitempty"`                 // The account to which money will be credited.
