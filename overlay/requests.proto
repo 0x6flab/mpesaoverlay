@@ -84,7 +84,7 @@ message RemitTaxReq {
   string securityCredential = 3;
   string commandID = 4;
   uint32 senderIdentifierType = 5;
-  uint32 receiverIdentifierType = 6;
+  uint32 recieverIdentifierType = 6;
   uint64 amount = 7;
   uint64 partyA = 8;
   uint64 partyB = 9;
@@ -97,7 +97,7 @@ message RemitTaxReq {
 message ReverseReq {
   string commandID = 1;
   uint64 receiverParty = 2;
-  uint32 receiverIdentifierType = 3;
+  uint32 recieverIdentifierType = 3;
   string remarks = 4;
   string initiatorName = 5;
   string initiatorPassword = 6;

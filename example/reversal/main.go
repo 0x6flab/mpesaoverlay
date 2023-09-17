@@ -31,7 +31,7 @@ func main() {
 		TransactionID:          "RI704KI9RW",
 		Amount:                 10,
 		ReceiverParty:          600992,
-		ReceiverIdentifierType: 11,
+		RecieverIdentifierType: 11,
 		QueueTimeOutURL:        "https://example.com/timeout",
 		ResultURL:              "https://example.com/result",
 		Remarks:                "test",

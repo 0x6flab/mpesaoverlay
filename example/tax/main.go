@@ -29,7 +29,7 @@ func main() {
 		InitiatorPassword:      "Safaricom999!*!",
 		CommandID:              "PayTaxToKRA",
 		SenderIdentifierType:   4,
-		ReceiverIdentifierType: 4,
+		RecieverIdentifierType: 4,
 		Amount:                 239,
 		PartyA:                 600978,
 		PartyB:                 572572,
