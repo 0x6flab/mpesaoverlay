@@ -21,7 +21,7 @@ type grpcServer struct {
 	accountBalance    kitgrpc.Handler
 	c2bRegisterURL    kitgrpc.Handler
 	c2bSimulate       kitgrpc.Handler
-	generateQRCode    kitgrpc.Handler
+	generateQR        kitgrpc.Handler
 	reverse           kitgrpc.Handler
 	transactionStatus kitgrpc.Handler
 	remitTax          kitgrpc.Handler
@@ -65,10 +65,10 @@ func NewServer(svc overlay.Service) overlay.ServiceServer {
 			decodeC2BSimulateRequest,
 			encodeC2BSimulateResponse,
 		),
-		generateQRCode: kitgrpc.NewServer(
+		generateQR: kitgrpc.NewServer(
 			generateQREndpoint(svc),
-			decodeGenerateQRCodeRequest,
-			encodeGenerateQRCodeResponse,
+			decodeGenerateQRRequest,
+			encodeGenerateQRResponse,
 		),
 		reverse: kitgrpc.NewServer(
 			reverseEndpoint(svc),
@@ -133,7 +133,15 @@ func decodeExpressQueryRequest(_ context.Context, grpcReq interface{}) (interfac
 func encodeExpressQueryResponse(_ context.Context, grpcRes interface{}) (interface{}, error) {
 	res := grpcRes.(expressQueryResp)
 
-	return res.ExpressQueryResp, nil
+	return &overlay.ExpressQueryResp{
+		MerchantRequestID:   res.MerchantRequestID,
+		CheckoutRequestID:   res.CheckoutRequestID,
+		ResponseCode:        res.ResponseCode,
+		ResponseDescription: res.ResponseDescription,
+		CustomerMessage:     res.CustomerMessage,
+		ResultCode:          res.ResultCode,
+		ResultDesc:          res.ResultDesc,
+	}, nil
 }
 
 func (s *grpcServer) ExpressSimulate(ctx context.Context, req *overlay.ExpressSimulateReq) (*overlay.ExpressSimulateResp, error) {
@@ -169,7 +177,13 @@ func decodeExpressSimulateRequest(_ context.Context, grpcReq interface{}) (inter
 func encodeExpressSimulateResponse(_ context.Context, grpcRes interface{}) (interface{}, error) {
 	res := grpcRes.(expressSimulateResp)
 
-	return res.ExpressSimulateResp, nil
+	return &overlay.ExpressSimulateResp{
+		MerchantRequestID:   res.MerchantRequestID,
+		CheckoutRequestID:   res.CheckoutRequestID,
+		ResponseCode:        res.ResponseCode,
+		ResponseDescription: res.ResponseDescription,
+		CustomerMessage:     res.CustomerMessage,
+	}, nil
 }
 
 func (s *grpcServer) B2CPayment(ctx context.Context, req *overlay.B2CPaymentReq) (*overlay.B2CPaymentResp, error) {
@@ -202,7 +216,14 @@ func decodeB2CRequest(_ context.Context, grpcReq interface{}) (interface{}, erro
 func encodeB2CResponse(_ context.Context, grpcRes interface{}) (interface{}, error) {
 	res := grpcRes.(b2cResp)
 
-	return res.B2CPaymentResp, nil
+	return &overlay.B2CPaymentResp{
+		ValidResp: &overlay.ValidResp{
+			ConversationID:           res.ConversationID,
+			OriginatorConversationID: res.OriginatorConversationID,
+			ResponseCode:             res.ResponseCode,
+			ResponseDescription:      res.ResponseDescription,
+		},
+	}, nil
 }
 
 func (s *grpcServer) AccountBalance(ctx context.Context, req *overlay.AccountBalanceReq) (*overlay.AccountBalanceResp, error) {
@@ -233,7 +254,14 @@ func decodeAccountBalanceRequest(_ context.Context, grpcReq interface{}) (interf
 func encodeAccountBalanceResponse(_ context.Context, grpcRes interface{}) (interface{}, error) {
 	res := grpcRes.(accountBalanceResp)
 
-	return res.AccountBalanceResp, nil
+	return &overlay.AccountBalanceResp{
+		ValidResp: &overlay.ValidResp{
+			ConversationID:           res.ConversationID,
+			OriginatorConversationID: res.OriginatorConversationID,
+			ResponseCode:             res.ResponseCode,
+			ResponseDescription:      res.ResponseDescription,
+		},
+	}, nil
 }
 
 func (s *grpcServer) C2BRegisterURL(ctx context.Context, req *overlay.C2BRegisterURLReq) (*overlay.C2BRegisterURLResp, error) {
@@ -259,7 +287,14 @@ func decodeC2BRegisterURLRequest(_ context.Context, grpcReq interface{}) (interf
 func encodeC2BRegisterURLResponse(_ context.Context, grpcRes interface{}) (interface{}, error) {
 	res := grpcRes.(c2bRegisterURLResp)
 
-	return res.C2BRegisterURLResp, nil
+	return &overlay.C2BRegisterURLResp{
+		ValidResp: &overlay.ValidResp{
+			ConversationID:           res.ConversationID,
+			OriginatorConversationID: res.OriginatorConversationID,
+			ResponseCode:             res.ResponseCode,
+			ResponseDescription:      res.ResponseDescription,
+		},
+	}, nil
 }
 
 func (s *grpcServer) C2BSimulate(ctx context.Context, req *overlay.C2BSimulateReq) (*overlay.C2BSimulateResp, error) {
@@ -286,11 +321,18 @@ func decodeC2BSimulateRequest(_ context.Context, grpcReq interface{}) (interface
 func encodeC2BSimulateResponse(_ context.Context, grpcRes interface{}) (interface{}, error) {
 	res := grpcRes.(c2bSimulateResp)
 
-	return res.C2BSimulateResp, nil
+	return &overlay.C2BSimulateResp{
+		ValidResp: &overlay.ValidResp{
+			ConversationID:           res.ConversationID,
+			OriginatorConversationID: res.OriginatorConversationID,
+			ResponseCode:             res.ResponseCode,
+			ResponseDescription:      res.ResponseDescription,
+		},
+	}, nil
 }
 
-func (s *grpcServer) GenerateQRCode(ctx context.Context, req *overlay.GenerateQRReq) (*overlay.GenerateQRResp, error) {
-	_, res, err := s.generateQRCode.ServeGRPC(ctx, req)
+func (s *grpcServer) GenerateQR(ctx context.Context, req *overlay.GenerateQRReq) (*overlay.GenerateQRResp, error) {
+	_, res, err := s.generateQR.ServeGRPC(ctx, req)
 	if err != nil {
 		return nil, encodeError(err)
 	}
@@ -298,7 +340,7 @@ func (s *grpcServer) GenerateQRCode(ctx context.Context, req *overlay.GenerateQR
 	return res.(*overlay.GenerateQRResp), nil
 }
 
-func decodeGenerateQRCodeRequest(_ context.Context, grpcReq interface{}) (interface{}, error) {
+func decodeGenerateQRRequest(_ context.Context, grpcReq interface{}) (interface{}, error) {
 	req := grpcReq.(*overlay.GenerateQRReq)
 
 	return generateQRReq{GenerateQRReq: pkg.GenerateQRReq{
@@ -311,10 +353,15 @@ func decodeGenerateQRCodeRequest(_ context.Context, grpcReq interface{}) (interf
 	}}, nil
 }
 
-func encodeGenerateQRCodeResponse(_ context.Context, grpcRes interface{}) (interface{}, error) {
+func encodeGenerateQRResponse(_ context.Context, grpcRes interface{}) (interface{}, error) {
 	res := grpcRes.(generateQRResp)
 
-	return res.GenerateQRResp, nil
+	return &overlay.GenerateQRResp{
+		RequestID:           res.RequestID,
+		QRCode:              res.QRCode,
+		ResponseCode:        res.ResponseCode,
+		ResponseDescription: res.ResponseDescription,
+	}, nil
 }
 
 func (s *grpcServer) Reverse(ctx context.Context, req *overlay.ReverseReq) (*overlay.ReverseResp, error) {
@@ -332,7 +379,7 @@ func decodeReverseRequest(_ context.Context, grpcReq interface{}) (interface{}, 
 	return reversalReq{ReverseReq: pkg.ReverseReq{
 		CommandID:              req.CommandID,
 		ReceiverParty:          req.ReceiverParty,
-		ReceiverIdentifierType: uint8(req.ReceiverIdentifierType),
+		RecieverIdentifierType: uint8(req.RecieverIdentifierType),
 		Remarks:                req.Remarks,
 		InitiatorName:          req.InitiatorName,
 		InitiatorPassword:      req.InitiatorPassword,
@@ -348,7 +395,14 @@ func decodeReverseRequest(_ context.Context, grpcReq interface{}) (interface{}, 
 func encodeReverseResponse(_ context.Context, grpcRes interface{}) (interface{}, error) {
 	res := grpcRes.(reverseResp)
 
-	return res.ReverseResp, nil
+	return &overlay.ReverseResp{
+		ValidResp: &overlay.ValidResp{
+			ConversationID:           res.ConversationID,
+			OriginatorConversationID: res.OriginatorConversationID,
+			ResponseCode:             res.ResponseCode,
+			ResponseDescription:      res.ResponseDescription,
+		},
+	}, nil
 }
 
 func (s *grpcServer) TransactionStatus(ctx context.Context, req *overlay.TransactionStatusReq) (*overlay.TransactionStatusResp, error) {
@@ -381,7 +435,14 @@ func decodeTransactionStatusRequest(_ context.Context, grpcReq interface{}) (int
 func encodeTransactionStatusResponse(_ context.Context, grpcRes interface{}) (interface{}, error) {
 	res := grpcRes.(transactionStatusResp)
 
-	return res.TransactionStatusResp, nil
+	return &overlay.TransactionStatusResp{
+		ValidResp: &overlay.ValidResp{
+			ConversationID:           res.ConversationID,
+			OriginatorConversationID: res.OriginatorConversationID,
+			ResponseCode:             res.ResponseCode,
+			ResponseDescription:      res.ResponseDescription,
+		},
+	}, nil
 }
 
 func (s *grpcServer) RemitTax(ctx context.Context, req *overlay.RemitTaxReq) (*overlay.RemitTaxResp, error) {
@@ -406,7 +467,7 @@ func decodeRemitTaxRequest(_ context.Context, grpcReq interface{}) (interface{},
 		PartyB:                 req.PartyB,
 		Remarks:                req.Remarks,
 		SenderIdentifierType:   uint8(req.SenderIdentifierType),
-		ReceiverIdentifierType: uint8(req.ReceiverIdentifierType),
+		RecieverIdentifierType: uint8(req.RecieverIdentifierType),
 		AccountReference:       req.AccountReference,
 		QueueTimeOutURL:        req.QueueTimeOutURL,
 		ResultURL:              req.ResultURL,
@@ -416,7 +477,14 @@ func decodeRemitTaxRequest(_ context.Context, grpcReq interface{}) (interface{},
 func encodeRemitTaxResponse(_ context.Context, grpcRes interface{}) (interface{}, error) {
 	res := grpcRes.(remitTaxResp)
 
-	return res.RemitTaxResp, nil
+	return &overlay.RemitTaxResp{
+		ValidResp: &overlay.ValidResp{
+			ConversationID:           res.ConversationID,
+			OriginatorConversationID: res.OriginatorConversationID,
+			ResponseCode:             res.ResponseCode,
+			ResponseDescription:      res.ResponseDescription,
+		},
+	}, nil
 }
 
 func encodeError(err error) error {
