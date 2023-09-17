@@ -1,0 +1,38 @@
+version: "3.7"
+
+networks:
+  mpesaoverlay-base-net:
+    driver: bridge
+
+volumes:
+  mpesaoverlay-overlay-db-volume:
+
+services:
+  overlay:
+    image: mpesaoverlay/overlay:${MO_RELEASE_TAG}
+    container_name: mpesaoverlay-overlay
+    restart: on-failure
+    environment:
+      MO_LOG_LEVEL: ${MO_LOG_LEVEL}
+      MPESA_CONSUMER_KEY: ${MPESA_CONSUMER_KEY}
+      MPESA_CONSUMER_SECRET: ${MPESA_CONSUMER_SECRET}
+      MPESA_BASE_URL: ${MPESA_BASE_URL}
+      MO_GRPC_URL: ${MO_GRPC_URL}
+      MO_GRPC_SERVER_CERT: ${MO_GRPC_SERVER_CERT}
+      MO_GRPC_SERVER_KEY: ${MO_GRPC_SERVER_KEY}
+      MO_JAEGER_URL: ${MO_JAEGER_URL}
+    ports:
+      - ${MO_GRPC_PORT}:${MO_GRPC_PORT}
+    networks:
+      - mpesaoverlay-base-net
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.38.0
+    container_name: mpesaoverlay-jaeger
+    ports:
+      - ${MO_JAEGER_PORT}:${MO_JAEGER_PORT}/udp
+      - ${MO_JAEGER_FRONTEND}:${MO_JAEGER_FRONTEND}
+      - ${MO_JAEGER_COLLECTOR}:${MO_JAEGER_COLLECTOR}
+      - ${MO_JAEGER_CONFIGS}:${MO_JAEGER_CONFIGS}
+    networks:
+      - mpesaoverlay-base-net
