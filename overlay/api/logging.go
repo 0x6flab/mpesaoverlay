@@ -12,11 +12,11 @@ import (
 var _ overlay.Service = (*loggingMiddleware)(nil)
 
 type loggingMiddleware struct {
-	logger zap.Logger
+	logger *zap.Logger
 	svc    overlay.Service
 }
 
-func LoggingMiddleware(svc overlay.Service, logger zap.Logger) overlay.Service {
+func LoggingMiddleware(svc overlay.Service, logger *zap.Logger) overlay.Service {
 	return &loggingMiddleware{logger, svc}
 }
 
@@ -50,16 +50,12 @@ func (lm *loggingMiddleware) ExpressSimulate(ctx context.Context, eReq pkg.Expre
 			"ExpressSimulate",
 			zap.Error(err),
 			zap.Uint64("BusinessShortCode", eReq.BusinessShortCode),
-			zap.String("Password", eReq.Password),
-			zap.String("Timestamp", eReq.Timestamp),
 			zap.String("TransactionType", eReq.TransactionType),
 			zap.Uint64("Amount", eReq.Amount),
 			zap.Uint64("PartyA", eReq.PartyA),
 			zap.Uint64("PartyB", eReq.PartyB),
 			zap.Uint64("PhoneNumber", eReq.PhoneNumber),
-			zap.String("CallBackURL", eReq.CallBackURL),
 			zap.String("AccountReference", eReq.AccountReference),
-			zap.String("TransactionDesc", eReq.TransactionDesc),
 		)
 	}(time.Now())
 
@@ -77,8 +73,6 @@ func (lm *loggingMiddleware) B2CPayment(ctx context.Context, b2cReq pkg.B2CPayme
 			zap.Uint64("Amount", b2cReq.Amount),
 			zap.Uint64("PartyA", b2cReq.PartyA),
 			zap.Uint64("PartyB", b2cReq.PartyB),
-			zap.String("QueueTimeOutURL", b2cReq.QueueTimeOutURL),
-			zap.String("ResultURL", b2cReq.ResultURL),
 			zap.String("TransactionID", b2cReq.TransactionID),
 		)
 	}(time.Now())
@@ -95,8 +89,6 @@ func (lm *loggingMiddleware) AccountBalance(ctx context.Context, abReq pkg.Accou
 			zap.Uint64("PartyA", abReq.PartyA),
 			zap.Uint8("IdentifierType", abReq.IdentifierType),
 			zap.String("InitiatorName", abReq.InitiatorName),
-			zap.String("QueueTimeOutURL", abReq.QueueTimeOutURL),
-			zap.String("ResultURL", abReq.ResultURL),
 		)
 	}(time.Now())
 
@@ -108,8 +100,6 @@ func (lm *loggingMiddleware) C2BRegisterURL(ctx context.Context, c2bReq pkg.C2BR
 		lm.logger.Info(
 			"C2BRegisterURL",
 			zap.Error(err),
-			zap.String("ValidationURL", c2bReq.ValidationURL),
-			zap.String("ConfirmationURL", c2bReq.ConfirmationURL),
 			zap.String("ResponseType", c2bReq.ResponseType),
 			zap.Uint64("ShortCode", c2bReq.ShortCode),
 		)
@@ -161,9 +151,7 @@ func (lm *loggingMiddleware) Reverse(ctx context.Context, rReq pkg.ReverseReq) (
 			zap.String("TransactionID", rReq.TransactionID),
 			zap.Uint64("Amount", rReq.Amount),
 			zap.Uint64("ReceiverParty", rReq.ReceiverParty),
-			zap.Uint8("ReceiverIdentifierType", rReq.ReceiverIdentifierType),
-			zap.String("ResultURL", rReq.ResultURL),
-			zap.String("QueueTimeOutURL", rReq.QueueTimeOutURL),
+			zap.Uint8("ReceiverIdentifierType", rReq.RecieverIdentifierType),
 		)
 	}(time.Now())
 
@@ -180,8 +168,6 @@ func (lm *loggingMiddleware) TransactionStatus(ctx context.Context, tReq pkg.Tra
 			zap.String("TransactionID", tReq.TransactionID),
 			zap.Uint64("PartyA", tReq.PartyA),
 			zap.Uint8("IdentifierType", tReq.IdentifierType),
-			zap.String("ResultURL", tReq.ResultURL),
-			zap.String("QueueTimeOutURL", tReq.QueueTimeOutURL),
 		)
 	}(time.Now())
 
@@ -197,13 +183,11 @@ func (lm *loggingMiddleware) RemitTax(ctx context.Context, rReq pkg.RemitTaxReq)
 			zap.String("InitiatorName", rReq.InitiatorName),
 			zap.String("CommandID", rReq.CommandID),
 			zap.Uint8("SenderIdentifierType", rReq.SenderIdentifierType),
-			zap.Uint8("ReceiverIdentifierType", rReq.ReceiverIdentifierType),
+			zap.Uint8("ReceiverIdentifierType", rReq.RecieverIdentifierType),
 			zap.Uint64("Amount", rReq.Amount),
 			zap.Uint64("PartyA", rReq.PartyA),
 			zap.Uint64("PartyB", rReq.PartyB),
 			zap.String("AccountReference", rReq.AccountReference),
-			zap.String("QueueTimeOutURL", rReq.QueueTimeOutURL),
-			zap.String("ResultURL", rReq.ResultURL),
 		)
 	}(time.Now())
 
