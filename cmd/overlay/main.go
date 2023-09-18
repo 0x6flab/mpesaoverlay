@@ -90,8 +90,6 @@ func initTracer(ctx context.Context, cfg config, logger *zap.Logger) (trace.Trac
 	case "":
 		return trace.NewNoopTracerProvider().Tracer(svcName), nil
 	default:
-		logger.Info(fmt.Sprintf("jaeger url: %s", cfg.JaegerURL))
-
 		tp, err := jaeger.NewProvider(ctx, svcName, cfg.JaegerURL)
 		if err != nil {
 			return nil, fmt.Errorf("failed to create tracer provider: %w", err)
