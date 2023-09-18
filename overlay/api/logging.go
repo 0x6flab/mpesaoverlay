@@ -25,6 +25,7 @@ func (lm *loggingMiddleware) GetToken(ctx context.Context) (resp pkg.TokenResp, 
 		lm.logger.Info(
 			"GetToken",
 			zap.Error(err),
+			zap.String("duration", time.Since(begin).String()),
 		)
 	}(time.Now())
 
@@ -36,6 +37,7 @@ func (lm *loggingMiddleware) ExpressQuery(ctx context.Context, eqReq pkg.Express
 		lm.logger.Info(
 			"ExpressQuery",
 			zap.Error(err),
+			zap.String("duration", time.Since(begin).String()),
 			zap.Uint64("BusinessShortCode", eqReq.BusinessShortCode),
 			zap.String("CheckoutRequestID", eqReq.CheckoutRequestID),
 		)
@@ -49,6 +51,7 @@ func (lm *loggingMiddleware) ExpressSimulate(ctx context.Context, eReq pkg.Expre
 		lm.logger.Info(
 			"ExpressSimulate",
 			zap.Error(err),
+			zap.String("duration", time.Since(begin).String()),
 			zap.Uint64("BusinessShortCode", eReq.BusinessShortCode),
 			zap.String("TransactionType", eReq.TransactionType),
 			zap.Uint64("Amount", eReq.Amount),
@@ -67,6 +70,7 @@ func (lm *loggingMiddleware) B2CPayment(ctx context.Context, b2cReq pkg.B2CPayme
 		lm.logger.Info(
 			"B2CPayment",
 			zap.Error(err),
+			zap.String("duration", time.Since(begin).String()),
 			zap.String("InitiatorName", b2cReq.InitiatorName),
 			zap.String("OriginatorConversationID", b2cReq.OriginatorConversationID),
 			zap.String("CommandID", b2cReq.CommandID),
@@ -85,6 +89,7 @@ func (lm *loggingMiddleware) AccountBalance(ctx context.Context, abReq pkg.Accou
 		lm.logger.Info(
 			"AccountBalance",
 			zap.Error(err),
+			zap.String("duration", time.Since(begin).String()),
 			zap.String("CommandID", abReq.CommandID),
 			zap.Uint64("PartyA", abReq.PartyA),
 			zap.Uint8("IdentifierType", abReq.IdentifierType),
@@ -100,6 +105,7 @@ func (lm *loggingMiddleware) C2BRegisterURL(ctx context.Context, c2bReq pkg.C2BR
 		lm.logger.Info(
 			"C2BRegisterURL",
 			zap.Error(err),
+			zap.String("duration", time.Since(begin).String()),
 			zap.String("ResponseType", c2bReq.ResponseType),
 			zap.Uint64("ShortCode", c2bReq.ShortCode),
 		)
@@ -113,6 +119,7 @@ func (lm *loggingMiddleware) C2BSimulate(ctx context.Context, c2bReq pkg.C2BSimu
 		lm.logger.Info(
 			"C2BSimulate",
 			zap.Error(err),
+			zap.String("duration", time.Since(begin).String()),
 			zap.String("CommandID", c2bReq.CommandID),
 			zap.Uint64("Amount", c2bReq.Amount),
 			zap.String("Msisdn", c2bReq.Msisdn),
@@ -129,6 +136,7 @@ func (lm *loggingMiddleware) GenerateQR(ctx context.Context, qReq pkg.GenerateQR
 		lm.logger.Info(
 			"GenerateQR",
 			zap.Error(err),
+			zap.String("duration", time.Since(begin).String()),
 			zap.String("MerchantName", qReq.MerchantName),
 			zap.String("RefNo", qReq.RefNo),
 			zap.Uint64("Amount", qReq.Amount),
@@ -146,6 +154,7 @@ func (lm *loggingMiddleware) Reverse(ctx context.Context, rReq pkg.ReverseReq) (
 		lm.logger.Info(
 			"Reverse",
 			zap.Error(err),
+			zap.String("duration", time.Since(begin).String()),
 			zap.String("CommandID", rReq.CommandID),
 			zap.String("InitiatorName", rReq.InitiatorName),
 			zap.String("TransactionID", rReq.TransactionID),
@@ -163,6 +172,7 @@ func (lm *loggingMiddleware) TransactionStatus(ctx context.Context, tReq pkg.Tra
 		lm.logger.Info(
 			"TransactionStatus",
 			zap.Error(err),
+			zap.String("duration", time.Since(begin).String()),
 			zap.String("CommandID", tReq.CommandID),
 			zap.String("Initiator", tReq.InitiatorName),
 			zap.String("TransactionID", tReq.TransactionID),
@@ -179,6 +189,7 @@ func (lm *loggingMiddleware) RemitTax(ctx context.Context, rReq pkg.RemitTaxReq)
 		lm.logger.Info(
 			"RemitTax",
 			zap.Error(err),
+			zap.String("duration", time.Since(begin).String()),
 			zap.String("CommandID", rReq.CommandID),
 			zap.String("InitiatorName", rReq.InitiatorName),
 			zap.String("CommandID", rReq.CommandID),
