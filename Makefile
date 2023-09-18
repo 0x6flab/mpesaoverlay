@@ -1,4 +1,4 @@
-MO_DOCKER_IMAGE_NAME_PREFIX ?= mpesaoverlay
+MO_DOCKER_IMAGE_NAME_PREFIX ?= ghcr.io/0x6flab/mpesaoverlay
 BUILD_DIR = build
 SERVICES = cli overlay
 DOCKERS = $(addprefix docker_,$(SERVICES))
@@ -31,7 +31,7 @@ define make_docker
 		--build-arg VERSION=$(VERSION) \
 		--build-arg COMMIT=$(COMMIT) \
 		--build-arg TIME=$(TIME) \
-		--tag=$(MO_DOCKER_IMAGE_NAME_PREFIX)/$(svc) \
+		--tag=$(MO_DOCKER_IMAGE_NAME_PREFIX)/$(svc):latest \
 		-f docker/Dockerfile .
 endef
 
@@ -41,8 +41,15 @@ define make_docker_dev
 	docker build \
 		--no-cache \
 		--build-arg SVC=$(svc) \
-		--tag=$(MO_DOCKER_IMAGE_NAME_PREFIX)/$(svc) \
+		--tag=$(MO_DOCKER_IMAGE_NAME_PREFIX)/$(svc):latest \
 		-f docker/Dockerfile.dev ./build
+endef
+
+define docker_push
+	for svc in $(SERVICES); do \
+		docker push $(MO_DOCKER_IMAGE_NAME_PREFIX)/$$svc:$(VERSION); \
+		docker push $(MO_DOCKER_IMAGE_NAME_PREFIX)/$$svc:latest; \
+	done
 endef
 
 $(SERVICES):
@@ -53,13 +60,16 @@ all: $(SERVICES)
 .PHONY: all $(SERVICES) dockers dockers_dev
 
 $(DOCKERS):
-	$(call make_docker,$(@),$(GOARCH))
+	$(call make_docker,$(@),$(GOARCH),$(GOARM),$(GOOS),$(CGO_ENABLED),$(VERSION),$(COMMIT),$(TIME))
 
 $(DOCKERS_DEV):
-	$(call make_docker_dev,$(@))
+	$(call make_docker_dev,$(@),$(GOARCH),$(GOARM),$(GOOS),$(CGO_ENABLED),$(VERSION),$(COMMIT),$(TIME))
 
 dockers: $(DOCKERS)
 dockers_dev: $(DOCKERS_DEV)
+
+docker_push:
+	$(call docker_push)
 
 clean:
 	rm -rf ${BUILD_DIR}
@@ -87,3 +97,6 @@ proto:
 
 run:
 	docker-compose -f docker/docker-compose.yml --env-file docker/.env up -d
+
+stop:
+	docker-compose -f docker/docker-compose.yml --env-file docker/.env down
