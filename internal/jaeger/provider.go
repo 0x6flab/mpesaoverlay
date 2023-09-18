@@ -7,7 +7,7 @@ import (
 	jaegerp "go.opentelemetry.io/contrib/propagators/jaeger"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
-	jaegerexp "go.opentelemetry.io/otel/exporters/jaeger"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
 	"go.opentelemetry.io/otel/sdk/resource"
 	tracesdk "go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.12.0"
@@ -28,7 +28,7 @@ func NewProvider(ctx context.Context, svcName, url string) (*tracesdk.TracerProv
 		return nil, errNoSvcName
 	}
 
-	exporter, err := jaegerexp.New(jaegerexp.WithCollectorEndpoint(jaegerexp.WithEndpoint(url)))
+	exporter, err := otlptracegrpc.New(ctx, otlptracegrpc.WithEndpoint(url))
 	if err != nil {
 		return nil, err
 	}
