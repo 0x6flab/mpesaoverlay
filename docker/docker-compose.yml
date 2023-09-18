@@ -9,7 +9,7 @@ volumes:
 
 services:
   overlay:
-    image: mpesaoverlay/overlay:${MO_RELEASE_TAG}
+    image: ghcr.io/0x6flab/mpesaoverlay/overlay:${MO_RELEASE_TAG}
     container_name: mpesaoverlay-overlay
     restart: on-failure
     environment:
