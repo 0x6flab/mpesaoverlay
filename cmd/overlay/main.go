@@ -136,7 +136,7 @@ func initGRPCServer(svc overlay.Service, cfg config, logger *zap.Logger) (*grpc.
 	if cfg.GRPCServerCert != "" || cfg.GRPCServerKey != "" {
 		creds, err := credentials.NewServerTLSFromFile(cfg.GRPCServerCert, cfg.GRPCServerKey)
 		if err != nil {
-			return nil, fmt.Errorf("failed to load %s certificates: %s", svcName, err)
+			return nil, fmt.Errorf("failed to load %s certificates: %w", svcName, err)
 		}
 
 		grpcServerOptions = append(grpcServerOptions, grpc.Creds(creds))
@@ -159,7 +159,7 @@ func initGRPCServer(svc overlay.Service, cfg config, logger *zap.Logger) (*grpc.
 func startGRPCServer(cfg config, server *grpc.Server) error {
 	listener, err := net.Listen("tcp", cfg.GRPCURL)
 	if err != nil {
-		return fmt.Errorf("failed to start %s gRPC service: %s", svcName, err)
+		return fmt.Errorf("failed to start %s gRPC service: %w", svcName, err)
 	}
 
 	return server.Serve(listener)
@@ -183,6 +183,7 @@ func StopSignalHandler(ctx context.Context, cancel context.CancelFunc, logger *z
 		}
 
 		logger.Info(fmt.Sprintf("%s gRPC service shutdown by signal: %s", svcName, sig))
+
 		return err
 	case <-ctx.Done():
 		return nil
