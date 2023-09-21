@@ -77,8 +77,11 @@ clean:
 install:
 	cp ${BUILD_DIR}/* $(GOBIN)
 
+lint:
+	golangci-lint run --no-config --disable-all --enable gosimple --enable govet --enable unused --enable misspell --enable revive --enable godot --enable gocritic --enable unconvert --enable whitespace --enable errorlint --enable nlreturn --timeout 3m
+
 test:
-	go test -mod=vendor -v -race -count 1 -tags test $(shell go list ./... | grep -v 'vendor\|cmd')
+	go test -mod=vendor -v -race -count 1 -tags test -covermode=atomic -coverprofile cover.out $(shell go list ./... | grep -v 'vendor\|cmd')
 
 changelog:
 	git log $(shell git describe --tags --abbrev=0)..HEAD --pretty=format:"- %s"
