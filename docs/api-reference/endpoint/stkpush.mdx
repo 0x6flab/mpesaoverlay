@@ -1,28 +1,14 @@
 ---
-title: "Update User"
-api: "PUT https://api.mintlify.com/api/user"
-description: "This endpoint updates an existing user."
+title: "STK Push"
+api: "POST https://sandbox.safaricom.co.ke/user"
+description: "This endpoint creates a new user"
 ---
 
 ### Body
 
-<ParamField body="name" type="string">
-  This is the name of the user group.
-</ParamField>
-
-<ParamField body="user_group_id" type="string">
-  This is the ID you use to identify this user group in your database.
-</ParamField>
-
-<ParamField body="mapping" type="object">
-  This is a JSON mapping of schema id to either the data source that this user
-  group should be associated with or id of the datasource you provided when
-  creating it.
-</ParamField>
-
-<ParamField body="properties" type="object">
-  This is a JSON object for properties assigned to this user group. These will
-  be accessible through variables in the dashboards and SQL editor
+<ParamField body="current_token" type="string">
+  This is the current user group token you have for the user group that you want
+  to rotate.
 </ParamField>
 
 ### Response
@@ -38,7 +24,8 @@ The contents of the user group
 <Expandable title="Toggle object">
 
 <ResponseField name="team_id" type="number">
-  Indicates whether a new user group was created.
+  This is the internal ID for this user group. You don't need to record this
+  information, since you will not need to use it.
 </ResponseField>
 
 <ResponseField name="token" type="string">
@@ -55,13 +42,12 @@ The contents of the user group
   This is the user_group_id provided in the request body.
 </ResponseField>
 
-<ResponseField name="properties" type="JSON | Null">
-  This is the properties object if it was provided in the request body
-</ResponseField>
-
 <ResponseField name="api_environment_tag" type="JSON or null">
   This is the environment tag of the user group. Possible values are 'Customer'
-  and 'Testing'
+  and 'Testing'. User group id's must be unique to each environment, so you can
+  not create multiple user groups with with same id. If you have a production
+  customer and a test user group with the same id, you will be required to label
+  one as 'Customer' and another as 'Testing'
 </ResponseField>
 
 </Expandable>
@@ -71,14 +57,11 @@ The contents of the user group
 <RequestExample>
 
 ```bash Example Request
-curl --location --request PUT 'https://api.mintlify.com/api/user' \
+curl --location --request POST 'https://api.mintlify.com/api/user' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Token <token>' \
 --data-raw '{
-    "user_group_id": "example_1",
-    "name": "Example 1",
-    "mapping": {"40": "213", "134": "386"},
-    "properties": {"filterValue": "value"}
+    "current_token": ""
 }'
 ```
 
@@ -90,10 +73,10 @@ curl --location --request PUT 'https://api.mintlify.com/api/user' \
 {
   "success": 1,
   "user_group": {
-    "team_id": 113,
+    "team_id": 3,
     "token": "<user_group_token_to_auth_dashboard>",
-    "name": "ok",
-    "provided_id": "6"
+    "name": "Example 1",
+    "provided_id": "example_1"
   }
 }
 ```

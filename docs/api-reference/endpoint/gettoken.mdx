@@ -1,0 +1,50 @@
+---
+title: "Get Token"
+api: "GET https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
+description: "Gives you a time bound access token to call allowed APIs."
+---
+
+### Response
+
+<ResponseField name="access_token" type="string">
+  Access token to be used in subsequent API calls.
+</ResponseField>
+
+<ResponseField name="expires_in" type="string">
+  Time in seconds before the token expires.
+</ResponseField>
+
+### Error Response
+
+<ResponseField name="requestId" type="string">
+  Unique request id for the request.
+</ResponseField>
+
+<ResponseField name="errorCode" type="string">
+  Error code for the request.
+</ResponseField>
+
+<ResponseField name="errorMessage" type="string">
+  Error message for the request.
+</ResponseField>
+
+<RequestExample>
+
+```bash Example Request
+curl -sSX GET \
+https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials \
+-u "$consumer_key:$consumer_secret"
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "access_token": "unwmeecytgd7JchVXtZTZmEpMAv2",
+  "expires_in": "3599"
+}
+```
+
+</ResponseExample>
