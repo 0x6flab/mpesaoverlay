@@ -25,7 +25,8 @@ jobs:
 
       - name: Build
         run: |
-          make all && make dockers_dev
+          go mod vendor
+          make all
 
   ci:
     runs-on: ubuntu-latest
@@ -45,7 +46,9 @@ jobs:
           run: make lint
 
       - name: Run tests
-        run: make test
+        run: |
+          go mod vendor
+          make test
 
     # - name: Convert coverage.out to coverage.lcov
     #   uses: jandelgado/gcov2lcov-action@v1.0.6
