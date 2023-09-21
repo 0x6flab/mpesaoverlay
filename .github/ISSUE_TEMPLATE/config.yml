@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: GitHub Discussions
+    url: https://github.com/0x6flab/mpesaoverlay/discussions
+    about: Join in-depth discussions about the mpesaoverlay project. Ask questions, share your experiences, and connect with other maintainers and community members.
