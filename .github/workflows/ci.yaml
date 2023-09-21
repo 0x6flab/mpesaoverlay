@@ -7,11 +7,12 @@ on:
     branches: [main]
 
 jobs:
-  ci:
+  build:
     strategy:
       matrix:
         go-version: [1.20.x, 1.21.x]
         os: [ubuntu-latest, macos-latest, windows-latest]
+
     runs-on: ${{ matrix.os }}
     steps:
       - name: Install Go
@@ -22,14 +23,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Build
+        run: go build -v ./...
+
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.21.x
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3
         with:
           version: latest
           args: --no-config --disable-all --enable gosimple --enable govet --enable unused --enable misspell --enable revive --enable godot --enable gocritic --enable unconvert --enable whitespace --enable errorlint --enable nlreturn --timeout 3m
-
-      - name: Build
-        run: go build -v ./...
 
       - name: Run tests
         run: go test -v -vet=off  -covermode=count -coverprofile cover.out ./...
