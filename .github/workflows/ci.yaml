@@ -24,7 +24,8 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build
-        run: go build -v ./...
+        run: |
+          make all && make dockers_dev
 
   ci:
     runs-on: ubuntu-latest
@@ -41,10 +42,10 @@ jobs:
         uses: golangci/golangci-lint-action@v3
         with:
           version: latest
-          args: --no-config --disable-all --enable gosimple --enable govet --enable unused --enable misspell --enable revive --enable godot --enable gocritic --enable unconvert --enable whitespace --enable errorlint --enable nlreturn --timeout 3m
+          run: make lint
 
       - name: Run tests
-        run: go test -v -vet=off  -covermode=count -coverprofile cover.out ./...
+        run: make test
 
     # - name: Convert coverage.out to coverage.lcov
     #   uses: jandelgado/gcov2lcov-action@v1.0.6
