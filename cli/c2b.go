@@ -1,12 +1,12 @@
 package cli
 
 import (
-	"github.com/0x6flab/mpesaoverlay/pkg"
+	"github.com/0x6flab/mpesaoverlay/pkg/mpesa"
 	"github.com/AlecAivazis/survey/v2"
 )
 
-func C2BRegisterURL(sdk pkg.SDK) error {
-	var req = pkg.C2BRegisterURLReq{}
+func C2BRegisterURL(sdk mpesa.SDK) error {
+	var req = mpesa.C2BRegisterURLReq{}
 
 	var qs = []*survey.Question{
 		{
@@ -69,8 +69,8 @@ func C2BRegisterURL(sdk pkg.SDK) error {
 	return nil
 }
 
-func C2BSimulate(sdk pkg.SDK) error {
-	var req = pkg.C2BSimulateReq{}
+func C2BSimulate(sdk mpesa.SDK) error {
+	var req = mpesa.C2BSimulateReq{}
 
 	var qs = []*survey.Question{
 		{

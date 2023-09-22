@@ -1,12 +1,12 @@
 package cli
 
 import (
-	"github.com/0x6flab/mpesaoverlay/pkg"
+	"github.com/0x6flab/mpesaoverlay/pkg/mpesa"
 	"github.com/AlecAivazis/survey/v2"
 )
 
-func RemitTax(sdk pkg.SDK) error {
-	var req = pkg.RemitTaxReq{}
+func RemitTax(sdk mpesa.SDK) error {
+	var req = mpesa.RemitTaxReq{}
 
 	var qs = []*survey.Question{
 		{

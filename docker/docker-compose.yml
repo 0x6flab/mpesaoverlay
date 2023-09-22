@@ -20,19 +20,17 @@ services:
       MO_GRPC_URL: ${MO_GRPC_URL}
       MO_GRPC_SERVER_CERT: ${MO_GRPC_SERVER_CERT}
       MO_GRPC_SERVER_KEY: ${MO_GRPC_SERVER_KEY}
-      MO_JAEGER_URL: ${MO_JAEGER_URL}
+      MO_PROMETHEUS_URL: ${MO_PROMETHEUS_URL}
     ports:
       - ${MO_GRPC_PORT}:${MO_GRPC_PORT}
     networks:
       - mpesaoverlay-base-net
 
-  jaeger:
-    image: jaegertracing/all-in-one:1.38.0
-    container_name: mpesaoverlay-jaeger
+  prometheus-pushgateway:
+    image: prom/pushgateway:v1.6.2
+    container_name: mpesaoverlay-prometheus-pushgateway
+    restart: on-failure
     ports:
-      - ${MO_JAEGER_PORT}:${MO_JAEGER_PORT}/udp
-      - ${MO_JAEGER_FRONTEND}:${MO_JAEGER_FRONTEND}
-      - ${MO_JAEGER_COLLECTOR}:${MO_JAEGER_COLLECTOR}
-      - ${MO_JAEGER_CONFIGS}:${MO_JAEGER_CONFIGS}
+      - ${MO_PROMETHEUS_PUSH_GATEWAY_PORT}:${MO_PROMETHEUS_PUSH_GATEWAY_PORT}
     networks:
       - mpesaoverlay-base-net

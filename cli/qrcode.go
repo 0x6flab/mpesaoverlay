@@ -1,12 +1,12 @@
 package cli
 
 import (
-	"github.com/0x6flab/mpesaoverlay/pkg"
+	"github.com/0x6flab/mpesaoverlay/pkg/mpesa"
 	"github.com/AlecAivazis/survey/v2"
 )
 
-func QRCode(sdk pkg.SDK) error {
-	var req = pkg.GenerateQRReq{}
+func QRCode(sdk mpesa.SDK) error {
+	var req = mpesa.GenerateQRReq{}
 
 	var qs = []*survey.Question{
 		{

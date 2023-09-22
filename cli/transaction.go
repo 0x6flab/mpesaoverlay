@@ -1,12 +1,12 @@
 package cli
 
 import (
-	"github.com/0x6flab/mpesaoverlay/pkg"
+	"github.com/0x6flab/mpesaoverlay/pkg/mpesa"
 	"github.com/AlecAivazis/survey/v2"
 )
 
-func TransactionStatus(sdk pkg.SDK) error {
-	var req = pkg.TransactionStatusReq{}
+func TransactionStatus(sdk mpesa.SDK) error {
+	var req = mpesa.TransactionStatusReq{}
 
 	var qs = []*survey.Question{
 		{

@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package mpesaoverlay.grpc;
+
+option go_package = "./grpc";
+
+import "grpc/requests.proto";
+
+import "grpc/responses.proto";
+
+message Empty {}
+
+service Service {
+    rpc GetToken (Empty) returns (mpesaoverlay.grpc.TokenResp) { }
+
+    rpc ExpressQuery (mpesaoverlay.grpc.ExpressQueryReq) returns (mpesaoverlay.grpc.ExpressQueryResp) { }
+
+    rpc ExpressSimulate (mpesaoverlay.grpc.ExpressSimulateReq) returns (mpesaoverlay.grpc.ExpressSimulateResp) { }
+
+    rpc B2CPayment (mpesaoverlay.grpc.B2CPaymentReq) returns (mpesaoverlay.grpc.B2CPaymentResp) { }
+
+    rpc AccountBalance (mpesaoverlay.grpc.AccountBalanceReq) returns (mpesaoverlay.grpc.AccountBalanceResp) { }
+
+    rpc C2BRegisterURL (mpesaoverlay.grpc.C2BRegisterURLReq) returns (mpesaoverlay.grpc.C2BRegisterURLResp) { }
+
+    rpc C2BSimulate (mpesaoverlay.grpc.C2BSimulateReq) returns (mpesaoverlay.grpc.C2BSimulateResp) { }
+
+    rpc GenerateQR (mpesaoverlay.grpc.GenerateQRReq) returns (mpesaoverlay.grpc.GenerateQRResp) { }
+
+    rpc Reverse (mpesaoverlay.grpc.ReverseReq) returns (mpesaoverlay.grpc.ReverseResp) { }
+
+    rpc TransactionStatus (mpesaoverlay.grpc.TransactionStatusReq) returns (mpesaoverlay.grpc.TransactionStatusResp) { }
+
+    rpc RemitTax (mpesaoverlay.grpc.RemitTaxReq) returns (mpesaoverlay.grpc.RemitTaxResp) { }
+}

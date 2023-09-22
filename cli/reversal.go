@@ -1,12 +1,12 @@
 package cli
 
 import (
-	"github.com/0x6flab/mpesaoverlay/pkg"
+	"github.com/0x6flab/mpesaoverlay/pkg/mpesa"
 	"github.com/AlecAivazis/survey/v2"
 )
 
-func Reversal(sdk pkg.SDK) error {
-	var req = pkg.ReverseReq{}
+func Reversal(sdk mpesa.SDK) error {
+	var req = mpesa.ReverseReq{}
 
 	var qs = []*survey.Question{
 		{

@@ -1,11 +1,11 @@
 package cli
 
 import (
-	"github.com/0x6flab/mpesaoverlay/pkg"
+	"github.com/0x6flab/mpesaoverlay/pkg/mpesa"
 	"github.com/choria-io/fisk"
 )
 
-func AddCommands(app *fisk.Application, sdk pkg.SDK) {
+func AddCommands(app *fisk.Application, sdk mpesa.SDK) {
 	token := app.Command("token", "Get a token")
 	token.Action(func(ctx *fisk.ParseContext) error {
 		return GetToken(sdk)

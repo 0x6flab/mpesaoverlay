@@ -8,7 +8,7 @@ import (
 
 	"github.com/0x6flab/mpesaoverlay"
 	"github.com/0x6flab/mpesaoverlay/cli"
-	mpesa "github.com/0x6flab/mpesaoverlay/pkg"
+	"github.com/0x6flab/mpesaoverlay/pkg/mpesa"
 	"github.com/caarlos0/env/v9"
 	"github.com/choria-io/fisk"
 )

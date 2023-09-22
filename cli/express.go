@@ -1,12 +1,12 @@
 package cli
 
 import (
-	"github.com/0x6flab/mpesaoverlay/pkg"
+	"github.com/0x6flab/mpesaoverlay/pkg/mpesa"
 	"github.com/AlecAivazis/survey/v2"
 )
 
-func STKPush(sdk pkg.SDK) error {
-	var req = pkg.ExpressSimulateReq{}
+func STKPush(sdk mpesa.SDK) error {
+	var req = mpesa.ExpressSimulateReq{}
 
 	var qs = []*survey.Question{
 		{
@@ -120,8 +120,8 @@ func STKPush(sdk pkg.SDK) error {
 	return nil
 }
 
-func STKPushQuery(sdk pkg.SDK) error {
-	var req = pkg.ExpressQueryReq{}
+func STKPushQuery(sdk mpesa.SDK) error {
+	var req = mpesa.ExpressQueryReq{}
 
 	var qs = []*survey.Question{
 		{
