@@ -1,6 +1,6 @@
 MO_DOCKER_IMAGE_NAME_PREFIX ?= ghcr.io/0x6flab/mpesaoverlay
 BUILD_DIR = build
-SERVICES = cli overlay
+SERVICES = cli grpc
 DOCKERS = $(addprefix docker_,$(SERVICES))
 DOCKERS_DEV = $(addprefix docker_dev_,$(SERVICES))
 CGO_ENABLED ?= 0
@@ -88,15 +88,15 @@ changelog:
 
 proto:
 	# go install github.com/anjmao/go2proto@latest
-	go2proto -f overlay/ -p pkg/request.go
-	mv overlay/output.proto overlay/requests.proto
-	sed -i 's,package proto;,package mpesaoverlay.overlay;\noption go_package = "./overlay";,g' overlay/requests.proto
-	sed -i 's/uint8/uint32/g' overlay/requests.proto
-	go2proto -f overlay/ -p pkg/response.go
-	mv overlay/output.proto overlay/responses.proto
-	sed -i 's,package proto;,package mpesaoverlay.overlay;\noption go_package = "./overlay";,g' overlay/responses.proto
-	sed -i 's/uint8/uint32/g' overlay/responses.proto
-	protoc -I. --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative overlay/*.proto
+	go2proto -f grpc/ -p pkg/mpesa/request.go
+	mv grpc/output.proto grpc/requests.proto
+	sed -i 's,package proto;,package mpesaoverlay.grpc;\noption go_package = "./grpc";,g' grpc/requests.proto
+	sed -i 's/uint8/uint32/g' grpc/requests.proto
+	go2proto -f grpc/ -p pkg/mpesa/response.go
+	mv grpc/output.proto grpc/responses.proto
+	sed -i 's,package proto;,package mpesaoverlay.grpc;\noption go_package = "./grpc";,g' grpc/responses.proto
+	sed -i 's/uint8/uint32/g' grpc/responses.proto
+	protoc -I. --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative grpc/*.proto
 
 run:
 	docker-compose -f docker/docker-compose.yml --env-file docker/.env up -d

@@ -1,13 +1,13 @@
 package cli
 
 import (
-	"github.com/0x6flab/mpesaoverlay/pkg"
+	"github.com/0x6flab/mpesaoverlay/pkg/mpesa"
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/google/uuid"
 )
 
-func B2CPayment(sdk pkg.SDK) error {
-	var req = pkg.B2CPaymentReq{}
+func B2CPayment(sdk mpesa.SDK) error {
+	var req = mpesa.B2CPaymentReq{}
 
 	var qs = []*survey.Question{
 		{
@@ -46,7 +46,7 @@ func B2CPayment(sdk pkg.SDK) error {
 			Prompt: &survey.Input{
 				Message: "OriginatorConversationID",
 				Help:    "Unique unique string you specify for a transaction",
-				Suggest: func(toComplete string) []string {
+				Suggest: func(_ string) []string {
 					uuid, err := uuid.NewRandom()
 					if err != nil {
 						return []string{}
