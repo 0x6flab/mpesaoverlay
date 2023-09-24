@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/0x6flab/mpesaoverlay/pkg/mpesa"
-	"github.com/google/uuid"
+	"github.com/oklog/ulid/v2"
 )
 
 var (
@@ -25,13 +25,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	uuid, err := uuid.NewRandom()
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	b2cReq := mpesa.B2CPaymentReq{
-		OriginatorConversationID: uuid.String(),
+		OriginatorConversationID: ulid.Make().String(),
 		InitiatorName:            "testapi",
 		InitiatorPassword:        "Safaricom999!*!",
 		CommandID:                "BusinessPayment",

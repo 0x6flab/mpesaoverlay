@@ -3,7 +3,7 @@ package cli
 import (
 	"github.com/0x6flab/mpesaoverlay/pkg/mpesa"
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/google/uuid"
+	"github.com/oklog/ulid/v2"
 )
 
 func B2CPayment(sdk mpesa.SDK) error {
@@ -47,12 +47,7 @@ func B2CPayment(sdk mpesa.SDK) error {
 				Message: "OriginatorConversationID",
 				Help:    "Unique unique string you specify for a transaction",
 				Suggest: func(_ string) []string {
-					uuid, err := uuid.NewRandom()
-					if err != nil {
-						return []string{}
-					}
-
-					return []string{uuid.String()}
+					return []string{ulid.Make().String()}
 				},
 			},
 			Validate: survey.Required,
