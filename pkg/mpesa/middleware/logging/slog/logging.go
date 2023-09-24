@@ -15,8 +15,8 @@ type loggingMiddleware struct {
 }
 
 func WithLogger(logger *log.Logger) mpesa.Option {
-	return func(sdk mpesa.SDK) mpesa.SDK {
-		return &loggingMiddleware{logger, sdk}
+	return func(sdk mpesa.SDK) (mpesa.SDK, error) {
+		return &loggingMiddleware{logger, sdk}, nil
 	}
 }
 
