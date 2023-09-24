@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/google/uuid"
+	"github.com/oklog/ulid/v2"
 )
 
 func (sdk mSDK) B2CPayment(b2cReq B2CPaymentReq) (B2CPaymentResp, error) {
@@ -21,10 +21,7 @@ func (sdk mSDK) B2CPayment(b2cReq B2CPaymentReq) (B2CPaymentResp, error) {
 	}
 
 	if b2cReq.OriginatorConversationID == "" {
-		uuid, err := uuid.NewRandom()
-		if err == nil && uuid.String() != "" {
-			b2cReq.OriginatorConversationID = uuid.String()
-		}
+		b2cReq.OriginatorConversationID = ulid.Make().String()
 	}
 
 	data, err := json.Marshal(b2cReq)
