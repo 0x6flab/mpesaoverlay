@@ -26,7 +26,7 @@ type metricsMiddleware struct {
 }
 
 func WithMetrics(svcName, url string) mpesa.Option {
-	return func(sdk mpesa.SDK) mpesa.SDK {
+	return func(sdk mpesa.SDK) (mpesa.SDK, error) {
 		var mm = &metricsMiddleware{
 			svcName: fmt.Sprintf("%s-%s", mpesaoverlay.SVCName, svcName),
 			sdk:     sdk,
@@ -49,7 +49,7 @@ func WithMetrics(svcName, url string) mpesa.Option {
 
 		mm.pusher = push.New(url, "mpesaoverlay").Gatherer(registry)
 
-		return mm
+		return mm, nil
 	}
 }
 

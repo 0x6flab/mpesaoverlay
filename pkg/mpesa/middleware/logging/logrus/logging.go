@@ -15,13 +15,13 @@ type loggingMiddleware struct {
 }
 
 func WithLogger(logger *log.Logger) mpesa.Option {
-	return func(sdk mpesa.SDK) mpesa.SDK {
+	return func(sdk mpesa.SDK) (mpesa.SDK, error) {
 		logger.SetFormatter(&log.JSONFormatter{
 			TimestampFormat: time.RFC3339,
 		})
 		logger.SetReportCaller(true)
 
-		return &loggingMiddleware{logger, sdk}
+		return &loggingMiddleware{logger, sdk}, nil
 	}
 }
 
