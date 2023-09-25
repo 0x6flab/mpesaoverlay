@@ -35,26 +35,31 @@ func (h *Hook) ID() string {
 }
 
 func (h *Hook) Provides(b byte) bool {
-	return bytes.Contains([]byte{
-		mqtt.OnConnect,
-		mqtt.OnDisconnect,
-		mqtt.OnPublished,
-		mqtt.OnSubscribed,
-		mqtt.OnUnsubscribed,
-	}, []byte{b})
+	return bytes.Contains(
+		[]byte{b},
+		[]byte{
+			mqtt.OnConnect,
+			mqtt.OnDisconnect,
+			mqtt.OnPublished,
+			mqtt.OnSubscribed,
+			mqtt.OnUnsubscribed,
+		},
+	)
 }
 
-func (h *Hook) Init(config interface{}) error {
+func (h *Hook) Init(_ interface{}) error {
 	h.logger.Info("initializing mqtt hook")
+
 	return nil
 }
 
-func (h *Hook) OnConnect(cl *mqtt.Client, pk packets.Packet) error {
+func (h *Hook) OnConnect(cl *mqtt.Client, _ packets.Packet) error {
 	h.logger.Info(
 		"mqtt client connected",
 		zap.String("client_id", cl.ID),
 		zap.String("username", string(cl.Properties.Username)),
 	)
+
 	return nil
 }
 
@@ -79,7 +84,7 @@ func (h *Hook) OnPublished(cl *mqtt.Client, pk packets.Packet) {
 	h.handleMessages(cl, pk)
 }
 
-func (h *Hook) OnSubscribed(cl *mqtt.Client, pk packets.Packet, reasonCodes []byte) {
+func (h *Hook) OnSubscribed(cl *mqtt.Client, pk packets.Packet, _ []byte) {
 	h.logger.Info(
 		"mqtt client subscribed",
 		zap.String("client_id", cl.ID),
@@ -118,6 +123,7 @@ func (h *Hook) handleMessages(cl *mqtt.Client, pk packets.Packet) {
 		resp, err := h.ExpressQuery(pk)
 		if err != nil {
 			h.logger.Error("failed to handle express query", zap.Error(err))
+
 			return
 		}
 		h.publish(cl, "mpesa/express/query", resp)
@@ -127,6 +133,7 @@ func (h *Hook) handleMessages(cl *mqtt.Client, pk packets.Packet) {
 		resp, err := h.ExpressSimulate(pk)
 		if err != nil {
 			h.logger.Error("failed to handle express query", zap.Error(err))
+
 			return
 		}
 		h.publish(cl, "mpesa/express/simulate", resp)
@@ -136,6 +143,7 @@ func (h *Hook) handleMessages(cl *mqtt.Client, pk packets.Packet) {
 		resp, err := h.B2CPayment(pk)
 		if err != nil {
 			h.logger.Error("failed to handle express query", zap.Error(err))
+
 			return
 		}
 		h.publish(cl, "mpesa/b2c/payment", resp)
@@ -145,6 +153,7 @@ func (h *Hook) handleMessages(cl *mqtt.Client, pk packets.Packet) {
 		resp, err := h.AccountBalance(pk)
 		if err != nil {
 			h.logger.Error("failed to handle express query", zap.Error(err))
+
 			return
 		}
 		h.publish(cl, "mpesa/account/balance", resp)
@@ -154,6 +163,7 @@ func (h *Hook) handleMessages(cl *mqtt.Client, pk packets.Packet) {
 		resp, err := h.C2BRegisterURL(pk)
 		if err != nil {
 			h.logger.Error("failed to handle express query", zap.Error(err))
+
 			return
 		}
 		h.publish(cl, "mpesa/c2b/register", resp)
@@ -163,6 +173,7 @@ func (h *Hook) handleMessages(cl *mqtt.Client, pk packets.Packet) {
 		resp, err := h.C2BSimulate(pk)
 		if err != nil {
 			h.logger.Error("failed to handle express query", zap.Error(err))
+
 			return
 		}
 		h.publish(cl, "mpesa/c2b/simulate", resp)
@@ -172,6 +183,7 @@ func (h *Hook) handleMessages(cl *mqtt.Client, pk packets.Packet) {
 		resp, err := h.GenerateQR(pk)
 		if err != nil {
 			h.logger.Error("failed to handle express query", zap.Error(err))
+
 			return
 		}
 		h.publish(cl, "mpesa/generate/qr", resp)
@@ -181,6 +193,7 @@ func (h *Hook) handleMessages(cl *mqtt.Client, pk packets.Packet) {
 		resp, err := h.Reverse(pk)
 		if err != nil {
 			h.logger.Error("failed to handle express query", zap.Error(err))
+
 			return
 		}
 		h.publish(cl, "mpesa/reverse", resp)
@@ -190,6 +203,7 @@ func (h *Hook) handleMessages(cl *mqtt.Client, pk packets.Packet) {
 		resp, err := h.TransactionStatus(pk)
 		if err != nil {
 			h.logger.Error("failed to handle express query", zap.Error(err))
+
 			return
 		}
 		h.publish(cl, "mpesa/transaction/status", resp)
@@ -199,6 +213,7 @@ func (h *Hook) handleMessages(cl *mqtt.Client, pk packets.Packet) {
 		resp, err := h.RemitTax(pk)
 		if err != nil {
 			h.logger.Error("failed to handle express query", zap.Error(err))
+
 			return
 		}
 		h.publish(cl, "mpesa/remit/tax", resp)
@@ -213,17 +228,19 @@ func (h *Hook) handleMessages(cl *mqtt.Client, pk packets.Packet) {
 	}
 }
 
-func (h *Hook) publish(cl *mqtt.Client, topic string, payload interface{}) {
+func (h *Hook) publish(_ *mqtt.Client, topic string, payload interface{}) {
 	data, err := json.Marshal(payload)
 	if err != nil {
 		h.logger.Error("failed to marshal payload", zap.Error(err))
+
 		return
 	}
 
-	topic = topic + "/response"
+	topic += "/response"
 
 	if err = h.serve.Publish(topic, data, false, 0); err != nil {
 		h.logger.Error("failed to publish", zap.Error(err))
+
 		return
 	}
 }

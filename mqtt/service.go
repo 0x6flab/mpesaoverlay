@@ -42,7 +42,6 @@ func NewService(sdk mpesa.SDK) Service {
 }
 
 func (s *service) GetToken(_ packets.Packet) (mpesa.TokenResp, error) {
-
 	return s.sdk.GetToken()
 }
 
