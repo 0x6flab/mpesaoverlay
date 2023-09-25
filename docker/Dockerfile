@@ -13,7 +13,6 @@ WORKDIR /go/src/github.com/0x6flab/mpesaoverlay
 COPY . .
 RUN apk update \
     && apk add make\
-    && go mod tidy \
     && go mod vendor \
     && make $SVC \
     && mv build/mpesa-$SVC /exe
