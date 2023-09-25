@@ -4,13 +4,10 @@ networks:
   mpesaoverlay-base-net:
     driver: bridge
 
-volumes:
-  mpesaoverlay-overlay-db-volume:
-
 services:
-  overlay:
-    image: ghcr.io/0x6flab/mpesaoverlay/overlay:${MO_RELEASE_TAG}
-    container_name: mpesaoverlay-overlay
+  grpc:
+    image: ghcr.io/0x6flab/mpesaoverlay/grpc:${MO_RELEASE_TAG}
+    container_name: mpesaoverlay-grpc
     restart: on-failure
     environment:
       MO_LOG_LEVEL: ${MO_LOG_LEVEL}
@@ -23,6 +20,24 @@ services:
       MO_PROMETHEUS_URL: ${MO_PROMETHEUS_URL}
     ports:
       - ${MO_GRPC_PORT}:${MO_GRPC_PORT}
+    networks:
+      - mpesaoverlay-base-net
+
+  mqtt:
+    image: ghcr.io/0x6flab/mpesaoverlay/mqtt:${MO_RELEASE_TAG}
+    container_name: mpesaoverlay-mqtt
+    restart: on-failure
+    environment:
+      MO_LOG_LEVEL: ${MO_LOG_LEVEL}
+      MPESA_CONSUMER_KEY: ${MPESA_CONSUMER_KEY}
+      MPESA_CONSUMER_SECRET: ${MPESA_CONSUMER_SECRET}
+      MPESA_BASE_URL: ${MPESA_BASE_URL}
+      MO_MQTT_URL: ${MO_MQTT_URL}
+      MO_MQTT_SERVER_CERT: ${MO_MQTT_SERVER_CERT}
+      MO_MQTT_SERVER_KEY: ${MO_MQTT_SERVER_KEY}
+      MO_PROMETHEUS_URL: ${MO_PROMETHEUS_URL}
+    ports:
+      - ${MO_MQTT_PORT}:${MO_MQTT_PORT}
     networks:
       - mpesaoverlay-base-net
 
