@@ -13,7 +13,7 @@ require (
 	github.com/oklog/ulid/v2 v2.1.0
 	github.com/prometheus/client_golang v1.16.0
 	github.com/sirupsen/logrus v1.9.3
-	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.42.0
+	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.44.0
 	go.uber.org/zap v1.26.0
 	golang.org/x/sync v0.3.0
 	google.golang.org/grpc v1.58.2
@@ -51,8 +51,8 @@ require (
 	go.opentelemetry.io/otel/trace v1.18.0 // indirect
 	go.uber.org/goleak v1.2.1 // indirect
 	go.uber.org/multierr v1.10.0 // indirect
-	golang.org/x/crypto v0.11.0 // indirect
-	golang.org/x/net v0.12.0 // indirect
+	golang.org/x/crypto v0.13.0 // indirect
+	golang.org/x/net v0.15.0 // indirect
 	golang.org/x/sys v0.12.0 // indirect
 	golang.org/x/term v0.12.0 // indirect
 	golang.org/x/text v0.13.0 // indirect
