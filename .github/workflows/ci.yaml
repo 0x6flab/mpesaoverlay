@@ -27,6 +27,7 @@ jobs:
         run: |
           go mod vendor
           make all
+          make dockers
 
   ci:
     runs-on: ubuntu-latest
