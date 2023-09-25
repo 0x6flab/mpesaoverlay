@@ -1,6 +1,6 @@
 MO_DOCKER_IMAGE_NAME_PREFIX ?= ghcr.io/0x6flab/mpesaoverlay
 BUILD_DIR = build
-SERVICES = cli grpc
+SERVICES = cli grpc mqtt
 DOCKERS = $(addprefix docker_,$(SERVICES))
 DOCKERS_DEV = $(addprefix docker_dev_,$(SERVICES))
 CGO_ENABLED ?= 0
