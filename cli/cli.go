@@ -15,7 +15,7 @@ import (
 func AddCommands(app *fisk.Application, sdk mpesa.SDK) {
 	token := app.Command("token", "Get a token")
 	token.Action(func(ctx *fisk.ParseContext) error {
-		return GetToken(sdk)
+		return Token(sdk)
 	})
 	token.Alias("auth")
 	token.Cheat("token", `Get an access token
