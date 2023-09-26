@@ -44,7 +44,7 @@ func NewClient(conn *grpc.ClientConn, timeout time.Duration) grpcadapter.Service
 		token: kitgrpc.NewClient(
 			conn,
 			svcName,
-			"GetToken",
+			"Token",
 			encodeTokenRequest,
 			decodeTokenResponse,
 			grpcadapter.TokenResp{},
