@@ -1,0 +1,61 @@
+linters:
+  disable-all: true
+  fast: true
+  enable:
+    - goheader
+    - godot
+    - errcheck
+    - gosimple
+    - govet
+    - ineffassign
+    - staticcheck
+    - typecheck
+    - unused
+    - bodyclose
+    - durationcheck
+    - exhaustive
+    - goconst
+    - misspell
+    - makezero
+    - nakedret
+    - nestif
+    - nilerr
+    - nilnil
+    - rowserrcheck
+    - stylecheck
+    - tenv
+    - unconvert
+    - unparam
+    - wastedassign
+    - containedctx
+    - revive
+    - gocritic
+    - whitespace
+    - errorlint
+    - contextcheck
+    - dogsled
+    - errname
+    - funlen
+    - gci
+    - goerr113
+    - gofmt
+    - goimports
+    - loggercheck
+    - nilnil
+    - nilerr
+    - nlreturn
+
+linters-settings:
+  goheader:
+    values:
+      const:
+        COMPANY: MpesaOverlay
+    template: |-
+      Copyright (c) {{ COMPANY }}. All rights reserved.
+      Use of this source code is governed by a Apache-2.0 license that can be
+      found in the LICENSE file.
+
+      SPDX-License-Identifier: Apache-2.0
+  funlen:
+    lines: -1
+    statements: -1
