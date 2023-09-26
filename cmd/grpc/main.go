@@ -67,12 +67,12 @@ func main() {
 
 	svc, err := newService(cfg, logger)
 	if err != nil {
-		logger.Error(fmt.Sprintf("failed to create %s service: %s", svcName, err))
+		logger.Fatal(fmt.Sprintf("failed to create %s service: %s", svcName, err))
 	}
 
 	grpcServer, err := initGRPCServer(svc, cfg, logger)
 	if err != nil {
-		logger.Error(fmt.Sprintf("failed to init %s gRPC server: %s", svcName, err))
+		logger.Fatal(fmt.Sprintf("failed to init %s gRPC server: %s", svcName, err))
 	}
 
 	g.Go(func() error {
