@@ -1,3 +1,13 @@
+// Copyright (c) MpesaOverlay. All rights reserved.
+// Use of this source code is governed by a Apache-2.0 license that can be
+// found in the LICENSE file.
+//
+// SPDX-License-Identifier: Apache-2.0
+
+// Package main provides the entrypoint for the grpc service.
+//
+// The grpc service is responsible for exposing the mpesaoverlay services
+// as a gRPC API.
 package main
 
 import (
@@ -55,7 +65,7 @@ func main() {
 		log.Fatalf("failed to init logger: %s", err)
 	}
 
-	svc, err := newService(ctx, cfg, logger)
+	svc, err := newService(cfg, logger)
 	if err != nil {
 		logger.Error(fmt.Sprintf("failed to create %s service: %s", svcName, err))
 	}
@@ -78,12 +88,11 @@ func main() {
 	}
 }
 
-func newService(ctx context.Context, cfg config, logger *zap.Logger) (grpcadapter.Service, error) {
+func newService(cfg config, logger *zap.Logger) (grpcadapter.Service, error) {
 	mpesaCfg := mpesa.Config{
 		BaseURL:   cfg.BaseURL,
 		AppKey:    cfg.ConsumerKey,
 		AppSecret: cfg.ConsumerSecret,
-		Context:   ctx,
 	}
 	var opts = []mpesa.Option{zapm.WithLogger(logger)}
 	if cfg.PrometheusURL != "" {

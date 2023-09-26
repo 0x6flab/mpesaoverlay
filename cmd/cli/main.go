@@ -1,7 +1,16 @@
+// Copyright (c) MpesaOverlay. All rights reserved.
+// Use of this source code is governed by a Apache-2.0 license that can be
+// found in the LICENSE file.
+//
+// SPDX-License-Identifier: Apache-2.0
+
+// Package main provides the entrypoint for the mpesaoverlay cli.
+//
+// The main package is responsible for parsing the command line arguments and
+// passing them to the appropriate function.
 package main
 
 import (
-	"context"
 	"fmt"
 	"log"
 	"os"
@@ -19,19 +28,14 @@ type Config struct {
 	BaseURL        string `env:"MPESA_BASE_URL"         envDefault:"https://sandbox.safaricom.co.ke"`
 }
 
-var (
-	help = `Mpesa Daraja CLI
+var help = `Mpesa Daraja CLI
 
 	See 'mpesa cheat' for a quick tutorial.
 	`
-)
 
 func main() {
-	ctx, cancel := context.WithCancel(context.Background())
-
 	var cfg = Config{}
 	if err := env.Parse(&cfg); err != nil {
-		cancel()
 		log.Fatalf(fmt.Sprintf("failed to parse env: %v", err))
 	}
 
@@ -39,11 +43,9 @@ func main() {
 		BaseURL:   cfg.BaseURL,
 		AppKey:    cfg.ConsumerKey,
 		AppSecret: cfg.ConsumerSecret,
-		Context:   ctx,
 	}
 	sdk, err := mpesa.NewSDK(mpesaCfg)
 	if err != nil {
-		cancel()
 		log.Fatalf(fmt.Sprintf("failed to create mpesa sdk: %v", err))
 	}
 

@@ -4,5 +4,5 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// Package database provides a middleware for database.
-package database
+// Package pkg provides a wrapper around the Mpesa API.
+package pkg

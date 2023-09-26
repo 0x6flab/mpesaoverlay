@@ -1,3 +1,9 @@
+// Copyright (c) MpesaOverlay. All rights reserved.
+// Use of this source code is governed by a Apache-2.0 license that can be
+// found in the LICENSE file.
+//
+// SPDX-License-Identifier: Apache-2.0
+
 package prometheus
 
 import (
@@ -13,9 +19,7 @@ import (
 
 var _ mpesa.SDK = (*metricsMiddleware)(nil)
 
-var (
-	funcNames = []string{"GetToken", "ExpressQuery", "ExpressSimulate", "B2CPayment", "AccountBalance", "C2BRegisterURL", "C2BSimulate", "GenerateQR", "Reverse", "TransactionStatus", "RemitTax"}
-)
+var funcNames = []string{"GetToken", "ExpressQuery", "ExpressSimulate", "B2CPayment", "AccountBalance", "C2BRegisterURL", "C2BSimulate", "GenerateQR", "Reverse", "TransactionStatus", "RemitTax"}
 
 type metricsMiddleware struct {
 	counters  map[string]prom.Counter
@@ -25,6 +29,7 @@ type metricsMiddleware struct {
 	sdk       mpesa.SDK
 }
 
+// WithMetrics returns a SDK middleware that instruments various metrics.
 func WithMetrics(svcName, url string) mpesa.Option {
 	return func(sdk mpesa.SDK) (mpesa.SDK, error) {
 		var mm = &metricsMiddleware{
@@ -53,16 +58,16 @@ func WithMetrics(svcName, url string) mpesa.Option {
 	}
 }
 
-func (mm *metricsMiddleware) GetToken() (resp mpesa.TokenResp, err error) {
+func (mm *metricsMiddleware) Token() (resp mpesa.TokenResp, err error) {
 	defer func(begin time.Time) {
-		mm.counters["GetToken"].Inc()
-		mm.latencies["GetToken"].Observe(time.Since(begin).Seconds())
+		mm.counters["Token"].Inc()
+		mm.latencies["Token"].Observe(time.Since(begin).Seconds())
 		if err1 := mm.pusher.Add(); err1 != nil {
 			err = fmt.Errorf("%w: %w", err, err1)
 		}
 	}(time.Now())
 
-	return mm.sdk.GetToken()
+	return mm.sdk.Token()
 }
 
 func (mm *metricsMiddleware) ExpressQuery(eqReq mpesa.ExpressQueryReq) (resp mpesa.ExpressQueryResp, err error) {

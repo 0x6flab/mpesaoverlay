@@ -1,3 +1,9 @@
+// Copyright (c) MpesaOverlay. All rights reserved.
+// Use of this source code is governed by a Apache-2.0 license that can be
+// found in the LICENSE file.
+//
+// SPDX-License-Identifier: Apache-2.0
+
 package slog
 
 import (
@@ -14,22 +20,23 @@ type loggingMiddleware struct {
 	sdk    mpesa.SDK
 }
 
+// WithLogger returns a logging middleware using slog.
 func WithLogger(logger *log.Logger) mpesa.Option {
 	return func(sdk mpesa.SDK) (mpesa.SDK, error) {
 		return &loggingMiddleware{logger, sdk}, nil
 	}
 }
 
-func (lm *loggingMiddleware) GetToken() (resp mpesa.TokenResp, err error) {
+func (lm *loggingMiddleware) Token() (resp mpesa.TokenResp, err error) {
 	defer func(begin time.Time) {
 		lm.logger.Info(
-			"GetToken",
+			"Token",
 			log.Any("error", err),
 			log.String("duration", time.Since(begin).String()),
 		)
 	}(time.Now())
 
-	return lm.sdk.GetToken()
+	return lm.sdk.Token()
 }
 
 func (lm *loggingMiddleware) ExpressQuery(eqReq mpesa.ExpressQueryReq) (resp mpesa.ExpressQueryResp, err error) {

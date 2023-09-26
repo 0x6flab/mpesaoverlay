@@ -1,3 +1,9 @@
+// Copyright (c) MpesaOverlay. All rights reserved.
+// Use of this source code is governed by a Apache-2.0 license that can be
+// found in the LICENSE file.
+//
+// SPDX-License-Identifier: Apache-2.0
+
 package postgres
 
 import (
@@ -14,7 +20,8 @@ type postgresMiddleware struct {
 	sdk mpesa.SDK
 }
 
-func WithMetrics(url string) mpesa.Option {
+// WithDatabase returns a database middleware using postgres.
+func WithDatabase(url string) mpesa.Option {
 	return func(sdk mpesa.SDK) (mpesa.SDK, error) {
 		db, err := gorm.Open(postgres.Open(url), &gorm.Config{})
 		if err != nil {
@@ -56,8 +63,8 @@ func WithMetrics(url string) mpesa.Option {
 	}
 }
 
-func (pm *postgresMiddleware) GetToken() (resp mpesa.TokenResp, err error) {
-	return pm.sdk.GetToken()
+func (pm *postgresMiddleware) Token() (resp mpesa.TokenResp, err error) {
+	return pm.sdk.Token()
 }
 
 func (pm *postgresMiddleware) ExpressQuery(eqReq mpesa.ExpressQueryReq) (resp mpesa.ExpressQueryResp, err error) {

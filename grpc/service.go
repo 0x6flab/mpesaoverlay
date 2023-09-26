@@ -1,127 +1,92 @@
+// Copyright (c) MpesaOverlay. All rights reserved.
+// Use of this source code is governed by a Apache-2.0 license that can be
+// found in the LICENSE file.
+//
+// SPDX-License-Identifier: Apache-2.0
+
 package grpc
 
 import (
-	"context"
-
 	"github.com/0x6flab/mpesaoverlay/pkg/mpesa"
 )
 
+// Service is the interface that provides methods for the MpesaOverlay SDK.
 type Service interface {
-	// GetToken Gives you a time bound access token to call allowed APIs.
-	//
-	// The token is valid for the specified time duration, which is usually an hour.
-	//
-	// Documentation: https://developer.safaricom.co.ke/APIs/Authorization
-	GetToken(ctx context.Context) (mpesa.TokenResp, error)
+	Token() (mpesa.TokenResp, error)
 
-	// ExpressQuery Check the status of a Lipa Na M-Pesa Online Payment.
-	//
-	// Query the payment status of a Lipa Na M-Pesa Online Payment using the M-Pesa transaction ID.
-	//
-	// Documentation: https://developer.safaricom.co.ke/APIs/MpesaExpressQuery
-	ExpressQuery(ctx context.Context, eqReq mpesa.ExpressQueryReq) (mpesa.ExpressQueryResp, error)
+	ExpressQuery(eqReq mpesa.ExpressQueryReq) (mpesa.ExpressQueryResp, error)
 
-	// ExpressSimulate Initiates online payment on behalf of a customer.
-	//
-	// Sends a USSD push to the customer’s phone to prompt them to enter their PIN to authorize the payment.
-	//
-	// Documentation: https://developer.safaricom.co.ke/APIs/MpesaExpressSimulate
-	ExpressSimulate(ctx context.Context, eReq mpesa.ExpressSimulateReq) (mpesa.ExpressSimulateResp, error)
+	ExpressSimulate(eReq mpesa.ExpressSimulateReq) (mpesa.ExpressSimulateResp, error)
 
-	// B2CPayment Transact between an M-Pesa short code to a phone number registered on M-Pesa
-	//
-	// B2C API is an API used to make payments from a Business to Customers (Pay Outs), also known as Bulk Disbursements.
-	//
-	// Documentation: https://developer.safaricom.co.ke/APIs/BusinessToCustomer
-	B2CPayment(ctx context.Context, b2cReq mpesa.B2CPaymentReq) (mpesa.B2CPaymentResp, error)
+	B2CPayment(b2cReq mpesa.B2CPaymentReq) (mpesa.B2CPaymentResp, error)
 
-	// AccountBalance Enquire the balance on an M-Pesa BuyGoods (Till Number)
-	//
-	// Documentation: https://developer.safaricom.co.ke/APIs/AccountBalance
-	AccountBalance(ctx context.Context, abReq mpesa.AccountBalanceReq) (mpesa.AccountBalanceResp, error)
+	AccountBalance(abReq mpesa.AccountBalanceReq) (mpesa.AccountBalanceResp, error)
 
-	// C2BRegisterURL Register validation and confirmation URLs on M-Pesa
-	//
-	// Register URL API works hand in hand with Customer to Business (C2B) APIs and allows receiving payment notifications to your paybill.
-	//
-	// This API enables you to register the callback URLs via which you shall receive notifications for payments to your pay bill/till number.
-	//
-	// Documentation: https://developer.safaricom.co.ke/APIs/CustomerToBusinessRegisterURL
-	C2BRegisterURL(ctx context.Context, c2bReq mpesa.C2BRegisterURLReq) (mpesa.C2BRegisterURLResp, error)
+	C2BRegisterURL(c2bReq mpesa.C2BRegisterURLReq) (mpesa.C2BRegisterURLResp, error)
 
-	// C2BSimulate Make payment requests from Client to Business (C2B)
-	//
-	// Documentation: https://developer.safaricom.co.ke/APIs/CustomerToBusinessRegisterURL
-	C2BSimulate(ctx context.Context, c2bReq mpesa.C2BSimulateReq) (mpesa.C2BSimulateResp, error)
+	C2BSimulate(c2bReq mpesa.C2BSimulateReq) (mpesa.C2BSimulateResp, error)
 
-	// GenerateQR Generates a dynamic M-PESA QR Code.
-	//
-	// Documentation: https://developer.safaricom.co.ke/APIs/DynamicQRCode
+	GenerateQR(qReq mpesa.GenerateQRReq) (mpesa.GenerateQRResp, error)
 
-	GenerateQR(ctx context.Context, qReq mpesa.GenerateQRReq) (mpesa.GenerateQRResp, error)
+	Reverse(rReq mpesa.ReverseReq) (mpesa.ReverseResp, error)
 
-	// Reverse Reverses an M-Pesa transaction.
-	Reverse(ctx context.Context, rReq mpesa.ReverseReq) (mpesa.ReverseResp, error)
+	TransactionStatus(tReq mpesa.TransactionStatusReq) (mpesa.TransactionStatusResp, error)
 
-	// TransactionStatus Check the status of a transaction
-	//
-	// Check the status of a transaction.
-	TransactionStatus(ctx context.Context, tReq mpesa.TransactionStatusReq) (mpesa.TransactionStatusResp, error)
-
-	// RemitTax enables businesses to remit tax to Kenya Revenue Authority (KRA).
-	RemitTax(ctx context.Context, rReq mpesa.RemitTaxReq) (mpesa.RemitTaxResp, error)
+	RemitTax(rReq mpesa.RemitTaxReq) (mpesa.RemitTaxResp, error)
 }
 
+// service implements the Service interface.
 type service struct {
 	sdk mpesa.SDK
 }
 
 var _ Service = (*service)(nil)
 
+// NewService returns a new gRPC service.
 func NewService(sdk mpesa.SDK) Service {
 	return &service{sdk: sdk}
 }
 
-func (s *service) GetToken(_ context.Context) (mpesa.TokenResp, error) {
-	return s.sdk.GetToken()
+func (s *service) Token() (mpesa.TokenResp, error) {
+	return s.sdk.Token()
 }
 
-func (s *service) ExpressQuery(_ context.Context, eqReq mpesa.ExpressQueryReq) (mpesa.ExpressQueryResp, error) {
+func (s *service) ExpressQuery(eqReq mpesa.ExpressQueryReq) (mpesa.ExpressQueryResp, error) {
 	return s.sdk.ExpressQuery(eqReq)
 }
 
-func (s *service) ExpressSimulate(_ context.Context, eReq mpesa.ExpressSimulateReq) (mpesa.ExpressSimulateResp, error) {
+func (s *service) ExpressSimulate(eReq mpesa.ExpressSimulateReq) (mpesa.ExpressSimulateResp, error) {
 	return s.sdk.ExpressSimulate(eReq)
 }
 
-func (s *service) B2CPayment(_ context.Context, b2cReq mpesa.B2CPaymentReq) (mpesa.B2CPaymentResp, error) {
+func (s *service) B2CPayment(b2cReq mpesa.B2CPaymentReq) (mpesa.B2CPaymentResp, error) {
 	return s.sdk.B2CPayment(b2cReq)
 }
 
-func (s *service) AccountBalance(_ context.Context, abReq mpesa.AccountBalanceReq) (mpesa.AccountBalanceResp, error) {
+func (s *service) AccountBalance(abReq mpesa.AccountBalanceReq) (mpesa.AccountBalanceResp, error) {
 	return s.sdk.AccountBalance(abReq)
 }
 
-func (s *service) C2BRegisterURL(_ context.Context, c2bReq mpesa.C2BRegisterURLReq) (mpesa.C2BRegisterURLResp, error) {
+func (s *service) C2BRegisterURL(c2bReq mpesa.C2BRegisterURLReq) (mpesa.C2BRegisterURLResp, error) {
 	return s.sdk.C2BRegisterURL(c2bReq)
 }
 
-func (s *service) C2BSimulate(_ context.Context, c2bReq mpesa.C2BSimulateReq) (mpesa.C2BSimulateResp, error) {
+func (s *service) C2BSimulate(c2bReq mpesa.C2BSimulateReq) (mpesa.C2BSimulateResp, error) {
 	return s.sdk.C2BSimulate(c2bReq)
 }
 
-func (s *service) GenerateQR(_ context.Context, qReq mpesa.GenerateQRReq) (mpesa.GenerateQRResp, error) {
+func (s *service) GenerateQR(qReq mpesa.GenerateQRReq) (mpesa.GenerateQRResp, error) {
 	return s.sdk.GenerateQR(qReq)
 }
 
-func (s *service) Reverse(_ context.Context, rReq mpesa.ReverseReq) (mpesa.ReverseResp, error) {
+func (s *service) Reverse(rReq mpesa.ReverseReq) (mpesa.ReverseResp, error) {
 	return s.sdk.Reverse(rReq)
 }
 
-func (s *service) TransactionStatus(_ context.Context, tReq mpesa.TransactionStatusReq) (mpesa.TransactionStatusResp, error) {
+func (s *service) TransactionStatus(tReq mpesa.TransactionStatusReq) (mpesa.TransactionStatusResp, error) {
 	return s.sdk.TransactionStatus(tReq)
 }
 
-func (s *service) RemitTax(_ context.Context, rReq mpesa.RemitTaxReq) (mpesa.RemitTaxResp, error) {
+func (s *service) RemitTax(rReq mpesa.RemitTaxReq) (mpesa.RemitTaxResp, error) {
 	return s.sdk.RemitTax(rReq)
 }

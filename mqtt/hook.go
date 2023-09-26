@@ -1,3 +1,9 @@
+// Copyright (c) MpesaOverlay. All rights reserved.
+// Use of this source code is governed by a Apache-2.0 license that can be
+// found in the LICENSE file.
+//
+// SPDX-License-Identifier: Apache-2.0
+
 package mqtt
 
 import (
@@ -18,6 +24,7 @@ type Hook struct {
 	Service
 }
 
+// NewHook returns a new MQTT hook.
 func NewHook(logger *zap.Logger, svc Service) *Hook {
 	return &Hook{
 		logger:  logger,
@@ -29,7 +36,6 @@ func (h *Hook) SetServer(s *mqtt.Server) {
 	h.serve = s
 }
 
-// ID returns the ID of the hook.
 func (h *Hook) ID() string {
 	return mpesaoverlay.SVCName + "-mqtt"
 }
@@ -81,7 +87,7 @@ func (h *Hook) OnPublished(cl *mqtt.Client, pk packets.Packet) {
 		zap.String("topic", pk.TopicName),
 	)
 
-	h.handleMessages(cl, pk)
+	h.handleMessages(pk)
 }
 
 func (h *Hook) OnSubscribed(cl *mqtt.Client, pk packets.Packet, _ []byte) {
@@ -102,21 +108,15 @@ func (h *Hook) OnUnsubscribed(cl *mqtt.Client, pk packets.Packet) {
 	)
 }
 
-func (h *Hook) handleMessages(cl *mqtt.Client, pk packets.Packet) {
-	// if pk.Payload == nil {
-	// 	h.logger.Info("empty payload")
-	// 	return
-	// }
+// handleMessages handles the inbound MQTT messages.
+func (h *Hook) handleMessages(pk packets.Packet) {
 	switch pk.TopicName {
 	case "mpesa/token":
 		h.logger.Info("handling token")
-		resp, _ := h.GetToken(pk)
+		resp, _ := h.Token(pk)
 		h.logger.Info("token", zap.Any("resp", resp))
-		// if err != nil {
-		// 	h.logger.Error("failed to handle token", zap.Error(err))
-		// 	return
-		// }
-		h.publish(cl, "mpesa/token", resp)
+
+		h.publish("mpesa/token", resp)
 
 	case "mpesa/express/query":
 		h.logger.Info("handling express query")
@@ -126,7 +126,7 @@ func (h *Hook) handleMessages(cl *mqtt.Client, pk packets.Packet) {
 
 			return
 		}
-		h.publish(cl, "mpesa/express/query", resp)
+		h.publish("mpesa/express/query", resp)
 
 	case "mpesa/express/simulate":
 		h.logger.Info("handling express simulate")
@@ -136,7 +136,7 @@ func (h *Hook) handleMessages(cl *mqtt.Client, pk packets.Packet) {
 
 			return
 		}
-		h.publish(cl, "mpesa/express/simulate", resp)
+		h.publish("mpesa/express/simulate", resp)
 
 	case "mpesa/b2c/payment":
 		h.logger.Info("handling b2c payment")
@@ -146,7 +146,7 @@ func (h *Hook) handleMessages(cl *mqtt.Client, pk packets.Packet) {
 
 			return
 		}
-		h.publish(cl, "mpesa/b2c/payment", resp)
+		h.publish("mpesa/b2c/payment", resp)
 
 	case "mpesa/account/balance":
 		h.logger.Info("handling account balance")
@@ -156,7 +156,7 @@ func (h *Hook) handleMessages(cl *mqtt.Client, pk packets.Packet) {
 
 			return
 		}
-		h.publish(cl, "mpesa/account/balance", resp)
+		h.publish("mpesa/account/balance", resp)
 
 	case "mpesa/c2b/register":
 		h.logger.Info("handling c2b register")
@@ -166,7 +166,7 @@ func (h *Hook) handleMessages(cl *mqtt.Client, pk packets.Packet) {
 
 			return
 		}
-		h.publish(cl, "mpesa/c2b/register", resp)
+		h.publish("mpesa/c2b/register", resp)
 
 	case "mpesa/c2b/simulate":
 		h.logger.Info("handling c2b simulate")
@@ -176,7 +176,7 @@ func (h *Hook) handleMessages(cl *mqtt.Client, pk packets.Packet) {
 
 			return
 		}
-		h.publish(cl, "mpesa/c2b/simulate", resp)
+		h.publish("mpesa/c2b/simulate", resp)
 
 	case "mpesa/generate/qr":
 		h.logger.Info("handling generate qr")
@@ -186,7 +186,7 @@ func (h *Hook) handleMessages(cl *mqtt.Client, pk packets.Packet) {
 
 			return
 		}
-		h.publish(cl, "mpesa/generate/qr", resp)
+		h.publish("mpesa/generate/qr", resp)
 
 	case "mpesa/reverse":
 		h.logger.Info("handling reverse")
@@ -196,7 +196,7 @@ func (h *Hook) handleMessages(cl *mqtt.Client, pk packets.Packet) {
 
 			return
 		}
-		h.publish(cl, "mpesa/reverse", resp)
+		h.publish("mpesa/reverse", resp)
 
 	case "mpesa/transaction/status":
 		h.logger.Info("handling transaction status")
@@ -206,7 +206,7 @@ func (h *Hook) handleMessages(cl *mqtt.Client, pk packets.Packet) {
 
 			return
 		}
-		h.publish(cl, "mpesa/transaction/status", resp)
+		h.publish("mpesa/transaction/status", resp)
 
 	case "mpesa/remit/tax":
 		h.logger.Info("handling remit tax")
@@ -216,7 +216,7 @@ func (h *Hook) handleMessages(cl *mqtt.Client, pk packets.Packet) {
 
 			return
 		}
-		h.publish(cl, "mpesa/remit/tax", resp)
+		h.publish("mpesa/remit/tax", resp)
 
 	default:
 		switch strings.HasSuffix(pk.TopicName, "/response") {
@@ -228,7 +228,8 @@ func (h *Hook) handleMessages(cl *mqtt.Client, pk packets.Packet) {
 	}
 }
 
-func (h *Hook) publish(_ *mqtt.Client, topic string, payload interface{}) {
+// publish publishes the response to the MQTT broker.
+func (h *Hook) publish(topic string, payload interface{}) {
 	data, err := json.Marshal(payload)
 	if err != nil {
 		h.logger.Error("failed to marshal payload", zap.Error(err))

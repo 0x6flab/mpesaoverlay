@@ -4,5 +4,5 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// Package database provides a middleware for database.
-package database
+// Package logging provides a middleware for logging.
+package logging

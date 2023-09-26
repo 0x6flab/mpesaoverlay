@@ -1,3 +1,12 @@
+// Copyright (c) MpesaOverlay. All rights reserved.
+// Use of this source code is governed by a Apache-2.0 license that can be
+// found in the LICENSE file.
+//
+// SPDX-License-Identifier: Apache-2.0
+
+// Package main provides the entrypoint for the mqtt service.
+//
+// The mqtt service is responsible for listening to mqtt messages and
 package main
 
 import (
@@ -55,7 +64,7 @@ func main() {
 		logger.Error(fmt.Sprintf("failed to add auth hook: %s", err))
 	}
 
-	hook, err := newService(ctx, cfg, logger)
+	hook, err := newService(cfg, logger)
 	if err != nil {
 		logger.Error(fmt.Sprintf("failed to create %s hook: %s", svcName, err))
 	}
@@ -78,12 +87,11 @@ func main() {
 	}
 }
 
-func newService(ctx context.Context, cfg config, logger *zap.Logger) (*mqttadapter.Hook, error) {
+func newService(cfg config, logger *zap.Logger) (*mqttadapter.Hook, error) {
 	mpesaCfg := mpesa.Config{
 		BaseURL:   cfg.BaseURL,
 		AppKey:    cfg.ConsumerKey,
 		AppSecret: cfg.ConsumerSecret,
-		Context:   ctx,
 	}
 
 	sdk, err := mpesa.NewSDK(mpesaCfg)

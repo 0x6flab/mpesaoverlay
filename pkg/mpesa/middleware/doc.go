@@ -4,5 +4,5 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// Package database provides a middleware for database.
-package database
+// Package middleware provides a set of middleware for use with MpesaOverlay.
+package middleware
