@@ -4,5 +4,5 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// Package database provides a middleware for database.
-package database
+// Package example is the root package for the example services.
+package example

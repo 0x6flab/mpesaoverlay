@@ -1,3 +1,9 @@
+// Copyright (c) MpesaOverlay. All rights reserved.
+// Use of this source code is governed by a Apache-2.0 license that can be
+// found in the LICENSE file.
+//
+// SPDX-License-Identifier: Apache-2.0
+
 package cli
 
 import (
@@ -5,6 +11,7 @@ import (
 	"github.com/AlecAivazis/survey/v2"
 )
 
+// C2BRegisterURL registers the confirmation and validation urls.
 func C2BRegisterURL(sdk mpesa.SDK) error {
 	var req = mpesa.C2BRegisterURLReq{}
 

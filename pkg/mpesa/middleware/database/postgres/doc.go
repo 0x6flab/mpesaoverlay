@@ -4,5 +4,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// Package database provides a middleware for database.
-package database
+// Package postgres implements the postgres database for the logging middleware to be used
+// with MpesaOverlay SDK.
+package postgres

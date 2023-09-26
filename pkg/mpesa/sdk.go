@@ -1,7 +1,12 @@
+// Copyright (c) MpesaOverlay. All rights reserved.
+// Use of this source code is governed by a Apache-2.0 license that can be
+// found in the LICENSE file.
+//
+// SPDX-License-Identifier: Apache-2.0
+
 package mpesa
 
 import (
-	"context"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/tls"
@@ -9,6 +14,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"encoding/pem"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -33,13 +39,19 @@ const (
 	sandboxCertificate  = "https://developer.safaricom.co.ke/api/v1/GenerateSecurityCredential/SandboxCertificate.cer"
 )
 
+var (
+	errInvalidBaseURL   = errors.New("invalid base url, must be either https://api.safaricom.co.ke or https://sandbox.safaricom.co.ke")
+	errMissingBaseURL   = errors.New("missing base url")
+	errMissingAppKey    = errors.New("missing app key")
+	errMissingAppSecret = errors.New("missing app secret")
+	errFailedToSendReq  = errors.New("failed to send request")
+)
+
 var _ SDK = (*mSDK)(nil)
 
 // SDK contains MpesaOverlay interface API.
 type SDK interface {
-	// GetToken Gives you a time bound access token to call allowed APIs.
-	//
-	// The token is valid for the specified time duration, which is usually an hour.
+	// GetToken gives you a time bound access token to call allowed APIs.
 	//
 	// Documentation: https://developer.safaricom.co.ke/APIs/Authorization
 	//
@@ -51,11 +63,9 @@ type SDK interface {
 	// 	log.Printf("Token: %+v\n", token)
 	// Output:
 	// 	2023/09/06 22:43:21 Token: {AccessToken:unU9joKpPqIsZ1jFiDmQoNJ1cIvK Expiry:3599}
-	GetToken() (TokenResp, error)
+	Token() (TokenResp, error)
 
-	// ExpressQuery Check the status of a Lipa Na M-Pesa Online Payment.
-	//
-	// Query the payment status of a Lipa Na M-Pesa Online Payment using the M-Pesa transaction ID.
+	// ExpressQuery check the status of a Lipa Na M-Pesa Online Payment.
 	//
 	// Documentation: https://developer.safaricom.co.ke/APIs/MpesaExpressQuery
 	//
@@ -76,9 +86,7 @@ type SDK interface {
 	//  2023/09/07 20:08:05 Resp: {ResponseDescription:The service request has been accepted successsfully ResponseCode:0 MerchantRequestID:92643-47073138-2 CheckoutRequestID:ws_CO_07092023195244460712345678 CustomerMessage: ResultCode:1032 ResultDesc:Request cancelled by user}
 	ExpressQuery(eqReq ExpressQueryReq) (ExpressQueryResp, error)
 
-	// ExpressSimulate Initiates online payment on behalf of a customer.
-	//
-	// Sends a USSD push to the customer’s phone to prompt them to enter their PIN to authorize the payment.
+	// ExpressSimulate initiates online payment on behalf of a customer.
 	//
 	// Documentation: https://developer.safaricom.co.ke/APIs/MpesaExpressSimulate
 	//
@@ -107,8 +115,6 @@ type SDK interface {
 	ExpressSimulate(eReq ExpressSimulateReq) (ExpressSimulateResp, error)
 
 	// B2CPayment Transact between an M-Pesa short code to a phone number registered on M-Pesa
-	//
-	// B2C API is an API used to make payments from a Business to Customers (Pay Outs), also known as Bulk Disbursements.
 	//
 	// Documentation: https://developer.safaricom.co.ke/APIs/BusinessToCustomer
 	//
@@ -163,11 +169,7 @@ type SDK interface {
 	//  2023/09/07 22:05:44 Resp: {ValidResp:{OriginatorConversationID: ConversationID:AG_20230907_201045e9b4e4f9bcb4d6 ResponseDescription:Accept the service request successfully. ResponseCode:0}}
 	AccountBalance(abReq AccountBalanceReq) (AccountBalanceResp, error)
 
-	// C2BRegisterURL Register validation and confirmation URLs on M-Pesa
-	//
-	// Register URL API works hand in hand with Customer to Business (C2B) APIs and allows receiving payment notifications to your paybill.
-	//
-	// This API enables you to register the callback URLs via which you shall receive notifications for payments to your pay bill/till number.
+	// C2BRegisterURL register validation and confirmation URLs on M-Pesa
 	//
 	// Documentation: https://developer.safaricom.co.ke/APIs/CustomerToBusinessRegisterURL
 	//
@@ -212,7 +214,7 @@ type SDK interface {
 	//  2023/09/07 20:33:56 Resp: {ValidResp:{OriginatorConversationID:92647-47234949-2 ConversationID: ResponseDescription:Accept the service request successfully. ResponseCode:0}}
 	C2BSimulate(c2bReq C2BSimulateReq) (C2BSimulateResp, error)
 
-	// GenerateQR Generates a dynamic M-PESA QR Code.
+	// GenerateQR generates a dynamic M-PESA QR Code.
 	//
 	// Documentation: https://developer.safaricom.co.ke/APIs/DynamicQRCode
 	//
@@ -263,9 +265,7 @@ type SDK interface {
 	//  2023/09/07 22:11:13 Resp: {ValidResp:{OriginatorConversationID: ConversationID:AG_20230907_20106204c62f8f1a3f21 ResponseDescription:Accept the service request successfully. ResponseCode:0}}
 	Reverse(rReq ReverseReq) (ReverseResp, error)
 
-	// TransactionStatus Check the status of a transaction
-	//
-	// Check the status of a transaction.
+	// TransactionStatus check the status of a transaction
 	//
 	// Documentation: https://developer.safaricom.co.ke/APIs/TransactionStatus
 	//
@@ -324,13 +324,13 @@ type SDK interface {
 	RemitTax(rReq RemitTaxReq) (RemitTaxResp, error)
 }
 
+// mSDK implements SDK interface.
 type mSDK struct {
 	baseURL           string
 	appKey            string
 	appSecret         string
 	certFile          string
 	client            *http.Client
-	context           context.Context
 	initiatorName     string
 	initiatorPassword string
 }
@@ -342,31 +342,32 @@ type Config struct {
 	AppSecret         string
 	CertFile          string
 	HTTPClient        *http.Client
-	Context           context.Context
 	InitiatorName     string
 	InitiatorPassword string
 }
 
+// validate validates the configuration parameters.
 func (cfg Config) validate() error {
 	if cfg.BaseURL == "" {
-		return fmt.Errorf("base url is required")
+		return errMissingBaseURL
 	}
 
 	if cfg.BaseURL != "https://api.safaricom.co.ke" && cfg.BaseURL != "https://sandbox.safaricom.co.ke" {
-		return fmt.Errorf("base url must be either https://api.safaricom.co.ke or https://sandbox.safaricom.co.ke")
+		return errInvalidBaseURL
 	}
 
 	if cfg.AppKey == "" {
-		return fmt.Errorf("app key is required")
+		return errMissingAppKey
 	}
 
 	if cfg.AppSecret == "" {
-		return fmt.Errorf("app secret is required")
+		return errMissingAppSecret
 	}
 
 	return nil
 }
 
+// newSDK returns new mpesa SDK instance.
 func newSDK(conf Config) (SDK, error) {
 	conf.CertFile = prodCertificate
 	if strings.Contains(conf.BaseURL, "sandbox") {
@@ -392,7 +393,6 @@ func newSDK(conf Config) (SDK, error) {
 		appSecret:         conf.AppSecret,
 		certFile:          conf.CertFile,
 		client:            conf.HTTPClient,
-		context:           conf.Context,
 		initiatorName:     conf.InitiatorName,
 		initiatorPassword: conf.InitiatorPassword,
 	}
@@ -408,20 +408,20 @@ func NewSDK(conf Config, opts ...Option) (SDK, error) {
 	}
 
 	for _, opt := range opts {
-		opt(sdk)
+		sdk, err = opt(sdk)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return sdk, nil
 }
 
+// sendRequest sends a request to the Mpesa API.
 func (sdk mSDK) sendRequest(req *http.Request) ([]byte, error) {
-	token, err := sdk.GetToken()
+	token, err := sdk.Token()
 	if err != nil {
 		return nil, err
-	}
-
-	if sdk.context != nil {
-		req = req.WithContext(sdk.context)
 	}
 
 	if token.AccessToken != "" {
@@ -433,7 +433,7 @@ func (sdk mSDK) sendRequest(req *http.Request) ([]byte, error) {
 
 	resp, err := sdk.client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("failed to send request: %w", err)
+		return nil, errors.Join(errFailedToSendReq, err)
 	}
 
 	body, err := io.ReadAll(resp.Body)
@@ -443,17 +443,18 @@ func (sdk mSDK) sendRequest(req *http.Request) ([]byte, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		var errResp ErrorResp
+		var errResp RespError
 		if err := json.Unmarshal(body, &errResp); err != nil {
 			return nil, fmt.Errorf("failed to unmarshal error response: %w", err)
 		}
 
-		return nil, fmt.Errorf("failed to send request: requestID %s, errorCode %s, errorMessage %s", errResp.RequestID, errResp.Code, errResp.Message)
+		return nil, errors.Join(errFailedToSendReq, errResp)
 	}
 
 	return body, nil
 }
 
+// generateTimestampAndPassword generates a timestamp and password.
 func (sdk mSDK) generateTimestampAndPassword(shortcode uint64, passkey string) (string, string) {
 	timestamp := time.Now().Local().Format("20060102150405")
 	password := fmt.Sprintf("%d%s%s", shortcode, passkey, timestamp)

@@ -1,3 +1,9 @@
+// Copyright (c) MpesaOverlay. All rights reserved.
+// Use of this source code is governed by a Apache-2.0 license that can be
+// found in the LICENSE file.
+//
+// SPDX-License-Identifier: Apache-2.0
+
 package logrus
 
 import (
@@ -14,6 +20,7 @@ type loggingMiddleware struct {
 	sdk    mpesa.SDK
 }
 
+// WithLogger returns a logging middleware using logrus.
 func WithLogger(logger *log.Logger) mpesa.Option {
 	return func(sdk mpesa.SDK) (mpesa.SDK, error) {
 		logger.SetFormatter(&log.JSONFormatter{
@@ -25,21 +32,21 @@ func WithLogger(logger *log.Logger) mpesa.Option {
 	}
 }
 
-func (lm *loggingMiddleware) GetToken() (resp mpesa.TokenResp, err error) {
+func (lm *loggingMiddleware) Token() (resp mpesa.TokenResp, err error) {
 	defer func(begin time.Time) {
 		var fields = log.Fields{
 			"duration": time.Since(begin).String(),
 		}
 		switch err {
 		case nil:
-			lm.logger.WithFields(fields).Info("GetToken")
+			lm.logger.WithFields(fields).Info("Token")
 		default:
 			fields["error"] = err
-			lm.logger.WithFields(fields).Error("GetToken")
+			lm.logger.WithFields(fields).Error("Token")
 		}
 	}(time.Now())
 
-	return lm.sdk.GetToken()
+	return lm.sdk.Token()
 }
 
 func (lm *loggingMiddleware) ExpressQuery(eqReq mpesa.ExpressQueryReq) (resp mpesa.ExpressQueryResp, err error) {

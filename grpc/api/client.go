@@ -1,3 +1,9 @@
+// Copyright (c) MpesaOverlay. All rights reserved.
+// Use of this source code is governed by a Apache-2.0 license that can be
+// found in the LICENSE file.
+//
+// SPDX-License-Identifier: Apache-2.0
+
 package api
 
 import (
@@ -15,8 +21,9 @@ const svcName = "mpesaoverlay.overlay.Service"
 
 var _ grpcadapter.ServiceClient = (*grpcClient)(nil)
 
+// grpcClient implements the gRPC ServiceClient interface.
 type grpcClient struct {
-	getToken          endpoint.Endpoint
+	token             endpoint.Endpoint
 	expressQuery      endpoint.Endpoint
 	expressSimulate   endpoint.Endpoint
 	b2c               endpoint.Endpoint
@@ -31,14 +38,15 @@ type grpcClient struct {
 }
 
 // NewClient returns new gRPC client instance.
+// The client is responsible for communicating with the mpesaoverlay service.
 func NewClient(conn *grpc.ClientConn, timeout time.Duration) grpcadapter.ServiceClient {
 	return &grpcClient{
-		getToken: kitgrpc.NewClient(
+		token: kitgrpc.NewClient(
 			conn,
 			svcName,
 			"GetToken",
-			encodeGetTokenRequest,
-			decodeGetTokenResponse,
+			encodeTokenRequest,
+			decodeTokenResponse,
 			grpcadapter.TokenResp{},
 		).Endpoint(),
 		expressQuery: kitgrpc.NewClient(
@@ -126,16 +134,16 @@ func NewClient(conn *grpc.ClientConn, timeout time.Duration) grpcadapter.Service
 	}
 }
 
-func (client grpcClient) GetToken(ctx context.Context, _ *grpcadapter.Empty, _ ...grpc.CallOption) (r *grpcadapter.TokenResp, err error) {
+func (client grpcClient) Token(ctx context.Context, _ *grpcadapter.Empty, _ ...grpc.CallOption) (r *grpcadapter.TokenResp, err error) {
 	ctx, cancel := context.WithTimeout(ctx, client.timeout)
 	defer cancel()
 
-	res, err := client.getToken(ctx, getTokenReq{})
+	res, err := client.token(ctx, tokenReq{})
 	if err != nil {
 		return &grpcadapter.TokenResp{}, err
 	}
 
-	ares := res.(getTokenResp)
+	ares := res.(tokenResp)
 
 	return &grpcadapter.TokenResp{
 		AccessToken: ares.AccessToken,
@@ -143,7 +151,7 @@ func (client grpcClient) GetToken(ctx context.Context, _ *grpcadapter.Empty, _ .
 	}, err
 }
 
-func decodeGetTokenResponse(_ context.Context, grpcRes interface{}) (interface{}, error) {
+func decodeTokenResponse(_ context.Context, grpcRes interface{}) (interface{}, error) {
 	res := grpcRes.(*grpcadapter.TokenResp)
 
 	return grpcadapter.TokenResp{
@@ -152,7 +160,7 @@ func decodeGetTokenResponse(_ context.Context, grpcRes interface{}) (interface{}
 	}, nil
 }
 
-func encodeGetTokenRequest(_ context.Context, _ interface{}) (interface{}, error) {
+func encodeTokenRequest(_ context.Context, _ interface{}) (interface{}, error) {
 	return &grpcadapter.Empty{}, nil
 }
 

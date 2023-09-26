@@ -1,3 +1,9 @@
+// Copyright (c) MpesaOverlay. All rights reserved.
+// Use of this source code is governed by a Apache-2.0 license that can be
+// found in the LICENSE file.
+//
+// SPDX-License-Identifier: Apache-2.0
+
 // This file is separated from request.go make it easy
 // to generate protobuf files using https://github.com/anjmao/go2proto
 
@@ -5,7 +11,17 @@ package mpesa
 
 import (
 	"errors"
+	"fmt"
 	"net/url"
+)
+
+const (
+	maxAccountReferenceLen = 12
+	maxTransactionDescLen  = 13
+	maxOccasionLen         = 100
+	maxRemarksLen          = 100
+	customerPayBillOnline  = "CustomerPayBillOnline"
+	customerBuyGoodsOnline = "CustomerBuyGoodsOnline"
 )
 
 var (
@@ -48,28 +64,22 @@ func (esr ExpressSimulateReq) Validate() error {
 	if ok := isShortCode(esr.BusinessShortCode); !ok {
 		return errInvalidShortCode
 	}
-
-	if esr.TransactionType != "CustomerPayBillOnline" && esr.TransactionType != "CustomerBuyGoodsOnline" {
+	if esr.TransactionType != customerPayBillOnline && esr.TransactionType != customerBuyGoodsOnline {
 		return errInvalidTransactionType
 	}
-
 	if ok := isPhoneNumber(esr.PartyA); !ok {
 		return errInvalidPhoneNumber
 	}
-
 	if ok := isShortCode(esr.PartyB); !ok {
 		return errInvalidShortCode
 	}
-
 	if ok := isPhoneNumber(esr.PhoneNumber); !ok {
 		return errInvalidPhoneNumber
 	}
-
-	if len(esr.AccountReference) > 12 {
+	if len(esr.AccountReference) > maxAccountReferenceLen {
 		return errInvalidAccountReference
 	}
-
-	if len(esr.TransactionDesc) > 13 {
+	if len(esr.TransactionDesc) > maxTransactionDescLen {
 		return errInvalidTransactionDesc
 	}
 	if ok := isValidURL(esr.CallBackURL); !ok {
@@ -97,6 +107,7 @@ func (qr GenerateQRReq) Validate() error {
 	return nil
 }
 
+// Validate validate the C2BRegisterURLReq Request.
 func (c2b C2BRegisterURLReq) Validate() error {
 	if ok := isShortCode(c2b.ShortCode); !ok {
 		return errInvalidShortCode
@@ -114,8 +125,9 @@ func (c2b C2BRegisterURLReq) Validate() error {
 	return nil
 }
 
+// Validate validate the C2BSimulateReq Request.
 func (c2b C2BSimulateReq) Validate() error {
-	if c2b.CommandID != "CustomerPayBillOnline" && c2b.CommandID != "CustomerBuyGoodsOnline" {
+	if c2b.CommandID != customerPayBillOnline && c2b.CommandID != customerBuyGoodsOnline {
 		return errInvalidCommandID
 	}
 
@@ -127,11 +139,9 @@ func (r B2CPaymentReq) Validate() error {
 	if r.CommandID != "BusinessPayment" && r.CommandID != "SalaryPayment" && r.CommandID != "PromotionPayment" {
 		return errInvalidCommandID
 	}
-
 	if ok := isShortCode(r.PartyA); !ok {
 		return errInvalidShortCode
 	}
-
 	if ok := isPhoneNumber(r.PartyB); !ok {
 		return errInvalidPhoneNumber
 	}
@@ -140,6 +150,12 @@ func (r B2CPaymentReq) Validate() error {
 	}
 	if ok := isValidURL(r.ResultURL); !ok {
 		return errInvalidURL
+	}
+	if r.Remarks != "" && len(r.Remarks) > maxRemarksLen {
+		return errInvalidRemarks
+	}
+	if r.Occasion != "" && len(r.Occasion) > maxOccasionLen {
+		return errInvalidOccasion
 	}
 
 	return nil
@@ -150,23 +166,18 @@ func (r TransactionStatusReq) Validate() error {
 	if r.CommandID != "TransactionStatusQuery" {
 		return errInvalidCommandID
 	}
-
-	if len(r.Remarks) > 100 {
+	if r.Remarks != "" && len(r.Remarks) > maxRemarksLen {
 		return errInvalidRemarks
 	}
-
-	if r.Occasion != "" && len(r.Occasion) > 100 {
+	if r.Occasion != "" && len(r.Occasion) > maxOccasionLen {
 		return errInvalidOccasion
 	}
-
 	if r.IdentifierType != 1 && r.IdentifierType != 2 && r.IdentifierType != 4 {
 		return errInvalidIdentifierType
 	}
-
 	if ok := isValidURL(r.QueueTimeOutURL); !ok {
 		return errInvalidURL
 	}
-
 	if ok := isValidURL(r.ResultURL); !ok {
 		return errInvalidURL
 	}
@@ -179,15 +190,12 @@ func (r AccountBalanceReq) Validate() error {
 	if r.CommandID != "AccountBalance" {
 		return errInvalidCommandID
 	}
-
 	if r.IdentifierType != 1 && r.IdentifierType != 2 && r.IdentifierType != 4 {
 		return errInvalidIdentifierType
 	}
-
 	if ok := isValidURL(r.QueueTimeOutURL); !ok {
 		return errInvalidURL
 	}
-
 	if ok := isValidURL(r.ResultURL); !ok {
 		return errInvalidURL
 	}
@@ -200,11 +208,9 @@ func (r ReverseReq) Validate() error {
 	if r.CommandID != "TransactionReversal" {
 		return errInvalidCommandID
 	}
-
 	if ok := isValidURL(r.QueueTimeOutURL); !ok {
 		return errInvalidURL
 	}
-
 	if ok := isValidURL(r.ResultURL); !ok {
 		return errInvalidURL
 	}
@@ -217,15 +223,12 @@ func (r RemitTaxReq) Validate() error {
 	if r.CommandID != "PayTaxToKRA" {
 		return errInvalidCommandID
 	}
-
-	if len(r.Remarks) > 100 {
+	if r.Remarks != "" && len(r.Remarks) > maxRemarksLen {
 		return errInvalidRemarks
 	}
-
 	if ok := isValidURL(r.QueueTimeOutURL); !ok {
 		return errInvalidURL
 	}
-
 	if ok := isValidURL(r.ResultURL); !ok {
 		return errInvalidURL
 	}
@@ -253,6 +256,7 @@ func isShortCode(number uint64) bool {
 	return true
 }
 
+// isValidURL checks if the url is valid.
 func isValidURL(inputURL string) bool {
 	parsedURL, err := url.Parse(inputURL)
 	if err != nil {
@@ -268,4 +272,9 @@ func isValidURL(inputURL string) bool {
 	}
 
 	return true
+}
+
+// Error is the error returned by the Mpesa API.
+func (e RespError) Error() string {
+	return fmt.Sprintf("%s: %s", e.Code, e.Message)
 }

@@ -4,5 +4,5 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// Package database provides a middleware for database.
-package database
+// Package cmd provides the entrypoint for all the mpesaoverlay services.
+package cmd

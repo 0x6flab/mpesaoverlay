@@ -19,12 +19,6 @@ message C2BSimulateResp {
   ValidResp validResp = 1;
 }
 
-message ErrorResp {
-  string requestID = 1;
-  string code = 2;
-  string message = 3;
-}
-
 message ExpressQueryResp {
   string responseDescription = 1;
   string responseCode = 2;
@@ -52,6 +46,12 @@ message GenerateQRResp {
 
 message RemitTaxResp {
   ValidResp validResp = 1;
+}
+
+message RespError {
+  string requestID = 1;
+  string code = 2;
+  string message = 3;
 }
 
 message ReverseResp {

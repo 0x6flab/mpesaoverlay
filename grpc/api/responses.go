@@ -1,8 +1,14 @@
+// Copyright (c) MpesaOverlay. All rights reserved.
+// Use of this source code is governed by a Apache-2.0 license that can be
+// found in the LICENSE file.
+//
+// SPDX-License-Identifier: Apache-2.0
+
 package api
 
 import "github.com/0x6flab/mpesaoverlay/pkg/mpesa"
 
-type getTokenResp struct {
+type tokenResp struct {
 	mpesa.TokenResp
 }
 

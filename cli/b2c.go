@@ -1,3 +1,9 @@
+// Copyright (c) MpesaOverlay. All rights reserved.
+// Use of this source code is governed by a Apache-2.0 license that can be
+// found in the LICENSE file.
+//
+// SPDX-License-Identifier: Apache-2.0
+
 package cli
 
 import (
@@ -6,6 +12,7 @@ import (
 	"github.com/oklog/ulid/v2"
 )
 
+// B2CPayment initiates a B2C payment request.
 func B2CPayment(sdk mpesa.SDK) error {
 	var req = mpesa.B2CPaymentReq{}
 

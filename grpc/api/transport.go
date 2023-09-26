@@ -1,3 +1,9 @@
+// Copyright (c) MpesaOverlay. All rights reserved.
+// Use of this source code is governed by a Apache-2.0 license that can be
+// found in the LICENSE file.
+//
+// SPDX-License-Identifier: Apache-2.0
+
 package api
 
 import (
@@ -13,8 +19,9 @@ import (
 
 var _ grpc.ServiceServer = (*grpcServer)(nil)
 
+// grpcServer implements the gRPC ServiceServer interface.
 type grpcServer struct {
-	getToken          kitgrpc.Handler
+	token             kitgrpc.Handler
 	expressQuery      kitgrpc.Handler
 	expressSimulate   kitgrpc.Handler
 	b2c               kitgrpc.Handler
@@ -28,12 +35,14 @@ type grpcServer struct {
 	grpc.UnimplementedServiceServer
 }
 
+// NewServer returns a new instance of the grpc server.
+// The grpc server is responsible for the grpc api.
 func NewServer(svc grpc.Service) grpc.ServiceServer {
 	return &grpcServer{
-		getToken: kitgrpc.NewServer(
-			getTokenEndpoint(svc),
-			decodeGetTokenRequest,
-			encodeGetTokenResponse,
+		token: kitgrpc.NewServer(
+			tokenEndpoint(svc),
+			decodeTokenRequest,
+			encodeTokenResponse,
 		),
 		expressQuery: kitgrpc.NewServer(
 			expressQueryEndpoint(svc),
@@ -88,8 +97,8 @@ func NewServer(svc grpc.Service) grpc.ServiceServer {
 	}
 }
 
-func (s *grpcServer) GetToken(ctx context.Context, req *grpc.Empty) (*grpc.TokenResp, error) {
-	_, res, err := s.getToken.ServeGRPC(ctx, req)
+func (s *grpcServer) Token(ctx context.Context, req *grpc.Empty) (*grpc.TokenResp, error) {
+	_, res, err := s.token.ServeGRPC(ctx, req)
 	if err != nil {
 		return nil, encodeError(err)
 	}
@@ -97,12 +106,12 @@ func (s *grpcServer) GetToken(ctx context.Context, req *grpc.Empty) (*grpc.Token
 	return res.(*grpc.TokenResp), nil
 }
 
-func decodeGetTokenRequest(_ context.Context, _ interface{}) (interface{}, error) {
-	return getTokenReq{}, nil
+func decodeTokenRequest(_ context.Context, _ interface{}) (interface{}, error) {
+	return tokenReq{}, nil
 }
 
-func encodeGetTokenResponse(_ context.Context, grpcRes interface{}) (interface{}, error) {
-	res := grpcRes.(getTokenResp)
+func encodeTokenResponse(_ context.Context, grpcRes interface{}) (interface{}, error) {
+	res := grpcRes.(tokenResp)
 
 	return &grpc.TokenResp{AccessToken: res.AccessToken, Expiry: res.Expiry}, nil
 }

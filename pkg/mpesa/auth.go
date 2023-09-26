@@ -1,22 +1,27 @@
+// Copyright (c) MpesaOverlay. All rights reserved.
+// Use of this source code is governed by a Apache-2.0 license that can be
+// found in the LICENSE file.
+//
+// SPDX-License-Identifier: Apache-2.0
+
 package mpesa
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
 )
 
-func (sdk mSDK) GetToken() (TokenResp, error) {
+var errFailedToGetToken = errors.New("failed to get token")
+
+func (sdk mSDK) Token() (TokenResp, error) {
 	url := fmt.Sprintf("%s/%s", sdk.baseURL, authEndpoint)
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return TokenResp{}, err
-	}
-
-	if sdk.context != nil {
-		req = req.WithContext(sdk.context)
 	}
 
 	req.SetBasicAuth(sdk.appKey, sdk.appSecret)
@@ -35,7 +40,7 @@ func (sdk mSDK) GetToken() (TokenResp, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return TokenResp{}, fmt.Errorf("failed to get token: %s", string(body))
+		return TokenResp{}, errFailedToGetToken
 	}
 
 	var tr TokenResp

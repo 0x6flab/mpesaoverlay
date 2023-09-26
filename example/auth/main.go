@@ -1,3 +1,10 @@
+// Copyright (c) MpesaOverlay. All rights reserved.
+// Use of this source code is governed by a Apache-2.0 license that can be
+// found in the LICENSE file.
+//
+// SPDX-License-Identifier: Apache-2.0
+
+// Package main provides an example of how to use Token method.
 package main
 
 import (
@@ -24,7 +31,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	token, err := mp.GetToken()
+	token, err := mp.Token()
 	if err != nil {
 		log.Fatal(err)
 	}

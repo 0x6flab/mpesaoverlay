@@ -1,3 +1,9 @@
+// Copyright (c) MpesaOverlay. All rights reserved.
+// Use of this source code is governed by a Apache-2.0 license that can be
+// found in the LICENSE file.
+//
+// SPDX-License-Identifier: Apache-2.0
+
 package cli
 
 import (
@@ -5,6 +11,7 @@ import (
 	"github.com/choria-io/fisk"
 )
 
+// AddCommands adds the mpesa commands to the application.
 func AddCommands(app *fisk.Application, sdk mpesa.SDK) {
 	token := app.Command("token", "Get a token")
 	token.Action(func(ctx *fisk.ParseContext) error {
@@ -40,7 +47,7 @@ For example: mpesa-cli b2c`)
 
 	balance := app.Command("balance", "Check Account Balance")
 	balance.Action(func(_ *fisk.ParseContext) error {
-		return Balance(sdk)
+		return AccountBalance(sdk)
 	})
 	balance.Cheat("balance", `Check Account Balance
 For example: mpesa-cli balance`)

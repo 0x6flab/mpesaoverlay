@@ -4,5 +4,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// Package database provides a middleware for database.
-package database
+// Package slog implements the slog logger for the logging middleware to be used
+// with MpesaOverlay SDK.
+package slog

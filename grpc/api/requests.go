@@ -1,11 +1,17 @@
+// Copyright (c) MpesaOverlay. All rights reserved.
+// Use of this source code is governed by a Apache-2.0 license that can be
+// found in the LICENSE file.
+//
+// SPDX-License-Identifier: Apache-2.0
+
 package api
 
 import "github.com/0x6flab/mpesaoverlay/pkg/mpesa"
 
-type getTokenReq struct {
+type tokenReq struct {
 }
 
-func (req getTokenReq) validate() error {
+func (req tokenReq) validate() error {
 	return nil
 }
 

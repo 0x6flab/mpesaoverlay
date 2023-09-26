@@ -1,3 +1,9 @@
+// Copyright (c) MpesaOverlay. All rights reserved.
+// Use of this source code is governed by a Apache-2.0 license that can be
+// found in the LICENSE file.
+//
+// SPDX-License-Identifier: Apache-2.0
+
 package mqtt
 
 import (
@@ -7,8 +13,9 @@ import (
 	"github.com/mochi-mqtt/server/v2/packets"
 )
 
+// Service is the interface that provides methods for the MpesaOverlay SDK.
 type Service interface {
-	GetToken(pk packets.Packet) (mpesa.TokenResp, error)
+	Token(pk packets.Packet) (mpesa.TokenResp, error)
 
 	ExpressQuery(pk packets.Packet) (mpesa.ExpressQueryResp, error)
 
@@ -31,18 +38,20 @@ type Service interface {
 	RemitTax(pk packets.Packet) (mpesa.RemitTaxResp, error)
 }
 
+// service implements the Service interface.
 type service struct {
 	sdk mpesa.SDK
 }
 
 var _ Service = (*service)(nil)
 
+// NewService returns a new MQTT service.
 func NewService(sdk mpesa.SDK) Service {
 	return &service{sdk: sdk}
 }
 
-func (s *service) GetToken(_ packets.Packet) (mpesa.TokenResp, error) {
-	return s.sdk.GetToken()
+func (s *service) Token(_ packets.Packet) (mpesa.TokenResp, error) {
+	return s.sdk.Token()
 }
 
 func (s *service) ExpressQuery(pk packets.Packet) (mpesa.ExpressQueryResp, error) {
