@@ -8,7 +8,7 @@ package cli
 
 import "github.com/0x6flab/mpesaoverlay/pkg/mpesa"
 
-func GetToken(sdk mpesa.SDK) error {
+func Token(sdk mpesa.SDK) error {
 	token, err := sdk.Token()
 	if err != nil {
 		logError(err)
