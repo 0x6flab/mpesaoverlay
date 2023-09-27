@@ -69,7 +69,9 @@ func TestToken(t *testing.T) {
 					}
 
 					if err := json.NewEncoder(w).Encode(tr); err != nil {
-						t.Errorf("Expected no error, got %v", err)
+						http.Error(w, err.Error(), http.StatusInternalServerError)
+
+						return
 					}
 				}
 			}))
