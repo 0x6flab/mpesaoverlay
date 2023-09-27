@@ -207,7 +207,9 @@ func TestExpressSimulate(t *testing.T) {
 					w.WriteHeader(http.StatusOK)
 
 					if err := json.NewEncoder(w).Encode(validToken); err != nil {
-						t.Errorf("Expected no error, got %v", err)
+						http.Error(w, err.Error(), http.StatusInternalServerError)
+
+						return
 					}
 
 					return
@@ -224,7 +226,9 @@ func TestExpressSimulate(t *testing.T) {
 
 				if tc.statusCode == http.StatusOK {
 					if err := json.NewEncoder(w).Encode(tc.expectedResponse); err != nil {
-						t.Errorf("Expected no error, got %v", err)
+						http.Error(w, err.Error(), http.StatusInternalServerError)
+
+						return
 					}
 				}
 			}))
@@ -296,7 +300,9 @@ func TestExpressQuery(t *testing.T) {
 					w.WriteHeader(http.StatusOK)
 
 					if err := json.NewEncoder(w).Encode(validToken); err != nil {
-						t.Errorf("Expected no error, got %v", err)
+						http.Error(w, err.Error(), http.StatusInternalServerError)
+
+						return
 					}
 
 					return
@@ -313,7 +319,9 @@ func TestExpressQuery(t *testing.T) {
 
 				if tc.statusCode == http.StatusOK {
 					if err := json.NewEncoder(w).Encode(tc.expectedResponse); err != nil {
-						t.Errorf("Expected no error, got %v", err)
+						http.Error(w, err.Error(), http.StatusInternalServerError)
+
+						return
 					}
 				}
 			}))
