@@ -130,11 +130,11 @@ func decodeExpressQueryRequest(_ context.Context, grpcReq interface{}) (interfac
 
 	return expressQueryReq{
 		ExpressQueryReq: mpesa.ExpressQueryReq{
-			PassKey:           req.PassKey,
-			BusinessShortCode: req.BusinessShortCode,
-			Password:          req.Password,
-			Timestamp:         req.Timestamp,
-			CheckoutRequestID: req.CheckoutRequestID,
+			PassKey:           req.GetPassKey(),
+			BusinessShortCode: req.GetBusinessShortCode(),
+			Password:          req.GetPassword(),
+			Timestamp:         req.GetTimestamp(),
+			CheckoutRequestID: req.GetCheckoutRequestID(),
 		},
 	}, nil
 }
@@ -167,18 +167,18 @@ func decodeExpressSimulateRequest(_ context.Context, grpcReq interface{}) (inter
 
 	return expressSimulateReq{
 		ExpressSimulateReq: mpesa.ExpressSimulateReq{
-			PassKey:           req.PassKey,
-			BusinessShortCode: req.BusinessShortCode,
-			Password:          req.Password,
-			Timestamp:         req.Timestamp,
-			TransactionType:   req.TransactionType,
-			PhoneNumber:       req.PhoneNumber,
-			Amount:            req.Amount,
-			PartyA:            req.PartyA,
-			PartyB:            req.PartyB,
-			AccountReference:  req.AccountReference,
-			TransactionDesc:   req.TransactionDesc,
-			CallBackURL:       req.CallBackURL,
+			PassKey:           req.GetPassKey(),
+			BusinessShortCode: req.GetBusinessShortCode(),
+			Password:          req.GetPassword(),
+			Timestamp:         req.GetTimestamp(),
+			TransactionType:   req.GetTransactionType(),
+			PhoneNumber:       req.GetPhoneNumber(),
+			Amount:            req.GetAmount(),
+			PartyA:            req.GetPartyA(),
+			PartyB:            req.GetPartyB(),
+			AccountReference:  req.GetAccountReference(),
+			TransactionDesc:   req.GetTransactionDesc(),
+			CallBackURL:       req.GetCallBackURL(),
 		},
 	}, nil
 }
@@ -208,17 +208,17 @@ func decodeB2CRequest(_ context.Context, grpcReq interface{}) (interface{}, erro
 	req := grpcReq.(*grpc.B2CPaymentReq)
 
 	return b2cReq{B2CPaymentReq: mpesa.B2CPaymentReq{
-		InitiatorName:      req.InitiatorName,
-		InitiatorPassword:  req.InitiatorPassword,
-		SecurityCredential: req.SecurityCredential,
-		CommandID:          req.CommandID,
-		Amount:             req.Amount,
-		PartyA:             req.PartyA,
-		PartyB:             req.PartyB,
-		Remarks:            req.Remarks,
-		QueueTimeOutURL:    req.QueueTimeOutURL,
-		ResultURL:          req.ResultURL,
-		Occasion:           req.Occasion,
+		InitiatorName:      req.GetInitiatorName(),
+		InitiatorPassword:  req.GetInitiatorPassword(),
+		SecurityCredential: req.GetSecurityCredential(),
+		CommandID:          req.GetCommandID(),
+		Amount:             req.GetAmount(),
+		PartyA:             req.GetPartyA(),
+		PartyB:             req.GetPartyB(),
+		Remarks:            req.GetRemarks(),
+		QueueTimeOutURL:    req.GetQueueTimeOutURL(),
+		ResultURL:          req.GetResultURL(),
+		Occasion:           req.GetOccasion(),
 	}}, nil
 }
 
@@ -248,15 +248,15 @@ func decodeAccountBalanceRequest(_ context.Context, grpcReq interface{}) (interf
 	req := grpcReq.(*grpc.AccountBalanceReq)
 
 	return accountBalanceReq{AccountBalanceReq: mpesa.AccountBalanceReq{
-		InitiatorName:      req.InitiatorName,
-		InitiatorPassword:  req.InitiatorPassword,
-		SecurityCredential: req.SecurityCredential,
-		CommandID:          req.CommandID,
-		PartyA:             req.PartyA,
-		IdentifierType:     uint8(req.IdentifierType),
-		Remarks:            req.Remarks,
-		QueueTimeOutURL:    req.QueueTimeOutURL,
-		ResultURL:          req.ResultURL,
+		InitiatorName:      req.GetInitiatorName(),
+		InitiatorPassword:  req.GetInitiatorPassword(),
+		SecurityCredential: req.GetSecurityCredential(),
+		CommandID:          req.GetCommandID(),
+		PartyA:             req.GetPartyA(),
+		IdentifierType:     uint8(req.GetIdentifierType()),
+		Remarks:            req.GetRemarks(),
+		QueueTimeOutURL:    req.GetQueueTimeOutURL(),
+		ResultURL:          req.GetResultURL(),
 	}}, nil
 }
 
@@ -286,10 +286,10 @@ func decodeC2BRegisterURLRequest(_ context.Context, grpcReq interface{}) (interf
 	req := grpcReq.(*grpc.C2BRegisterURLReq)
 
 	return c2bRegisterURLReq{C2BRegisterURLReq: mpesa.C2BRegisterURLReq{
-		ShortCode:       req.ShortCode,
-		ResponseType:    req.ResponseType,
-		ConfirmationURL: req.ConfirmationURL,
-		ValidationURL:   req.ValidationURL,
+		ShortCode:       req.GetShortCode(),
+		ResponseType:    req.GetResponseType(),
+		ConfirmationURL: req.GetConfirmationURL(),
+		ValidationURL:   req.GetValidationURL(),
 	}}, nil
 }
 
@@ -319,11 +319,11 @@ func decodeC2BSimulateRequest(_ context.Context, grpcReq interface{}) (interface
 	req := grpcReq.(*grpc.C2BSimulateReq)
 
 	return c2bSimulateReq{C2BSimulateReq: mpesa.C2BSimulateReq{
-		ShortCode:     req.ShortCode,
-		CommandID:     req.CommandID,
-		Amount:        req.Amount,
-		Msisdn:        req.Msisdn,
-		BillRefNumber: req.BillRefNumber,
+		ShortCode:     req.GetShortCode(),
+		CommandID:     req.GetCommandID(),
+		Amount:        req.GetAmount(),
+		Msisdn:        req.GetMsisdn(),
+		BillRefNumber: req.GetBillRefNumber(),
 	}}, nil
 }
 
@@ -353,12 +353,12 @@ func decodeGenerateQRRequest(_ context.Context, grpcReq interface{}) (interface{
 	req := grpcReq.(*grpc.GenerateQRReq)
 
 	return generateQRReq{GenerateQRReq: mpesa.GenerateQRReq{
-		MerchantName: req.MerchantName,
-		RefNo:        req.RefNo,
-		Amount:       req.Amount,
-		TrxCode:      req.TrxCode,
-		CPI:          req.CPI,
-		Size:         req.Size,
+		MerchantName: req.GetMerchantName(),
+		RefNo:        req.GetRefNo(),
+		Amount:       req.GetAmount(),
+		TrxCode:      req.GetTrxCode(),
+		CPI:          req.GetCPI(),
+		Size:         req.GetSize(),
 	}}, nil
 }
 
@@ -386,18 +386,18 @@ func decodeReverseRequest(_ context.Context, grpcReq interface{}) (interface{}, 
 	req := grpcReq.(*grpc.ReverseReq)
 
 	return reversalReq{ReverseReq: mpesa.ReverseReq{
-		CommandID:              req.CommandID,
-		ReceiverParty:          req.ReceiverParty,
-		RecieverIdentifierType: uint8(req.RecieverIdentifierType),
-		Remarks:                req.Remarks,
-		InitiatorName:          req.InitiatorName,
-		InitiatorPassword:      req.InitiatorPassword,
-		SecurityCredential:     req.SecurityCredential,
-		QueueTimeOutURL:        req.QueueTimeOutURL,
-		ResultURL:              req.ResultURL,
-		TransactionID:          req.TransactionID,
-		Occasion:               req.Occasion,
-		Amount:                 req.Amount,
+		CommandID:              req.GetCommandID(),
+		ReceiverParty:          req.GetReceiverParty(),
+		RecieverIdentifierType: uint8(req.GetRecieverIdentifierType()),
+		Remarks:                req.GetRemarks(),
+		InitiatorName:          req.GetInitiatorName(),
+		InitiatorPassword:      req.GetInitiatorPassword(),
+		SecurityCredential:     req.GetSecurityCredential(),
+		QueueTimeOutURL:        req.GetQueueTimeOutURL(),
+		ResultURL:              req.GetResultURL(),
+		TransactionID:          req.GetTransactionID(),
+		Occasion:               req.GetOccasion(),
+		Amount:                 req.GetAmount(),
 	}}, nil
 }
 
@@ -427,17 +427,17 @@ func decodeTransactionStatusRequest(_ context.Context, grpcReq interface{}) (int
 	req := grpcReq.(*grpc.TransactionStatusReq)
 
 	return transactionReq{TransactionStatusReq: mpesa.TransactionStatusReq{
-		CommandID:          req.CommandID,
-		PartyA:             req.PartyA,
-		IdentifierType:     uint8(req.IdentifierType),
-		Remarks:            req.Remarks,
-		InitiatorName:      req.InitiatorName,
-		InitiatorPassword:  req.InitiatorPassword,
-		SecurityCredential: req.SecurityCredential,
-		QueueTimeOutURL:    req.QueueTimeOutURL,
-		ResultURL:          req.ResultURL,
-		TransactionID:      req.TransactionID,
-		Occasion:           req.Occasion,
+		CommandID:          req.GetCommandID(),
+		PartyA:             req.GetPartyA(),
+		IdentifierType:     uint8(req.GetIdentifierType()),
+		Remarks:            req.GetRemarks(),
+		InitiatorName:      req.GetInitiatorName(),
+		InitiatorPassword:  req.GetInitiatorPassword(),
+		SecurityCredential: req.GetSecurityCredential(),
+		QueueTimeOutURL:    req.GetQueueTimeOutURL(),
+		ResultURL:          req.GetResultURL(),
+		TransactionID:      req.GetTransactionID(),
+		Occasion:           req.GetOccasion(),
 	}}, nil
 }
 
@@ -467,19 +467,19 @@ func decodeRemitTaxRequest(_ context.Context, grpcReq interface{}) (interface{},
 	req := grpcReq.(*grpc.RemitTaxReq)
 
 	return remitTaxReq{RemitTaxReq: mpesa.RemitTaxReq{
-		InitiatorName:          req.InitiatorName,
-		InitiatorPassword:      req.InitiatorPassword,
-		SecurityCredential:     req.SecurityCredential,
-		CommandID:              req.CommandID,
-		Amount:                 req.Amount,
-		PartyA:                 req.PartyA,
-		PartyB:                 req.PartyB,
-		Remarks:                req.Remarks,
-		SenderIdentifierType:   uint8(req.SenderIdentifierType),
-		RecieverIdentifierType: uint8(req.RecieverIdentifierType),
-		AccountReference:       req.AccountReference,
-		QueueTimeOutURL:        req.QueueTimeOutURL,
-		ResultURL:              req.ResultURL,
+		InitiatorName:          req.GetInitiatorName(),
+		InitiatorPassword:      req.GetInitiatorPassword(),
+		SecurityCredential:     req.GetSecurityCredential(),
+		CommandID:              req.GetCommandID(),
+		Amount:                 req.GetAmount(),
+		PartyA:                 req.GetPartyA(),
+		PartyB:                 req.GetPartyB(),
+		Remarks:                req.GetRemarks(),
+		SenderIdentifierType:   uint8(req.GetSenderIdentifierType()),
+		RecieverIdentifierType: uint8(req.GetRecieverIdentifierType()),
+		AccountReference:       req.GetAccountReference(),
+		QueueTimeOutURL:        req.GetQueueTimeOutURL(),
+		ResultURL:              req.GetResultURL(),
 	}}, nil
 }
 
