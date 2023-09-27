@@ -211,7 +211,7 @@ func TestB2CPayment(t *testing.T) {
 					return
 				}
 				if r.Method != http.MethodPost {
-					t.Errorf("Expected GET request, got %s", r.Method)
+					t.Errorf("Expected POST request, got %s", r.Method)
 				}
 				if r.URL.Path != "/"+b2cEndpoint {
 					t.Errorf("Expected URL path '%s', got %s", b2cEndpoint, r.URL.Path)

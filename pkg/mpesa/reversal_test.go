@@ -157,7 +157,7 @@ func TestReverse(t *testing.T) {
 					return
 				}
 				if r.Method != http.MethodPost {
-					t.Errorf("Expected GET request, got %s", r.Method)
+					t.Errorf("Expected POST request, got %s", r.Method)
 				}
 				if r.URL.Path != "/"+reversalEndpoint {
 					t.Errorf("Expected URL path '%s', got %s", reversalEndpoint, r.URL.Path)
