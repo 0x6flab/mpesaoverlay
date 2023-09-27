@@ -99,7 +99,7 @@ func TestAccountBalance(t *testing.T) {
 		if err != nil {
 			assert.Contains(t, err.Error(), tc.expectedErr.Error(), fmt.Sprintf("%s: expected error: %v, got: %v", tc.name, tc.expectedErr, err))
 		} else {
-			assert.Equal(t, tc.expectedResp, resp, fmt.Sprintf("expected response: %v, got: %v", tc.expectedResp, resp))
+			assert.Nil(t, err, fmt.Sprintf("%s: expected error: %v, got: %v", tc.name, tc.expectedErr, err))
 		}
 		assert.Equal(t, tc.expectedResp, resp, fmt.Sprintf("expected response: %v, got: %v", tc.expectedResp, resp))
 
@@ -140,7 +140,7 @@ func TestC2BRegisterURL(t *testing.T) {
 		if err != nil {
 			assert.Contains(t, err.Error(), tc.expectedErr.Error(), fmt.Sprintf("%s: expected error: %v, got: %v", tc.name, tc.expectedErr, err))
 		} else {
-			assert.Equal(t, tc.expectedResp, resp, fmt.Sprintf("expected response: %v, got: %v", tc.expectedResp, resp))
+			assert.Nil(t, err, fmt.Sprintf("%s: expected error: %v, got: %v", tc.name, tc.expectedErr, err))
 		}
 		assert.Equal(t, tc.expectedResp, resp, fmt.Sprintf("expected response: %v, got: %v", tc.expectedResp, resp))
 
@@ -181,7 +181,7 @@ func TestC2BSimulate(t *testing.T) {
 		if err != nil {
 			assert.Contains(t, err.Error(), tc.expectedErr.Error(), fmt.Sprintf("%s: expected error: %v, got: %v", tc.name, tc.expectedErr, err))
 		} else {
-			assert.Equal(t, tc.expectedResp, resp, fmt.Sprintf("expected response: %v, got: %v", tc.expectedResp, resp))
+			assert.Nil(t, err, fmt.Sprintf("%s: expected error: %v, got: %v", tc.name, tc.expectedErr, err))
 		}
 		assert.Equal(t, tc.expectedResp, resp, fmt.Sprintf("expected response: %v, got: %v", tc.expectedResp, resp))
 
@@ -225,7 +225,7 @@ func TestGenerateQR(t *testing.T) {
 		if err != nil {
 			assert.Contains(t, err.Error(), tc.expectedErr.Error(), fmt.Sprintf("%s: expected error: %v, got: %v", tc.name, tc.expectedErr, err))
 		} else {
-			assert.Equal(t, tc.expectedResp, resp, fmt.Sprintf("expected response: %v, got: %v", tc.expectedResp, resp))
+			assert.Nil(t, err, fmt.Sprintf("%s: expected error: %v, got: %v", tc.name, tc.expectedErr, err))
 		}
 		assert.Equal(t, tc.expectedResp, resp, fmt.Sprintf("expected response: %v, got: %v", tc.expectedResp, resp))
 
@@ -272,7 +272,7 @@ func TestExpressQuery(t *testing.T) {
 		if err != nil {
 			assert.Contains(t, err.Error(), tc.expectedErr.Error(), fmt.Sprintf("%s: expected error: %v, got: %v", tc.name, tc.expectedErr, err))
 		} else {
-			assert.Equal(t, tc.expectedResp, resp, fmt.Sprintf("expected response: %v, got: %v", tc.expectedResp, resp))
+			assert.Nil(t, err, fmt.Sprintf("%s: expected error: %v, got: %v", tc.name, tc.expectedErr, err))
 		}
 		assert.Equal(t, tc.expectedResp, resp, fmt.Sprintf("expected response: %v, got: %v", tc.expectedResp, resp))
 
@@ -313,7 +313,7 @@ func TestReverse(t *testing.T) {
 		if err != nil {
 			assert.Contains(t, err.Error(), tc.expectedErr.Error(), fmt.Sprintf("%s: expected error: %v, got: %v", tc.name, tc.expectedErr, err))
 		} else {
-			assert.Equal(t, tc.expectedResp, resp, fmt.Sprintf("expected response: %v, got: %v", tc.expectedResp, resp))
+			assert.Nil(t, err, fmt.Sprintf("%s: expected error: %v, got: %v", tc.name, tc.expectedErr, err))
 		}
 		assert.Equal(t, tc.expectedResp, resp, fmt.Sprintf("expected response: %v, got: %v", tc.expectedResp, resp))
 
@@ -358,7 +358,7 @@ func TestExpressSimulate(t *testing.T) {
 		if err != nil {
 			assert.Contains(t, err.Error(), tc.expectedErr.Error(), fmt.Sprintf("%s: expected error: %v, got: %v", tc.name, tc.expectedErr, err))
 		} else {
-			assert.Equal(t, tc.expectedResp, resp, fmt.Sprintf("expected response: %v, got: %v", tc.expectedResp, resp))
+			assert.Nil(t, err, fmt.Sprintf("%s: expected error: %v, got: %v", tc.name, tc.expectedErr, err))
 		}
 		assert.Equal(t, tc.expectedResp, resp, fmt.Sprintf("expected response: %v, got: %v", tc.expectedResp, resp))
 
@@ -399,7 +399,7 @@ func TestRemitTax(t *testing.T) {
 		if err != nil {
 			assert.Contains(t, err.Error(), tc.expectedErr.Error(), fmt.Sprintf("%s: expected error: %v, got: %v", tc.name, tc.expectedErr, err))
 		} else {
-			assert.Equal(t, tc.expectedResp, resp, fmt.Sprintf("expected response: %v, got: %v", tc.expectedResp, resp))
+			assert.Nil(t, err, fmt.Sprintf("%s: expected error: %v, got: %v", tc.name, tc.expectedErr, err))
 		}
 		assert.Equal(t, tc.expectedResp, resp, fmt.Sprintf("expected response: %v, got: %v", tc.expectedResp, resp))
 
@@ -440,7 +440,7 @@ func TestTransactionStatus(t *testing.T) {
 		if err != nil {
 			assert.Contains(t, err.Error(), tc.expectedErr.Error(), fmt.Sprintf("%s: expected error: %v, got: %v", tc.name, tc.expectedErr, err))
 		} else {
-			assert.Equal(t, tc.expectedResp, resp, fmt.Sprintf("expected response: %v, got: %v", tc.expectedResp, resp))
+			assert.Nil(t, err, fmt.Sprintf("%s: expected error: %v, got: %v", tc.name, tc.expectedErr, err))
 		}
 		assert.Equal(t, tc.expectedResp, resp, fmt.Sprintf("expected response: %v, got: %v", tc.expectedResp, resp))
 
@@ -481,7 +481,7 @@ func TestB2CPayment(t *testing.T) {
 		if err != nil {
 			assert.Contains(t, err.Error(), tc.expectedErr.Error(), fmt.Sprintf("%s: expected error: %v, got: %v", tc.name, tc.expectedErr, err))
 		} else {
-			assert.Equal(t, tc.expectedResp, resp, fmt.Sprintf("expected response: %v, got: %v", tc.expectedResp, resp))
+			assert.Nil(t, err, fmt.Sprintf("%s: expected error: %v, got: %v", tc.name, tc.expectedErr, err))
 		}
 		assert.Equal(t, tc.expectedResp, resp, fmt.Sprintf("expected response: %v, got: %v", tc.expectedResp, resp))
 
