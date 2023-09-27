@@ -61,20 +61,17 @@ var (
 
 // Validate validate the ExpressSimulateReq Request.
 func (esr ExpressSimulateReq) Validate() error {
-	if ok := isShortCode(esr.BusinessShortCode); !ok {
+	if !isShortCode(esr.BusinessShortCode) {
 		return errInvalidShortCode
 	}
 	if esr.TransactionType != customerPayBillOnline && esr.TransactionType != customerBuyGoodsOnline {
 		return errInvalidTransactionType
 	}
-	if ok := isPhoneNumber(esr.PartyA); !ok {
+	if !isPhoneNumber(esr.PartyA) || !isPhoneNumber(esr.PhoneNumber) {
 		return errInvalidPhoneNumber
 	}
-	if ok := isShortCode(esr.PartyB); !ok {
+	if !isShortCode(esr.PartyB) {
 		return errInvalidShortCode
-	}
-	if ok := isPhoneNumber(esr.PhoneNumber); !ok {
-		return errInvalidPhoneNumber
 	}
 	if len(esr.AccountReference) > maxAccountReferenceLen {
 		return errInvalidAccountReference
@@ -82,7 +79,7 @@ func (esr ExpressSimulateReq) Validate() error {
 	if len(esr.TransactionDesc) > maxTransactionDescLen {
 		return errInvalidTransactionDesc
 	}
-	if ok := isValidURL(esr.CallBackURL); !ok {
+	if !isValidURL(esr.CallBackURL) {
 		return errInvalidURL
 	}
 
@@ -91,7 +88,7 @@ func (esr ExpressSimulateReq) Validate() error {
 
 // Validate validate the ExpressQueryReq Request.
 func (eqr ExpressQueryReq) Validate() error {
-	if ok := isShortCode(eqr.BusinessShortCode); !ok {
+	if !isShortCode(eqr.BusinessShortCode) {
 		return errInvalidShortCode
 	}
 
@@ -109,16 +106,13 @@ func (qr GenerateQRReq) Validate() error {
 
 // Validate validate the C2BRegisterURLReq Request.
 func (c2b C2BRegisterURLReq) Validate() error {
-	if ok := isShortCode(c2b.ShortCode); !ok {
+	if !isShortCode(c2b.ShortCode) {
 		return errInvalidShortCode
 	}
 	if c2b.ResponseType != "Completed" && c2b.ResponseType != "Cancelled" {
 		return errInvalidResponseType
 	}
-	if ok := isValidURL(c2b.ValidationURL); !ok {
-		return errInvalidURL
-	}
-	if ok := isValidURL(c2b.ConfirmationURL); !ok {
+	if !isValidURL(c2b.ValidationURL) || !isValidURL(c2b.ConfirmationURL) {
 		return errInvalidURL
 	}
 
@@ -130,6 +124,9 @@ func (c2b C2BSimulateReq) Validate() error {
 	if c2b.CommandID != customerPayBillOnline && c2b.CommandID != customerBuyGoodsOnline {
 		return errInvalidCommandID
 	}
+	if !isShortCode(c2b.ShortCode) {
+		return errInvalidShortCode
+	}
 
 	return nil
 }
@@ -139,16 +136,13 @@ func (r B2CPaymentReq) Validate() error {
 	if r.CommandID != "BusinessPayment" && r.CommandID != "SalaryPayment" && r.CommandID != "PromotionPayment" {
 		return errInvalidCommandID
 	}
-	if ok := isShortCode(r.PartyA); !ok {
+	if !isShortCode(r.PartyA) {
 		return errInvalidShortCode
 	}
-	if ok := isPhoneNumber(r.PartyB); !ok {
+	if !isPhoneNumber(r.PartyB) {
 		return errInvalidPhoneNumber
 	}
-	if ok := isValidURL(r.QueueTimeOutURL); !ok {
-		return errInvalidURL
-	}
-	if ok := isValidURL(r.ResultURL); !ok {
+	if !isValidURL(r.QueueTimeOutURL) || !isValidURL(r.ResultURL) {
 		return errInvalidURL
 	}
 	if r.Remarks != "" && len(r.Remarks) > maxRemarksLen {
@@ -175,10 +169,7 @@ func (r TransactionStatusReq) Validate() error {
 	if r.IdentifierType != 1 && r.IdentifierType != 2 && r.IdentifierType != 4 {
 		return errInvalidIdentifierType
 	}
-	if ok := isValidURL(r.QueueTimeOutURL); !ok {
-		return errInvalidURL
-	}
-	if ok := isValidURL(r.ResultURL); !ok {
+	if !isValidURL(r.QueueTimeOutURL) || !isValidURL(r.ResultURL) {
 		return errInvalidURL
 	}
 
@@ -193,11 +184,14 @@ func (r AccountBalanceReq) Validate() error {
 	if r.IdentifierType != 1 && r.IdentifierType != 2 && r.IdentifierType != 4 {
 		return errInvalidIdentifierType
 	}
-	if ok := isValidURL(r.QueueTimeOutURL); !ok {
+	if !isValidURL(r.QueueTimeOutURL) || !isValidURL(r.ResultURL) {
 		return errInvalidURL
 	}
-	if ok := isValidURL(r.ResultURL); !ok {
-		return errInvalidURL
+	if r.Remarks != "" && len(r.Remarks) > maxRemarksLen {
+		return errInvalidRemarks
+	}
+	if !isShortCode(r.PartyA) {
+		return errInvalidShortCode
 	}
 
 	return nil
@@ -208,11 +202,14 @@ func (r ReverseReq) Validate() error {
 	if r.CommandID != "TransactionReversal" {
 		return errInvalidCommandID
 	}
-	if ok := isValidURL(r.QueueTimeOutURL); !ok {
+	if !isValidURL(r.QueueTimeOutURL) || !isValidURL(r.ResultURL) {
 		return errInvalidURL
 	}
-	if ok := isValidURL(r.ResultURL); !ok {
-		return errInvalidURL
+	if r.Remarks != "" && len(r.Remarks) > maxRemarksLen {
+		return errInvalidRemarks
+	}
+	if r.Occasion != "" && len(r.Occasion) > maxOccasionLen {
+		return errInvalidOccasion
 	}
 
 	return nil
@@ -226,11 +223,14 @@ func (r RemitTaxReq) Validate() error {
 	if r.Remarks != "" && len(r.Remarks) > maxRemarksLen {
 		return errInvalidRemarks
 	}
-	if ok := isValidURL(r.QueueTimeOutURL); !ok {
+	if !isValidURL(r.QueueTimeOutURL) || !isValidURL(r.ResultURL) {
 		return errInvalidURL
 	}
-	if ok := isValidURL(r.ResultURL); !ok {
-		return errInvalidURL
+	if !isShortCode(r.PartyA) || !isShortCode(r.PartyB) {
+		return errInvalidShortCode
+	}
+	if len(r.AccountReference) > maxAccountReferenceLen {
+		return errInvalidAccountReference
 	}
 
 	return nil

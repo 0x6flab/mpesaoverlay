@@ -25,18 +25,19 @@ import (
 const (
 	defaultTimeout = 1 * time.Minute
 
-	authEndpoint        = "oauth/v1/generate?grant_type=client_credentials"
-	b2cEndpoint         = "mpesa/b2c/v1/paymentrequest"
-	accbalanceEndpoint  = "mpesa/accountbalance/v1/query"
-	c2bEndpoint         = "mpesa/c2b/v1"
-	qrCodeEndpoint      = "mpesa/qrcode/v1/generate"
-	expressEndpoint     = "mpesa/stkpush/v1"
-	queryEndpoint       = "mpesa/stkpushquery/v1/query"
-	reversalEndpoint    = "mpesa/reversal/v1/request"
-	transactionEndpoint = "mpesa/transactionstatus/v1/query"
-	taxEndpoint         = "mpesa/b2b/v1/remittax"
-	prodCertificate     = "https://developer.safaricom.co.ke/api/v1/GenerateSecurityCredential/ProductionCertificate.cer"
-	sandboxCertificate  = "https://developer.safaricom.co.ke/api/v1/GenerateSecurityCredential/SandboxCertificate.cer"
+	authEndpoint            = "oauth/v1/generate?grant_type=client_credentials"
+	b2cEndpoint             = "mpesa/b2c/v1/paymentrequest"
+	accbalanceEndpoint      = "mpesa/accountbalance/v1/query"
+	c2bRegisterURLEndpoint  = "mpesa/c2b/v1/registerurl"
+	c2bSimulateEndpoint     = "mpesa/c2b/v1/simulate"
+	qrCodeEndpoint          = "mpesa/qrcode/v1/generate"
+	expressSimulateEndpoint = "mpesa/stkpush/v1/processrequest"
+	queryEndpoint           = "mpesa/stkpushquery/v1/query"
+	reversalEndpoint        = "mpesa/reversal/v1/request"
+	transactionEndpoint     = "mpesa/transactionstatus/v1/query"
+	taxEndpoint             = "mpesa/b2b/v1/remittax"
+	prodCertificate         = "https://developer.safaricom.co.ke/api/v1/GenerateSecurityCredential/ProductionCertificate.cer"
+	sandboxCertificate      = "https://developer.safaricom.co.ke/api/v1/GenerateSecurityCredential/SandboxCertificate.cer"
 )
 
 var (

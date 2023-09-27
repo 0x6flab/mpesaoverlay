@@ -25,7 +25,7 @@ func (sdk mSDK) ExpressSimulate(eReq ExpressSimulateReq) (ExpressSimulateResp, e
 		return ExpressSimulateResp{}, err
 	}
 
-	url := fmt.Sprintf("%s/%s/%s", sdk.baseURL, expressEndpoint, "processrequest")
+	url := fmt.Sprintf("%s/%s", sdk.baseURL, expressSimulateEndpoint)
 
 	req, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(data))
 	if err != nil {

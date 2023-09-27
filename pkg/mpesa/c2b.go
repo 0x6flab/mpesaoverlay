@@ -23,7 +23,7 @@ func (sdk mSDK) C2BRegisterURL(c2bReq C2BRegisterURLReq) (C2BRegisterURLResp, er
 		return C2BRegisterURLResp{}, err
 	}
 
-	url := fmt.Sprintf("%s/%s/%s", sdk.baseURL, c2bEndpoint, "registerurl")
+	url := fmt.Sprintf("%s/%s", sdk.baseURL, c2bRegisterURLEndpoint)
 
 	req, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(data))
 	if err != nil {
@@ -53,7 +53,7 @@ func (sdk mSDK) C2BSimulate(c2bReq C2BSimulateReq) (C2BSimulateResp, error) {
 		return C2BSimulateResp{}, err
 	}
 
-	url := fmt.Sprintf("%s/%s/%s", sdk.baseURL, c2bEndpoint, "simulate")
+	url := fmt.Sprintf("%s/%s", sdk.baseURL, c2bSimulateEndpoint)
 
 	req, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(data))
 	if err != nil {
