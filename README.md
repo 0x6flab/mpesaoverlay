@@ -7,6 +7,7 @@
 ![GitHub go.mod Go version (subdirectory of monorepo)](https://img.shields.io/github/go-mod/go-version/0x6flab/mpesaoverlay)
 [![go.dev reference](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white&style=flat-square)](https://pkg.go.dev/github.com/0x6flab/mpesaoverlay)
 [![Go Report Card](https://goreportcard.com/badge/github.com/0x6flab/mpesaoverlay)](https://goreportcard.com/report/github.com/0x6flab/mpesaoverlay)
+[![Coverage Status](https://coveralls.io/repos/github/0x6flab/mpesaoverlay/badge.svg?branch=main%0Amo-28)](https://coveralls.io/github/0x6flab/mpesaoverlay?branch=main%0Amo-28)
 
 MpesaOverlay is modern, scalable, secure open source and patent-free API overlay for the Daraja API by Safaricom written in Go.
 
