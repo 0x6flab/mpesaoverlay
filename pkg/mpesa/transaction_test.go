@@ -169,7 +169,7 @@ func TestTransactionStatus(t *testing.T) {
 					return
 				}
 				if r.Method != http.MethodPost {
-					t.Errorf("Expected GET request, got %s", r.Method)
+					t.Errorf("Expected POST request, got %s", r.Method)
 				}
 				if r.URL.Path != "/"+transactionEndpoint {
 					t.Errorf("Expected URL path '%s', got %s", transactionEndpoint, r.URL.Path)

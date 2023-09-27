@@ -155,7 +155,7 @@ func TestAccountBalance(t *testing.T) {
 					return
 				}
 				if r.Method != http.MethodPost {
-					t.Errorf("Expected GET request, got %s", r.Method)
+					t.Errorf("Expected POST request, got %s", r.Method)
 				}
 				if r.URL.Path != "/"+accbalanceEndpoint {
 					t.Errorf("Expected URL path '%s', got %s", accbalanceEndpoint, r.URL.Path)

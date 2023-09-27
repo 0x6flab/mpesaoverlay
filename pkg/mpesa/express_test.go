@@ -213,7 +213,7 @@ func TestExpressSimulate(t *testing.T) {
 					return
 				}
 				if r.Method != http.MethodPost {
-					t.Errorf("Expected GET request, got %s", r.Method)
+					t.Errorf("Expected POST request, got %s", r.Method)
 				}
 				if r.URL.Path != "/"+expressSimulateEndpoint {
 					t.Errorf("Expected URL path '%s', got %s", expressSimulateEndpoint, r.URL.Path)
@@ -302,7 +302,7 @@ func TestExpressQuery(t *testing.T) {
 					return
 				}
 				if r.Method != http.MethodPost {
-					t.Errorf("Expected GET request, got %s", r.Method)
+					t.Errorf("Expected POST request, got %s", r.Method)
 				}
 				if r.URL.Path != "/"+queryEndpoint {
 					t.Errorf("Expected URL path '%s', got %s", queryEndpoint, r.URL.Path)

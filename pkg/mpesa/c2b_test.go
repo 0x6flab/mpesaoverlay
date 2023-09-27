@@ -203,7 +203,7 @@ func TestC2BSimulate(t *testing.T) {
 					return
 				}
 				if r.Method != http.MethodPost {
-					t.Errorf("Expected GET request, got %s", r.Method)
+					t.Errorf("Expected POST request, got %s", r.Method)
 				}
 				if r.URL.Path != "/"+c2bSimulateEndpoint {
 					t.Errorf("Expected URL path '%s', got %s", c2bSimulateEndpoint, r.URL.Path)
