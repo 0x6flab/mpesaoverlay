@@ -69,9 +69,7 @@ func TestID(t *testing.T) {
 
 	for _, c := range cases {
 		got := hook.ID()
-		if got != c.want {
-			t.Errorf("ID() = %v, want %v", got, c.want)
-		}
+		assert.Equal(t, c.want, got, "ID() = %v, want %v", got, c.want)
 	}
 }
 
