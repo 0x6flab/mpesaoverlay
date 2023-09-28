@@ -44,14 +44,6 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - uses: docker-practice/actions-setup-docker@master
-        timeout-minutes: 12
-
-      - run: |
-          set -x
-          docker version
-          docker pull prom/pushgateway:v1.6.2
-
       - name: Check formatting
         run: |
           curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin latest
