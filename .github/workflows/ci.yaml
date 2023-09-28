@@ -19,6 +19,7 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: 1.21.x
+          cache-dependency-path: "go.sum"
 
       - name: Build Binaries
         run: |
@@ -36,6 +37,7 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: 1.21.x
+          cache-dependency-path: "go.sum"
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -55,6 +57,7 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: 1.21.x
+          cache-dependency-path: "go.sum"
 
       - name: Checkout code
         uses: actions/checkout@v4
@@ -71,7 +74,8 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: 1.21.x
-      
+          cache-dependency-path: "go.sum"
+
       - name: Checkout code
         uses: actions/checkout@v4
       
