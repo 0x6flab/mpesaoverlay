@@ -3,6 +3,8 @@ name: Continuous Integration
 on:
   pull_request:
     branches: [main]
+  push:
+    branches: [main]
 
 jobs:
   build-across-platforms:
@@ -78,7 +80,7 @@ jobs:
 
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Run tests
         run: |
           go mod vendor
