@@ -19,7 +19,7 @@ import (
 
 var _ mpesa.SDK = (*metricsMiddleware)(nil)
 
-var funcNames = []string{"GetToken", "ExpressQuery", "ExpressSimulate", "B2CPayment", "AccountBalance", "C2BRegisterURL", "C2BSimulate", "GenerateQR", "Reverse", "TransactionStatus", "RemitTax"}
+var funcNames = []string{"Token", "ExpressQuery", "ExpressSimulate", "B2CPayment", "AccountBalance", "C2BRegisterURL", "C2BSimulate", "GenerateQR", "Reverse", "TransactionStatus", "RemitTax"}
 
 type metricsMiddleware struct {
 	counters  map[string]prom.Counter
