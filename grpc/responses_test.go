@@ -14,7 +14,7 @@ import (
 )
 
 var (
-	validGRPCResp = grpc.ValidResp{
+	validGRPCResp = &grpc.ValidResp{
 		OriginatorConversationID: "AG_20230907_2010325b025970fde878",
 		ConversationID:           "AG_20230907_2010325b025970fde878",
 		ResponseDescription:      "Accept the service request successfully.",
@@ -24,7 +24,7 @@ var (
 
 func TestAccountBalanceResp(t *testing.T) {
 	var resp = grpc.AccountBalanceResp{
-		ValidResp: &validGRPCResp,
+		ValidResp: validGRPCResp,
 	}
 
 	val := resp.String()
@@ -50,7 +50,7 @@ func TestAccountBalanceResp(t *testing.T) {
 
 func TestB2CPaymentResp(t *testing.T) {
 	var resp = grpc.B2CPaymentResp{
-		ValidResp: &validGRPCResp,
+		ValidResp: validGRPCResp,
 	}
 
 	val := resp.String()
@@ -76,7 +76,7 @@ func TestB2CPaymentResp(t *testing.T) {
 
 func TestC2BRegisterURLResp(t *testing.T) {
 	var resp = grpc.C2BRegisterURLResp{
-		ValidResp: &validGRPCResp,
+		ValidResp: validGRPCResp,
 	}
 
 	val := resp.String()
@@ -102,7 +102,7 @@ func TestC2BRegisterURLResp(t *testing.T) {
 
 func TestC2BSimulateResp(t *testing.T) {
 	var resp = grpc.C2BSimulateResp{
-		ValidResp: &validGRPCResp,
+		ValidResp: validGRPCResp,
 	}
 
 	val := resp.String()
@@ -274,7 +274,7 @@ func TestGenerateQRResp(t *testing.T) {
 
 func TestRemitTaxResp(t *testing.T) {
 	var resp = grpc.RemitTaxResp{
-		ValidResp: &validGRPCResp,
+		ValidResp: validGRPCResp,
 	}
 
 	val := resp.String()
@@ -337,7 +337,7 @@ func TestRespError(t *testing.T) {
 
 func TestReverseResp(t *testing.T) {
 	var resp = grpc.ReverseResp{
-		ValidResp: &validGRPCResp,
+		ValidResp: validGRPCResp,
 	}
 
 	val := resp.String()
@@ -395,7 +395,7 @@ func TestTokenResp(t *testing.T) {
 
 func TestTransactionStatusResp(t *testing.T) {
 	var resp = grpc.TransactionStatusResp{
-		ValidResp: &validGRPCResp,
+		ValidResp: validGRPCResp,
 	}
 
 	val := resp.String()
@@ -420,7 +420,7 @@ func TestTransactionStatusResp(t *testing.T) {
 }
 
 func TestValidResp(t *testing.T) {
-	var resp = &validGRPCResp
+	var resp = validGRPCResp
 
 	val := resp.String()
 	assert.NotEmpty(t, val)
