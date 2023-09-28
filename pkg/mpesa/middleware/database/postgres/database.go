@@ -27,35 +27,20 @@ func WithDatabase(url string) mpesa.Option {
 		if err != nil {
 			return sdk, err
 		}
+		tables := []interface{}{
+			&expressQueryReq{},
+			&expressSimulateReq{},
+			&b2cPaymentReq{},
+			&accountBalanceReq{},
+			&c2bRegisterURLReq{},
+			&c2bSimulateReq{},
+			&generateQRReq{},
+			&reverseReq{},
+			&transactionStatusReq{},
+			&remitTaxReq{},
+		}
 
-		if err := db.AutoMigrate(&expressQueryReq{}); err != nil {
-			return sdk, err
-		}
-		if err := db.AutoMigrate(&expressSimulateReq{}); err != nil {
-			return sdk, err
-		}
-		if err := db.AutoMigrate(&b2cPaymentReq{}); err != nil {
-			return sdk, err
-		}
-		if err := db.AutoMigrate(&accountBalanceReq{}); err != nil {
-			return sdk, err
-		}
-		if err := db.AutoMigrate(&c2bRegisterURLReq{}); err != nil {
-			return sdk, err
-		}
-		if err := db.AutoMigrate(&c2bSimulateReq{}); err != nil {
-			return sdk, err
-		}
-		if err := db.AutoMigrate(&generateQRReq{}); err != nil {
-			return sdk, err
-		}
-		if err := db.AutoMigrate(&reverseReq{}); err != nil {
-			return sdk, err
-		}
-		if err := db.AutoMigrate(&transactionStatusReq{}); err != nil {
-			return sdk, err
-		}
-		if err := db.AutoMigrate(&remitTaxReq{}); err != nil {
+		if err := db.AutoMigrate(tables...); err != nil {
 			return sdk, err
 		}
 

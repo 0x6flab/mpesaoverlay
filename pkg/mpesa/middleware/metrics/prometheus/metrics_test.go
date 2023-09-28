@@ -9,7 +9,7 @@ package prometheus
 import (
 	"errors"
 	"fmt"
-	"log"
+	"net"
 	"os"
 	"testing"
 
@@ -32,12 +32,13 @@ var (
 		ResponseDescription:      "Accept the service request successfully.",
 		ResponseCode:             "0",
 	}
+	t = testing.T{}
 )
 
 func TestMain(m *testing.M) {
 	pool, err := dockertest.NewPool("")
 	if err != nil {
-		log.Fatalf("Could not connect to docker: %s", err)
+		t.Fatalf("Could not connect to docker: %s", err)
 	}
 
 	container, err := pool.RunWithOptions(&dockertest.RunOptions{
@@ -48,21 +49,24 @@ func TestMain(m *testing.M) {
 		config.RestartPolicy = docker.RestartPolicy{Name: "no"}
 	})
 	if err != nil {
-		log.Fatalf("Could not start container: %s", err)
+		t.Fatalf("Could not start container: %s", err)
 	}
 
 	port = container.GetPort("9091/tcp")
 
 	if err := pool.Retry(func() error {
-		return nil
+		var err error
+		_, err = net.Dial("tcp", fmt.Sprintf("localhost:%s", port))
+
+		return err
 	}); err != nil {
-		log.Fatalf("Could not connect to docker: %s", err)
+		t.Fatalf("Could not connect to docker: %s", err)
 	}
 
 	code := m.Run()
 
 	if err := pool.Purge(container); err != nil {
-		log.Fatalf("Could not purge container: %s", err)
+		t.Fatalf("Could not purge container: %s", err)
 	}
 
 	os.Exit(code)
