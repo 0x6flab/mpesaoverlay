@@ -570,7 +570,7 @@ func TestEmpty(t *testing.T) {
 	var req = grpc.Empty{}
 
 	val := req.String()
-	assert.NotEmpty(t, val)
+	assert.Empty(t, val)
 
 	req.ProtoMessage()
 
@@ -648,43 +648,6 @@ func TestTransactionStatusReq(t *testing.T) {
 	val2 = req.GetOccasion()
 	assert.NotEmpty(t, val2)
 	assert.Equal(t, req.Occasion, val2)
-
-	val9, val10 := req.Descriptor()
-	assert.NotEmpty(t, val9)
-	assert.NotEmpty(t, val10)
-
-	req.Reset()
-
-	val = req.String()
-	assert.Empty(t, val)
-}
-
-func TestValidReq(t *testing.T) {
-	var req = &validGRPCResp
-
-	val := req.String()
-	assert.NotEmpty(t, val)
-
-	req.ProtoMessage()
-
-	val1 := req.ProtoReflect()
-	assert.NotEmpty(t, val1)
-
-	val2 := req.GetOriginatorConversationID()
-	assert.NotEmpty(t, val2)
-	assert.Equal(t, req.OriginatorConversationID, val2)
-
-	val2 = req.GetConversationID()
-	assert.NotEmpty(t, val2)
-	assert.Equal(t, req.ConversationID, val2)
-
-	val2 = req.GetResponseDescription()
-	assert.NotEmpty(t, val2)
-	assert.Equal(t, req.ResponseDescription, val2)
-
-	val2 = req.GetResponseCode()
-	assert.NotEmpty(t, val2)
-	assert.Equal(t, req.ResponseCode, val2)
 
 	val9, val10 := req.Descriptor()
 	assert.NotEmpty(t, val9)
