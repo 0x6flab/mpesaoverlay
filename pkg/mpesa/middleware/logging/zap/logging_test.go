@@ -28,7 +28,7 @@ var (
 	}
 )
 
-func generateMockMetricsMiddleware(sdk mpesa.SDK) *loggingMiddleware {
+func generateMockLoggingMiddleware(sdk mpesa.SDK) *loggingMiddleware {
 	var lm = &loggingMiddleware{
 		logger: zap.NewNop(),
 		sdk:    sdk,
@@ -49,7 +49,7 @@ func TestWithLogger(t *testing.T) {
 
 func TestToken(t *testing.T) {
 	mockSDK := new(mocks.SDK)
-	s := generateMockMetricsMiddleware(mockSDK)
+	s := generateMockLoggingMiddleware(mockSDK)
 
 	cases := []struct {
 		name         string
@@ -86,7 +86,7 @@ func TestToken(t *testing.T) {
 
 func TestAccountBalance(t *testing.T) {
 	mockSDK := new(mocks.SDK)
-	s := generateMockMetricsMiddleware(mockSDK)
+	s := generateMockLoggingMiddleware(mockSDK)
 
 	cases := []struct {
 		name         string
@@ -127,7 +127,7 @@ func TestAccountBalance(t *testing.T) {
 
 func TestC2BRegisterURL(t *testing.T) {
 	mockSDK := new(mocks.SDK)
-	s := generateMockMetricsMiddleware(mockSDK)
+	s := generateMockLoggingMiddleware(mockSDK)
 
 	cases := []struct {
 		name         string
@@ -168,7 +168,7 @@ func TestC2BRegisterURL(t *testing.T) {
 
 func TestC2BSimulate(t *testing.T) {
 	mockSDK := new(mocks.SDK)
-	s := generateMockMetricsMiddleware(mockSDK)
+	s := generateMockLoggingMiddleware(mockSDK)
 
 	cases := []struct {
 		name         string
@@ -209,7 +209,7 @@ func TestC2BSimulate(t *testing.T) {
 
 func TestGenerateQR(t *testing.T) {
 	mockSDK := new(mocks.SDK)
-	s := generateMockMetricsMiddleware(mockSDK)
+	s := generateMockLoggingMiddleware(mockSDK)
 
 	cases := []struct {
 		name         string
@@ -253,7 +253,7 @@ func TestGenerateQR(t *testing.T) {
 
 func TestExpressQuery(t *testing.T) {
 	mockSDK := new(mocks.SDK)
-	s := generateMockMetricsMiddleware(mockSDK)
+	s := generateMockLoggingMiddleware(mockSDK)
 
 	cases := []struct {
 		name         string
@@ -300,7 +300,7 @@ func TestExpressQuery(t *testing.T) {
 
 func TestReverse(t *testing.T) {
 	mockSDK := new(mocks.SDK)
-	s := generateMockMetricsMiddleware(mockSDK)
+	s := generateMockLoggingMiddleware(mockSDK)
 
 	cases := []struct {
 		name         string
@@ -341,7 +341,7 @@ func TestReverse(t *testing.T) {
 
 func TestExpressSimulate(t *testing.T) {
 	mockSDK := new(mocks.SDK)
-	s := generateMockMetricsMiddleware(mockSDK)
+	s := generateMockLoggingMiddleware(mockSDK)
 
 	cases := []struct {
 		name         string
@@ -386,7 +386,7 @@ func TestExpressSimulate(t *testing.T) {
 
 func TestRemitTax(t *testing.T) {
 	mockSDK := new(mocks.SDK)
-	s := generateMockMetricsMiddleware(mockSDK)
+	s := generateMockLoggingMiddleware(mockSDK)
 
 	cases := []struct {
 		name         string
@@ -427,7 +427,7 @@ func TestRemitTax(t *testing.T) {
 
 func TestTransactionStatus(t *testing.T) {
 	mockSDK := new(mocks.SDK)
-	s := generateMockMetricsMiddleware(mockSDK)
+	s := generateMockLoggingMiddleware(mockSDK)
 
 	cases := []struct {
 		name         string
@@ -468,7 +468,7 @@ func TestTransactionStatus(t *testing.T) {
 
 func TestB2CPayment(t *testing.T) {
 	mockSDK := new(mocks.SDK)
-	s := generateMockMetricsMiddleware(mockSDK)
+	s := generateMockLoggingMiddleware(mockSDK)
 
 	cases := []struct {
 		name         string

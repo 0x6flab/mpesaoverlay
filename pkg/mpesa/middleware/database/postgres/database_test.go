@@ -9,7 +9,6 @@ package postgres
 import (
 	"errors"
 	"fmt"
-	"log"
 	"os"
 	"testing"
 
@@ -32,12 +31,13 @@ var (
 		ResponseDescription:      "Accept the service request successfully.",
 		ResponseCode:             "0",
 	}
+	t = testing.T{}
 )
 
 func TestMain(m *testing.M) {
 	pool, err := dockertest.NewPool("")
 	if err != nil {
-		log.Fatalf("Could not connect to docker: %s", err)
+		t.Fatalf("Could not connect to docker: %s", err)
 	}
 
 	container, err := pool.RunWithOptions(&dockertest.RunOptions{
@@ -54,7 +54,7 @@ func TestMain(m *testing.M) {
 		config.RestartPolicy = docker.RestartPolicy{Name: "no"}
 	})
 	if err != nil {
-		log.Fatalf("Could not start container: %s", err)
+		t.Fatalf("Could not start container: %s", err)
 	}
 
 	url = fmt.Sprintf("postgres://test:test@localhost:%s/test?sslmode=disable", container.GetPort("5432/tcp"))
@@ -67,52 +67,38 @@ func TestMain(m *testing.M) {
 
 		return nil
 	}); err != nil {
-		log.Fatalf("Could not connect to docker: %s", err)
+		t.Fatalf("Could not connect to docker: %s", err)
 	}
 
 	code := m.Run()
 
 	if err := pool.Purge(container); err != nil {
-		log.Fatalf("Could not purge container: %s", err)
+		t.Fatalf("Could not purge container: %s", err)
 	}
 
 	os.Exit(code)
 }
 
-func generateMockMetricsMiddleware(sdk mpesa.SDK) (*postgresMiddleware, error) {
+func generateMockPostgresMiddleware(sdk mpesa.SDK) (*postgresMiddleware, error) {
 	db, err := gorm.Open(postgres.Open(url), &gorm.Config{})
 	if err != nil {
 		return &postgresMiddleware{}, err
 	}
 
-	if err := db.AutoMigrate(&expressQueryReq{}); err != nil {
-		return &postgresMiddleware{}, err
+	tables := []interface{}{
+		&expressQueryReq{},
+		&expressSimulateReq{},
+		&b2cPaymentReq{},
+		&accountBalanceReq{},
+		&c2bRegisterURLReq{},
+		&c2bSimulateReq{},
+		&generateQRReq{},
+		&reverseReq{},
+		&transactionStatusReq{},
+		&remitTaxReq{},
 	}
-	if err := db.AutoMigrate(&expressSimulateReq{}); err != nil {
-		return &postgresMiddleware{}, err
-	}
-	if err := db.AutoMigrate(&b2cPaymentReq{}); err != nil {
-		return &postgresMiddleware{}, err
-	}
-	if err := db.AutoMigrate(&accountBalanceReq{}); err != nil {
-		return &postgresMiddleware{}, err
-	}
-	if err := db.AutoMigrate(&c2bRegisterURLReq{}); err != nil {
-		return &postgresMiddleware{}, err
-	}
-	if err := db.AutoMigrate(&c2bSimulateReq{}); err != nil {
-		return &postgresMiddleware{}, err
-	}
-	if err := db.AutoMigrate(&generateQRReq{}); err != nil {
-		return &postgresMiddleware{}, err
-	}
-	if err := db.AutoMigrate(&reverseReq{}); err != nil {
-		return &postgresMiddleware{}, err
-	}
-	if err := db.AutoMigrate(&transactionStatusReq{}); err != nil {
-		return &postgresMiddleware{}, err
-	}
-	if err := db.AutoMigrate(&remitTaxReq{}); err != nil {
+
+	if err := db.AutoMigrate(tables...); err != nil {
 		return &postgresMiddleware{}, err
 	}
 
@@ -131,7 +117,7 @@ func TestWithDatabase(t *testing.T) {
 
 func TestToken(t *testing.T) {
 	mockSDK := new(mocks.SDK)
-	s, err := generateMockMetricsMiddleware(mockSDK)
+	s, err := generateMockPostgresMiddleware(mockSDK)
 	assert.Nil(t, err)
 
 	cases := []struct {
@@ -169,7 +155,7 @@ func TestToken(t *testing.T) {
 
 func TestAccountBalance(t *testing.T) {
 	mockSDK := new(mocks.SDK)
-	s, err := generateMockMetricsMiddleware(mockSDK)
+	s, err := generateMockPostgresMiddleware(mockSDK)
 	assert.Nil(t, err)
 
 	cases := []struct {
@@ -211,7 +197,7 @@ func TestAccountBalance(t *testing.T) {
 
 func TestC2BRegisterURL(t *testing.T) {
 	mockSDK := new(mocks.SDK)
-	s, err := generateMockMetricsMiddleware(mockSDK)
+	s, err := generateMockPostgresMiddleware(mockSDK)
 	assert.Nil(t, err)
 
 	cases := []struct {
@@ -253,7 +239,7 @@ func TestC2BRegisterURL(t *testing.T) {
 
 func TestC2BSimulate(t *testing.T) {
 	mockSDK := new(mocks.SDK)
-	s, err := generateMockMetricsMiddleware(mockSDK)
+	s, err := generateMockPostgresMiddleware(mockSDK)
 	assert.Nil(t, err)
 
 	cases := []struct {
@@ -295,7 +281,7 @@ func TestC2BSimulate(t *testing.T) {
 
 func TestGenerateQR(t *testing.T) {
 	mockSDK := new(mocks.SDK)
-	s, err := generateMockMetricsMiddleware(mockSDK)
+	s, err := generateMockPostgresMiddleware(mockSDK)
 	assert.Nil(t, err)
 
 	cases := []struct {
@@ -340,7 +326,7 @@ func TestGenerateQR(t *testing.T) {
 
 func TestExpressQuery(t *testing.T) {
 	mockSDK := new(mocks.SDK)
-	s, err := generateMockMetricsMiddleware(mockSDK)
+	s, err := generateMockPostgresMiddleware(mockSDK)
 	assert.Nil(t, err)
 
 	cases := []struct {
@@ -388,7 +374,7 @@ func TestExpressQuery(t *testing.T) {
 
 func TestReverse(t *testing.T) {
 	mockSDK := new(mocks.SDK)
-	s, err := generateMockMetricsMiddleware(mockSDK)
+	s, err := generateMockPostgresMiddleware(mockSDK)
 	assert.Nil(t, err)
 
 	cases := []struct {
@@ -430,7 +416,7 @@ func TestReverse(t *testing.T) {
 
 func TestExpressSimulate(t *testing.T) {
 	mockSDK := new(mocks.SDK)
-	s, err := generateMockMetricsMiddleware(mockSDK)
+	s, err := generateMockPostgresMiddleware(mockSDK)
 	assert.Nil(t, err)
 
 	cases := []struct {
@@ -476,7 +462,7 @@ func TestExpressSimulate(t *testing.T) {
 
 func TestRemitTax(t *testing.T) {
 	mockSDK := new(mocks.SDK)
-	s, err := generateMockMetricsMiddleware(mockSDK)
+	s, err := generateMockPostgresMiddleware(mockSDK)
 	assert.Nil(t, err)
 
 	cases := []struct {
@@ -518,7 +504,7 @@ func TestRemitTax(t *testing.T) {
 
 func TestTransactionStatus(t *testing.T) {
 	mockSDK := new(mocks.SDK)
-	s, err := generateMockMetricsMiddleware(mockSDK)
+	s, err := generateMockPostgresMiddleware(mockSDK)
 	assert.Nil(t, err)
 
 	cases := []struct {
@@ -560,7 +546,7 @@ func TestTransactionStatus(t *testing.T) {
 
 func TestB2CPayment(t *testing.T) {
 	mockSDK := new(mocks.SDK)
-	s, err := generateMockMetricsMiddleware(mockSDK)
+	s, err := generateMockPostgresMiddleware(mockSDK)
 	assert.Nil(t, err)
 
 	cases := []struct {
