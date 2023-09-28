@@ -32,13 +32,14 @@ var (
 		ResponseDescription:      "Accept the service request successfully.",
 		ResponseCode:             "0",
 	}
-	t = testing.T{}
+	t = &testing.T{}
 )
 
 func TestMain(m *testing.M) {
 	pool, err := dockertest.NewPool("")
 	if err != nil {
-		t.Fatalf("Could not connect to docker: %s", err)
+		t.Logf("Could not connect to docker: %s", err)
+		t.FailNow()
 	}
 
 	container, err := pool.RunWithOptions(&dockertest.RunOptions{
@@ -49,7 +50,8 @@ func TestMain(m *testing.M) {
 		config.RestartPolicy = docker.RestartPolicy{Name: "no"}
 	})
 	if err != nil {
-		t.Fatalf("Could not start container: %s", err)
+		t.Logf("Could not start container: %s", err)
+		t.FailNow()
 	}
 
 	port = container.GetPort("9091/tcp")
@@ -60,13 +62,15 @@ func TestMain(m *testing.M) {
 
 		return err
 	}); err != nil {
-		t.Fatalf("Could not connect to docker: %s", err)
+		t.Logf("Could not connect to docker: %s", err)
+		t.FailNow()
 	}
 
 	code := m.Run()
 
 	if err := pool.Purge(container); err != nil {
-		t.Fatalf("Could not purge container: %s", err)
+		t.Logf("Could not purge container: %s", err)
+		t.FailNow()
 	}
 
 	os.Exit(code)
