@@ -1,20 +1,21 @@
+
 <!--
-    Pull request title should be `MO-XXX - description` or `NOISSUE - description` where XXX is ID of issue that this PR relate to.
+Pull request title should be `MO-XXX - description` or `NOISSUE - description` where XXX is ID of issue that this PR relate to.
 
-    For Work In Progress Pull Requests, please use the Draft PR feature, see https://github.blog/2019-02-14-introducing-draft-pull-requests/ for further details.
+For Work In Progress Pull Requests, please use the Draft PR feature, see https://github.blog/2019-02-14-introducing-draft-pull-requests/ for further details.
 
-    For a timely review/response, please avoid force-pushing additional commits if your PR already received reviews or comments.
+For a timely review/response, please avoid force-pushing additional commits if your PR already received reviews or comments.
 
-    Before submitting a Pull Request, please ensure that you have:
+Before submitting a Pull Request, please ensure that you have:
 
-     - 📖 Read the Contributing guide: https://github.com/0x6flab/mpesaoverlay/blob/main/CONTRIBUTING.md
-     - 📖 Read the Code of Conduct: https://github.com/0x6flab/mpesaoverlay/blob/main/CODE_OF_CONDUCT.md
+- 📖 Read the Contributing guide: https://github.com/0x6flab/mpesaoverlay/blob/main/CONTRIBUTING.md
+- 📖 Read the Code of Conduct: https://github.com/0x6flab/mpesaoverlay/blob/main/CODE_OF_CONDUCT.md
 
-    - Provide tests for your changes.
-    - Use descriptive commit messages. If you need help you can check out https://pypi.org/project/commitgpt/
-    - Comment your code where appropriate.
-    - Squash your commits
-    - Update any related documentation.
+- Provide tests for your changes.
+- Use descriptive commit messages. If you need help you can check out https://pypi.org/project/commitgpt/
+- Comment your code where appropriate.
+- Squash your commits
+- Update any related documentation.
 -->
 
 # What type of PR is this?
@@ -29,18 +30,6 @@
 - [ ] Optimization
 - [ ] Documentation Update
 - [ ] Dependency Update
-
-# Description
-
-<!--
-Please describe your pull request.
--->
-
-## Changes that modify/break current functionality
-
-<!--
-Please describe the changes that modify/break current functionality.
--->
 
 ## Related Tickets & Documents
 
