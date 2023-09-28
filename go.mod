@@ -6,6 +6,7 @@ require (
 	github.com/AlecAivazis/survey/v2 v2.3.7
 	github.com/caarlos0/env/v9 v9.0.0
 	github.com/choria-io/fisk v0.6.0
+	github.com/eclipse/paho.mqtt.golang v1.4.3
 	github.com/fatih/color v1.15.0
 	github.com/go-kit/kit v0.13.0
 	github.com/hokaccha/go-prettyjson v0.0.0-20211117102719-0474bc63780f
