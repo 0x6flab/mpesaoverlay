@@ -1,13 +1,11 @@
-name: CI
+name: Continuous Integration
 
 on:
-  push:
-    branches: [main]
   pull_request:
     branches: [main]
 
 jobs:
-  build:
+  build-across-platforms:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
@@ -22,12 +20,35 @@ jobs:
         with:
           go-version: 1.21.x
 
-      - name: Build Artifacts
+      - name: Build Binaries
         run: |
           go mod vendor
           make all -j $(nproc)
 
-  ci:
+  build-docker-images:
+    if: github.event_name == 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.21.x
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build docker images
+        run: |
+          go mod vendor
+          make dockers -j $(nproc)
+
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Install Go
@@ -38,13 +59,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Check formatting
+      - name: Check linting
         run: |
           curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin latest
           make lint
@@ -53,10 +68,6 @@ jobs:
         run: |
           go mod vendor
           make test
-
-      - name: Build Artifacts
-        run: |
-          make dockers -j $(nproc)
 
       - name: Install goveralls
         run: go install github.com/mattn/goveralls@latest
