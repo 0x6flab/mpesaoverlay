@@ -33,7 +33,7 @@ type metricsMiddleware struct {
 func WithMetrics(svcName, url string) mpesa.Option {
 	return func(sdk mpesa.SDK) (mpesa.SDK, error) {
 		var mm = &metricsMiddleware{
-			svcName: fmt.Sprintf("%s-%s", mpesaoverlay.SVCName, svcName),
+			svcName: fmt.Sprintf("%s_%s", mpesaoverlay.SVCName, strings.ReplaceAll(svcName, "-", "_")),
 			sdk:     sdk,
 		}
 
