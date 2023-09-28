@@ -15,6 +15,7 @@ import (
 	mqtt "github.com/mochi-mqtt/server/v2"
 	"github.com/mochi-mqtt/server/v2/packets"
 	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
 type Hook struct {
@@ -41,16 +42,14 @@ func (h *Hook) ID() string {
 }
 
 func (h *Hook) Provides(b byte) bool {
-	return bytes.Contains(
-		[]byte{b},
+	return bytes.Contains( // nolint: gocritic
 		[]byte{
 			mqtt.OnConnect,
 			mqtt.OnDisconnect,
 			mqtt.OnPublished,
 			mqtt.OnSubscribed,
 			mqtt.OnUnsubscribed,
-		},
-	)
+		}, []byte{b})
 }
 
 func (h *Hook) Init(_ interface{}) error {
@@ -70,13 +69,24 @@ func (h *Hook) OnConnect(cl *mqtt.Client, _ packets.Packet) error {
 }
 
 func (h *Hook) OnDisconnect(cl *mqtt.Client, err error, expire bool) {
-	h.logger.Info(
-		"mqtt client disconnected",
+	var fields = []zapcore.Field{
 		zap.String("client_id", cl.ID),
 		zap.String("username", string(cl.Properties.Username)),
 		zap.Bool("expired", expire),
-		zap.Error(err),
-	)
+	}
+	switch err {
+	case nil:
+		h.logger.Info(
+			"mqtt client disconnected",
+			fields...,
+		)
+	default:
+		fields = append(fields, zap.Error(err))
+		h.logger.Error(
+			"mqtt client disconnected",
+			fields...,
+		)
+	}
 }
 
 func (h *Hook) OnPublished(cl *mqtt.Client, pk packets.Packet) {
