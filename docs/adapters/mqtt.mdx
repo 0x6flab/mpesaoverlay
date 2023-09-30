@@ -1,7 +1,1021 @@
 ---
-title: 'MQTT Adapter'
-description: 'This is an adapter for MQTT'
-icon: 'm'
+title: "MQTT Adapter"
+description: "This is an adapter for MQTT"
+icon: "m"
 ---
 
-<Info>**Prerequisite** Documentation is coming soon.</Info>
+# MQTT Adapter
+
+Mpesaoverlay has a simple MQTT adapter that can be used to send messages to an
+MQTT broker. This allows users who develop in applications constrained
+environments and use MQTT as their data transport to send messages to the
+broker.
+
+## Configuration
+
+The MQTT adapter is configured using the `MQTT Adapter` section in the `docker/.env` file.
+
+```env
+### MQTT Adapter
+MO_MQTT_HOST=
+MO_MQTT_PORT=1883
+MO_MQTT_URL=${MO_MQTT_HOST}:${MO_MQTT_PORT}
+MO_MQTT_SERVER_CERT=
+MO_MQTT_SERVER_KEY=
+```
+
+- `MO_MQTT_HOST` - The host of the MQTT broker. Defaults to `localhost`
+- `MO_MQTT_PORT` - The port of the MQTT broker. Defaults to `1883`
+- `MO_MQTT_URL` - The URL of the MQTT broker. Defaults to `${MO_MQTT_HOST}:${MO_MQTT_PORT}`
+- `MO_MQTT_SERVER_CERT` - The path to the server certificate. Defaults to `""`
+- `MO_MQTT_SERVER_KEY` - The path to the server key. Defaults to `""`
+
+## Running
+
+To run the MQTT adapter, you can use the following command:
+
+```bash
+docker-compose up -d mqtt
+```
+
+or if you want to run the binary directly:
+
+```bash
+make mqtt
+./build/mpesa-mqtt
+```
+
+## Usage
+
+The MQTT adapter is used by sending a message to the `mpesa/` topic. The message should be a JSON object.
+
+The supported topics are:
+
+- `mpesa/token` - Get a token
+- `mpesa/express/query` - Query an express transaction
+- `mpesa/express/simulate` - Simulate an express transaction
+- `mpesa/b2c/payment` - Make a B2C payment
+- `mpesa/account/balance` - Get the balance of an account
+- `mpesa/c2b/register` - Register a C2B URL
+- `mpesa/c2b/simulate` - Simulate a C2B transaction
+- `mpesa/generate/qr` - Generate a QR code
+- `mpesa/reverse` - Reverse a transaction
+- `mpesa/transaction/status` - Get the status of a transaction
+- `mpesa/remit/tax` - Remit tax
+
+To subscribe to the response, you can subscribe to the
+`<publish_topic>/response` topic. For example, if you want to subscribe to the
+response of the `mpesa/token` topic, you can subscribe to the
+`mpesa/token/response` topic.
+
+<AccordionGroup>
+
+  <Accordion icon="code" title="GetToken">
+  
+    <CodeGroup>
+
+        ```go main.go
+        // Copyright (c) MpesaOverlay. All rights reserved.
+        // Use of this source code is governed by a Apache-2.0 license that can be
+        // found in the LICENSE file.
+        //
+        // SPDX-License-Identifier: Apache-2.0
+
+        // Package main provides an example of how to use Token method.
+        package main
+
+        import (
+            "fmt"
+            "log"
+            "time"
+
+            mqtt "github.com/eclipse/paho.mqtt.golang"
+        )
+
+        var (
+            respTopic = "mpesa/token/response"
+            topic     = "mpesa/token"
+            closeChan = make(chan struct{})
+        )
+
+        func onMessageReceived(_ mqtt.Client, message mqtt.Message) {
+            log.Printf("Received message: %s from topic: %s\n", string(message.Payload()), message.Topic())
+            close(closeChan)
+        }
+
+        func main() {
+            opts := mqtt.NewClientOptions()
+            opts.AddBroker("tcp://localhost:1883")
+
+            client := mqtt.NewClient(opts)
+            if token := client.Connect(); token.Wait() && token.Error() != nil {
+                log.Fatal(fmt.Errorf("failed to connect to MQTT broker: %w", token.Error()))
+            }
+
+            if token := client.Subscribe(respTopic, 0, onMessageReceived); token.Wait() && token.Error() != nil {
+                log.Fatal(fmt.Errorf("error subscribing to topic: %w", token.Error()))
+            }
+
+            message := ""
+            token := client.Publish(topic, 0, false, message)
+            token.Wait()
+
+            select {
+            case <-closeChan:
+                log.Println("received message")
+            case <-time.After(5 * time.Second):
+                log.Println("timed out")
+            }
+
+            client.Unsubscribe(topic)
+            client.Disconnect(250)
+        }
+
+        ```
+
+        ```python main.py
+        print('Hello World!')
+        ```
+
+    </CodeGroup>
+
+  </Accordion>
+
+  <Accordion icon="code" title="ExpressQuery">
+
+    <CodeGroup>
+
+        ```go main.go
+        // Copyright (c) MpesaOverlay. All rights reserved.
+        // Use of this source code is governed by a Apache-2.0 license that can be
+        // found in the LICENSE file.
+        //
+        // SPDX-License-Identifier: Apache-2.0
+
+        // Package main provides an example of how to use ExpressQuery method.
+        package main
+
+        import (
+            "encoding/json"
+            "fmt"
+            "log"
+            "time"
+
+            "github.com/0x6flab/mpesaoverlay/pkg/mpesa"
+            mqtt "github.com/eclipse/paho.mqtt.golang"
+        )
+
+        var (
+            respTopic = "mpesa/express/query/response"
+            topic     = "mpesa/express/query"
+            closeChan = make(chan struct{})
+        )
+
+        func onMessageReceived(_ mqtt.Client, message mqtt.Message) {
+            log.Printf("Received message: %s from topic: %s\n", string(message.Payload()), message.Topic())
+            close(closeChan)
+        }
+
+        func main() {
+            opts := mqtt.NewClientOptions()
+            opts.AddBroker("tcp://localhost:1883")
+
+            client := mqtt.NewClient(opts)
+            if token := client.Connect(); token.Wait() && token.Error() != nil {
+                log.Fatal(fmt.Errorf("failed to connect to MQTT broker: %w", token.Error()))
+            }
+
+            if token := client.Subscribe(respTopic, 0, onMessageReceived); token.Wait() && token.Error() != nil {
+                log.Fatal(fmt.Errorf("error subscribing to topic: %w", token.Error()))
+            }
+
+            qrReq := mpesa.ExpressQueryReq{
+                PassKey:           "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919", // Get this from the developer portal under the test credentials section
+                BusinessShortCode: 174379,
+                CheckoutRequestID: "ws_CO_28092023221107502712345678",
+            }
+            message, err := json.Marshal(qrReq)
+            if err != nil {
+                log.Fatal(fmt.Errorf("failed to marshal b2c request: %w", err))
+            }
+
+            token := client.Publish(topic, 0, false, message)
+            token.Wait()
+
+            select {
+            case <-closeChan:
+                log.Println("received message")
+            case <-time.After(5 * time.Second):
+                log.Println("timed out")
+            }
+
+            client.Unsubscribe(topic)
+            client.Disconnect(250)
+        }
+        ```
+
+        ```python main.py
+        print('Hello World!')
+        ```
+
+    </CodeGroup>
+
+  </Accordion>
+
+  <Accordion icon="code" title="ExpressSimulate">
+
+    <CodeGroup>
+
+        ```go main.go
+        // Copyright (c) MpesaOverlay. All rights reserved.
+        // Use of this source code is governed by a Apache-2.0 license that can be
+        // found in the LICENSE file.
+        //
+        // SPDX-License-Identifier: Apache-2.0
+
+        // Package main provides an example of how to use ExpressSimulate method.
+        package main
+
+        import (
+            "encoding/json"
+            "fmt"
+            "log"
+            "time"
+
+            "github.com/0x6flab/mpesaoverlay/pkg/mpesa"
+            mqtt "github.com/eclipse/paho.mqtt.golang"
+        )
+
+        var (
+            respTopic = "mpesa/express/simulate/response"
+            topic     = "mpesa/express/simulate"
+            closeChan = make(chan struct{})
+        )
+
+        func onMessageReceived(_ mqtt.Client, message mqtt.Message) {
+            log.Printf("Received message: %s from topic: %s\n", string(message.Payload()), message.Topic())
+            close(closeChan)
+        }
+
+        func main() {
+            opts := mqtt.NewClientOptions()
+            opts.AddBroker("tcp://localhost:1883")
+
+            client := mqtt.NewClient(opts)
+            if token := client.Connect(); token.Wait() && token.Error() != nil {
+                log.Fatal(fmt.Errorf("failed to connect to MQTT broker: %w", token.Error()))
+            }
+
+            if token := client.Subscribe(respTopic, 0, onMessageReceived); token.Wait() && token.Error() != nil {
+                log.Fatal(fmt.Errorf("error subscribing to topic: %w", token.Error()))
+            }
+
+            qrReq := mpesa.ExpressSimulateReq{
+                PassKey:           "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919", // Get this from the developer portal under the test credentials section
+                BusinessShortCode: 174379,
+                TransactionType:   "CustomerPayBillOnline",
+                PhoneNumber:       254712345678, // You can use your own phone number here
+                Amount:            1,
+                PartyA:            254712345678,
+                PartyB:            174379,
+                CallBackURL:       "https://69a2-105-163-2-116.ngrok.io",
+                AccountReference:  "CompanyXLTD",
+                TransactionDesc:   "Payment of X",
+            }
+            message, err := json.Marshal(qrReq)
+            if err != nil {
+                log.Fatal(fmt.Errorf("failed to marshal b2c request: %w", err))
+            }
+
+            token := client.Publish(topic, 0, false, message)
+            token.Wait()
+
+            select {
+            case <-closeChan:
+                log.Println("received message")
+            case <-time.After(5 * time.Second):
+                log.Println("timed out")
+            }
+
+            client.Unsubscribe(topic)
+            client.Disconnect(250)
+        }
+        ```
+
+        ```python main.py
+        print('Hello World!')
+        ```
+
+    </CodeGroup>
+
+  </Accordion>
+
+  <Accordion icon="code" title="B2CPayment">
+
+    <CodeGroup>
+
+        ```go main.go
+        // Copyright (c) MpesaOverlay. All rights reserved.
+        // Use of this source code is governed by a Apache-2.0 license that can be
+        // found in the LICENSE file.
+        //
+        // SPDX-License-Identifier: Apache-2.0
+
+        // Package main provides an example of how to use B2C payment method.
+        package main
+
+        import (
+            "encoding/json"
+            "fmt"
+            "log"
+            "time"
+
+            "github.com/0x6flab/mpesaoverlay/pkg/mpesa"
+            mqtt "github.com/eclipse/paho.mqtt.golang"
+            "github.com/oklog/ulid/v2"
+        )
+
+        var (
+            respTopic = "mpesa/b2c/payment/response"
+            topic     = "mpesa/b2c/payment"
+            closeChan = make(chan struct{})
+        )
+
+        func onMessageReceived(_ mqtt.Client, message mqtt.Message) {
+            log.Printf("Received message: %s from topic: %s\n", string(message.Payload()), message.Topic())
+            close(closeChan)
+        }
+
+        func main() {
+            opts := mqtt.NewClientOptions()
+            opts.AddBroker("tcp://localhost:1883")
+
+            client := mqtt.NewClient(opts)
+            if token := client.Connect(); token.Wait() && token.Error() != nil {
+                log.Fatal(fmt.Errorf("failed to connect to MQTT broker: %w", token.Error()))
+            }
+
+            if token := client.Subscribe(respTopic, 0, onMessageReceived); token.Wait() && token.Error() != nil {
+                log.Fatal(fmt.Errorf("error subscribing to topic: %w", token.Error()))
+            }
+
+            b2cReq := mpesa.B2CPaymentReq{
+                OriginatorConversationID: ulid.Make().String(),
+                InitiatorName:            "testapi",
+                InitiatorPassword:        "Safaricom999!*!",
+                CommandID:                "BusinessPayment",
+                Amount:                   10,
+                PartyA:                   600986,
+                PartyB:                   254712345678,
+                QueueTimeOutURL:          "https://example.com/timeout",
+                ResultURL:                "https://example.com/result",
+                Remarks:                  "test",
+                Occasion:                 "test",
+            }
+            message, err := json.Marshal(b2cReq)
+            if err != nil {
+                log.Fatal(fmt.Errorf("failed to marshal b2c request: %w", err))
+            }
+
+            token := client.Publish(topic, 0, false, message)
+            token.Wait()
+
+            select {
+            case <-closeChan:
+                log.Println("received message")
+            case <-time.After(5 * time.Second):
+                log.Println("timed out")
+            }
+
+            client.Unsubscribe(topic)
+            client.Disconnect(250)
+        }
+
+        ```
+
+        ```python main.py
+        print('Hello World!')
+        ```
+
+    </CodeGroup>
+
+  </Accordion>
+
+  <Accordion icon="code" title="AccountBalance">
+
+    <CodeGroup>
+
+        ```go main.go
+        // Copyright (c) MpesaOverlay. All rights reserved.
+        // Use of this source code is governed by a Apache-2.0 license that can be
+        // found in the LICENSE file.
+        //
+        // SPDX-License-Identifier: Apache-2.0
+
+        // Package main provides an example of how to use AccountBalance method.
+        package main
+
+        import (
+            "encoding/json"
+            "fmt"
+            "log"
+            "time"
+
+            "github.com/0x6flab/mpesaoverlay/pkg/mpesa"
+            mqtt "github.com/eclipse/paho.mqtt.golang"
+        )
+
+        var (
+            respTopic = "mpesa/account/balance/response"
+            topic     = "mpesa/account/balance"
+            closeChan = make(chan struct{})
+        )
+
+        func onMessageReceived(_ mqtt.Client, message mqtt.Message) {
+            log.Printf("Received message: %s from topic: %s\n", string(message.Payload()), message.Topic())
+            close(closeChan)
+        }
+
+        func main() {
+            opts := mqtt.NewClientOptions()
+            opts.AddBroker("tcp://localhost:1883")
+
+            client := mqtt.NewClient(opts)
+            if token := client.Connect(); token.Wait() && token.Error() != nil {
+                log.Fatal(fmt.Errorf("failed to connect to MQTT broker: %w", token.Error()))
+            }
+
+            if token := client.Subscribe(respTopic, 0, onMessageReceived); token.Wait() && token.Error() != nil {
+                log.Fatal(fmt.Errorf("error subscribing to topic: %w", token.Error()))
+            }
+
+            balReq := mpesa.AccountBalanceReq{
+                InitiatorName:     "testapi",
+                InitiatorPassword: "Safaricom999!*!",
+                CommandID:         "AccountBalance",
+                IdentifierType:    4,
+                PartyA:            600772,
+                QueueTimeOutURL:   "https://example.com/timeout",
+                ResultURL:         "https://example.com/result",
+                Remarks:           "test",
+            }
+            message, err := json.Marshal(balReq)
+            if err != nil {
+                log.Fatal(fmt.Errorf("failed to marshal b2c request: %w", err))
+            }
+
+            token := client.Publish(topic, 0, false, message)
+            token.Wait()
+
+            select {
+            case <-closeChan:
+                log.Println("received message")
+            case <-time.After(5 * time.Second):
+                log.Println("timed out")
+            }
+
+            client.Unsubscribe(topic)
+            client.Disconnect(250)
+        }
+
+        ```
+
+        ```python main.py
+        print('Hello World!')
+        ```
+
+    </CodeGroup>
+
+  </Accordion>
+
+  <Accordion icon="code" title="C2BRegisterURL">
+
+    <CodeGroup>
+
+        ```go main.go
+        // Copyright (c) MpesaOverlay. All rights reserved.
+        // Use of this source code is governed by a Apache-2.0 license that can be
+        // found in the LICENSE file.
+        //
+        // SPDX-License-Identifier: Apache-2.0
+
+        // Package main provides an example of how to use C2BRegisterURL method.
+        package main
+
+        import (
+            "encoding/json"
+            "fmt"
+            "log"
+            "time"
+
+            "github.com/0x6flab/mpesaoverlay/pkg/mpesa"
+            mqtt "github.com/eclipse/paho.mqtt.golang"
+        )
+
+        var (
+            respTopic = "mpesa/c2b/register/response"
+            topic     = "mpesa/c2b/register"
+            closeChan = make(chan struct{})
+        )
+
+        func onMessageReceived(_ mqtt.Client, message mqtt.Message) {
+            log.Printf("Received message: %s from topic: %s\n", string(message.Payload()), message.Topic())
+            close(closeChan)
+        }
+
+        func main() {
+            opts := mqtt.NewClientOptions()
+            opts.AddBroker("tcp://localhost:1883")
+
+            client := mqtt.NewClient(opts)
+            if token := client.Connect(); token.Wait() && token.Error() != nil {
+                log.Fatal(fmt.Errorf("failed to connect to MQTT broker: %w", token.Error()))
+            }
+
+            if token := client.Subscribe(respTopic, 0, onMessageReceived); token.Wait() && token.Error() != nil {
+                log.Fatal(fmt.Errorf("error subscribing to topic: %w", token.Error()))
+            }
+
+            c2bReq := mpesa.C2BRegisterURLReq{
+                ShortCode:       600981,
+                ResponseType:    "Completed",
+                ConfirmationURL: "https://example.com/confirmation",
+                ValidationURL:   "https://example.com/validation",
+            }
+            message, err := json.Marshal(c2bReq)
+            if err != nil {
+                log.Fatal(fmt.Errorf("failed to marshal b2c request: %w", err))
+            }
+
+            token := client.Publish(topic, 0, false, message)
+            token.Wait()
+
+            select {
+            case <-closeChan:
+                log.Println("received message")
+            case <-time.After(5 * time.Second):
+                log.Println("timed out")
+            }
+
+            client.Unsubscribe(topic)
+            client.Disconnect(250)
+        }
+        ```
+
+        ```python main.py
+        print('Hello World!')
+        ```
+
+    </CodeGroup>
+
+  </Accordion>
+
+  <Accordion icon="code" title="C2BSimulate">
+
+    <CodeGroup>
+
+        ```go main.go
+        // Copyright (c) MpesaOverlay. All rights reserved.
+        // Use of this source code is governed by a Apache-2.0 license that can be
+        // found in the LICENSE file.
+        //
+        // SPDX-License-Identifier: Apache-2.0
+
+        // Package main provides an example of how to use C2BSimulate method.
+        package main
+
+        import (
+            "encoding/json"
+            "fmt"
+            "log"
+            "time"
+
+            "github.com/0x6flab/mpesaoverlay/pkg/mpesa"
+            mqtt "github.com/eclipse/paho.mqtt.golang"
+        )
+
+        var (
+            respTopic = "mpesa/c2b/simulate/response"
+            topic     = "mpesa/c2b/simulate"
+            closeChan = make(chan struct{})
+        )
+
+        func onMessageReceived(_ mqtt.Client, message mqtt.Message) {
+            log.Printf("Received message: %s from topic: %s\n", string(message.Payload()), message.Topic())
+            close(closeChan)
+        }
+
+        func main() {
+            opts := mqtt.NewClientOptions()
+            opts.AddBroker("tcp://localhost:1883")
+
+            client := mqtt.NewClient(opts)
+            if token := client.Connect(); token.Wait() && token.Error() != nil {
+                log.Fatal(fmt.Errorf("failed to connect to MQTT broker: %w", token.Error()))
+            }
+
+            if token := client.Subscribe(respTopic, 0, onMessageReceived); token.Wait() && token.Error() != nil {
+                log.Fatal(fmt.Errorf("error subscribing to topic: %w", token.Error()))
+            }
+
+            c2bReq := mpesa.C2BSimulateReq{
+                CommandID:     "CustomerBuyGoodsOnline",
+                Amount:        10,
+                Msisdn:        "254712345678",
+                BillRefNumber: "",
+                ShortCode:     600986,
+            }
+            message, err := json.Marshal(c2bReq)
+            if err != nil {
+                log.Fatal(fmt.Errorf("failed to marshal b2c request: %w", err))
+            }
+
+            token := client.Publish(topic, 0, false, message)
+            token.Wait()
+
+            select {
+            case <-closeChan:
+                log.Println("received message")
+            case <-time.After(5 * time.Second):
+                log.Println("timed out")
+            }
+
+            client.Unsubscribe(topic)
+            client.Disconnect(250)
+        }
+        ```
+
+        ```python main.py
+        print('Hello World!')
+        ```
+
+    </CodeGroup>
+
+  </Accordion>
+
+  <Accordion icon="code" title="GenerateQR">
+
+    <CodeGroup>
+
+        ```go main.go
+        // Copyright (c) MpesaOverlay. All rights reserved.
+        // Use of this source code is governed by a Apache-2.0 license that can be
+        // found in the LICENSE file.
+        //
+        // SPDX-License-Identifier: Apache-2.0
+
+        // Package main provides an example of how to use GenerateQR method.
+        package main
+
+        import (
+            "encoding/json"
+            "fmt"
+            "log"
+            "time"
+
+            "github.com/0x6flab/mpesaoverlay/pkg/mpesa"
+            mqtt "github.com/eclipse/paho.mqtt.golang"
+        )
+
+        var (
+            respTopic = "mpesa/generate/qr/response"
+            topic     = "mpesa/generate/qr"
+            closeChan = make(chan struct{})
+        )
+
+        func onMessageReceived(_ mqtt.Client, message mqtt.Message) {
+            log.Printf("Received message: %s from topic: %s\n", string(message.Payload()), message.Topic())
+            close(closeChan)
+        }
+
+        func main() {
+            opts := mqtt.NewClientOptions()
+            opts.AddBroker("tcp://localhost:1883")
+
+            client := mqtt.NewClient(opts)
+            if token := client.Connect(); token.Wait() && token.Error() != nil {
+                log.Fatal(fmt.Errorf("failed to connect to MQTT broker: %w", token.Error()))
+            }
+
+            if token := client.Subscribe(respTopic, 0, onMessageReceived); token.Wait() && token.Error() != nil {
+                log.Fatal(fmt.Errorf("error subscribing to topic: %w", token.Error()))
+            }
+
+            qrReq := mpesa.GenerateQRReq{
+                MerchantName: "Test Supermarket",
+                RefNo:        "Invoice No",
+                Amount:       2000,
+                TrxCode:      "BG",
+                CPI:          "174379",
+                Size:         "300",
+            }
+            message, err := json.Marshal(qrReq)
+            if err != nil {
+                log.Fatal(fmt.Errorf("failed to marshal b2c request: %w", err))
+            }
+
+            token := client.Publish(topic, 0, false, message)
+            token.Wait()
+
+            select {
+            case <-closeChan:
+                log.Println("received message")
+            case <-time.After(5 * time.Second):
+                log.Println("timed out")
+            }
+
+            client.Unsubscribe(topic)
+            client.Disconnect(250)
+        }
+
+        ```
+
+        ```python main.py
+        print('Hello World!')
+        ```
+
+    </CodeGroup>
+
+  </Accordion>
+
+  <Accordion icon="code" title="Reverse">
+
+    <CodeGroup>
+
+        ```go main.go
+        // Copyright (c) MpesaOverlay. All rights reserved.
+        // Use of this source code is governed by a Apache-2.0 license that can be
+        // found in the LICENSE file.
+        //
+        // SPDX-License-Identifier: Apache-2.0
+
+        // Package main provides an example of how to use Reverse method.
+        package main
+
+        import (
+            "encoding/json"
+            "fmt"
+            "log"
+            "time"
+
+            "github.com/0x6flab/mpesaoverlay/pkg/mpesa"
+            mqtt "github.com/eclipse/paho.mqtt.golang"
+        )
+
+        var (
+            respTopic = "mpesa/reverse/response"
+            topic     = "mpesa/reverse"
+            closeChan = make(chan struct{})
+        )
+
+        func onMessageReceived(_ mqtt.Client, message mqtt.Message) {
+            log.Printf("Received message: %s from topic: %s\n", string(message.Payload()), message.Topic())
+            close(closeChan)
+        }
+
+        func main() {
+            opts := mqtt.NewClientOptions()
+            opts.AddBroker("tcp://localhost:1883")
+
+            client := mqtt.NewClient(opts)
+            if token := client.Connect(); token.Wait() && token.Error() != nil {
+                log.Fatal(fmt.Errorf("failed to connect to MQTT broker: %w", token.Error()))
+            }
+
+            if token := client.Subscribe(respTopic, 0, onMessageReceived); token.Wait() && token.Error() != nil {
+                log.Fatal(fmt.Errorf("error subscribing to topic: %w", token.Error()))
+            }
+
+            reverseReq := mpesa.ReverseReq{
+                InitiatorName:          "testapi",
+                InitiatorPassword:      "Safaricom999!*!",
+                CommandID:              "TransactionReversal",
+                TransactionID:          "RI704KI9RW",
+                Amount:                 10,
+                ReceiverParty:          600992,
+                RecieverIdentifierType: 11,
+                QueueTimeOutURL:        "https://example.com/timeout",
+                ResultURL:              "https://example.com/result",
+                Remarks:                "test",
+                Occasion:               "test",
+            }
+            message, err := json.Marshal(reverseReq)
+            if err != nil {
+                log.Fatal(fmt.Errorf("failed to marshal b2c request: %w", err))
+            }
+
+            token := client.Publish(topic, 0, false, message)
+            token.Wait()
+
+            select {
+            case <-closeChan:
+                log.Println("received message")
+            case <-time.After(5 * time.Second):
+                log.Println("timed out")
+            }
+
+            client.Unsubscribe(topic)
+            client.Disconnect(250)
+        }
+        ```
+
+        ```python main.py
+        print('Hello World!')
+        ```
+
+    </CodeGroup>
+
+  </Accordion>
+
+  <Accordion icon="code" title="TransactionStatus">
+
+    <CodeGroup>
+
+        ```go main.go
+        // Copyright (c) MpesaOverlay. All rights reserved.
+        // Use of this source code is governed by a Apache-2.0 license that can be
+        // found in the LICENSE file.
+        //
+        // SPDX-License-Identifier: Apache-2.0
+
+        // Package main provides an example of how to use TransactionStatus method.
+        package main
+
+        import (
+            "encoding/json"
+            "fmt"
+            "log"
+            "time"
+
+            "github.com/0x6flab/mpesaoverlay/pkg/mpesa"
+            mqtt "github.com/eclipse/paho.mqtt.golang"
+        )
+
+        var (
+            respTopic = "mpesa/transaction/status/response"
+            topic     = "mpesa/transaction/status"
+            closeChan = make(chan struct{})
+        )
+
+        func onMessageReceived(_ mqtt.Client, message mqtt.Message) {
+            log.Printf("Received message: %s from topic: %s\n", string(message.Payload()), message.Topic())
+            close(closeChan)
+        }
+
+        func main() {
+            opts := mqtt.NewClientOptions()
+            opts.AddBroker("tcp://localhost:1883")
+
+            client := mqtt.NewClient(opts)
+            if token := client.Connect(); token.Wait() && token.Error() != nil {
+                log.Fatal(fmt.Errorf("failed to connect to MQTT broker: %w", token.Error()))
+            }
+
+            if token := client.Subscribe(respTopic, 0, onMessageReceived); token.Wait() && token.Error() != nil {
+                log.Fatal(fmt.Errorf("error subscribing to topic: %w", token.Error()))
+            }
+
+            trxReq := mpesa.TransactionStatusReq{
+                InitiatorName:     "testapi",
+                InitiatorPassword: "Safaricom999!*!",
+                CommandID:         "TransactionStatusQuery",
+                IdentifierType:    1,
+                TransactionID:     "RI704KI9RW",
+                PartyA:            254759764065,
+                QueueTimeOutURL:   "https://example.com/timeout",
+                ResultURL:         "https://example.com/result",
+                Remarks:           "test",
+                Occasion:          "test",
+            }
+            message, err := json.Marshal(trxReq)
+            if err != nil {
+                log.Fatal(fmt.Errorf("failed to marshal b2c request: %w", err))
+            }
+
+            token := client.Publish(topic, 0, false, message)
+            token.Wait()
+
+            select {
+            case <-closeChan:
+                log.Println("received message")
+            case <-time.After(5 * time.Second):
+                log.Println("timed out")
+            }
+
+            client.Unsubscribe(topic)
+            client.Disconnect(250)
+        }
+        ```
+
+        ```python main.py
+        print('Hello World!')
+        ```
+
+    </CodeGroup>
+
+  </Accordion>
+
+  <Accordion icon="code" title="RemitTax">
+
+    <CodeGroup>
+
+        ```go main.go
+        // Copyright (c) MpesaOverlay. All rights reserved.
+        // Use of this source code is governed by a Apache-2.0 license that can be
+        // found in the LICENSE file.
+        //
+        // SPDX-License-Identifier: Apache-2.0
+
+        // Package main provides an example of how to use RemitTax method.
+        package main
+
+        import (
+            "encoding/json"
+            "fmt"
+            "log"
+            "time"
+
+            "github.com/0x6flab/mpesaoverlay/pkg/mpesa"
+            mqtt "github.com/eclipse/paho.mqtt.golang"
+        )
+
+        var (
+            respTopic = "mpesa/remit/tax/response"
+            topic     = "mpesa/remit/tax"
+            closeChan = make(chan struct{})
+        )
+
+        func onMessageReceived(_ mqtt.Client, message mqtt.Message) {
+            log.Printf("Received message: %s from topic: %s\n", string(message.Payload()), message.Topic())
+            close(closeChan)
+        }
+
+        func main() {
+            opts := mqtt.NewClientOptions()
+            opts.AddBroker("tcp://localhost:1883")
+
+            client := mqtt.NewClient(opts)
+            if token := client.Connect(); token.Wait() && token.Error() != nil {
+                log.Fatal(fmt.Errorf("failed to connect to MQTT broker: %w", token.Error()))
+            }
+
+            if token := client.Subscribe(respTopic, 0, onMessageReceived); token.Wait() && token.Error() != nil {
+                log.Fatal(fmt.Errorf("error subscribing to topic: %w", token.Error()))
+            }
+
+            taxReq := mpesa.RemitTaxReq{
+                InitiatorName:          "testapi",
+                InitiatorPassword:      "Safaricom999!*!",
+                CommandID:              "PayTaxToKRA",
+                SenderIdentifierType:   4,
+                RecieverIdentifierType: 4,
+                Amount:                 239,
+                PartyA:                 600978,
+                PartyB:                 572572,
+                AccountReference:       "353353",
+                QueueTimeOutURL:        "https://example.com/timeout",
+                ResultURL:              "https://example.com/result",
+                Remarks:                "test",
+            }
+            message, err := json.Marshal(taxReq)
+            if err != nil {
+                log.Fatal(fmt.Errorf("failed to marshal b2c request: %w", err))
+            }
+
+            token := client.Publish(topic, 0, false, message)
+            token.Wait()
+
+            select {
+            case <-closeChan:
+                log.Println("received message")
+            case <-time.After(5 * time.Second):
+                log.Println("timed out")
+            }
+
+            client.Unsubscribe(topic)
+            client.Disconnect(250)
+        }
+        ```
+
+        ```python main.py
+        print('Hello World!')
+        ```
+
+    </CodeGroup>
+
+  </Accordion>
+
+</AccordionGroup>
+
+## Supprt
+
+- [ ] MQTT Authentication is not supported.
+- [ ] MQTT TLS is not supported.
+- [ ] MQTT QoS is not supported.
+- [ ] MQTT Retain is not supported.
+- [ ] MQTT Last Will and Testament is not supported.
+- [ ] MQTT Bridge is not supported.
+- [ ] MQTT Websockets is not supported.
+- [ ] MQTT Proxy Protocol is not supported.
+- [ ] MQTT ACL is not supported.
+- [ ] MQTT Persistence is not supported.
