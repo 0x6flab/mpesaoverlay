@@ -89,7 +89,7 @@ changelog:
 	git log $(shell git describe --tags --abbrev=0)..HEAD --pretty=format:"- %s"
 
 proto:
-	# go install github.com/anjmao/go2proto@latest
+	go install github.com/anjmao/go2proto@latest
 	go2proto -f grpc/ -p pkg/mpesa/request.go
 	mv grpc/output.proto grpc/requests.proto
 	sed -i 's,package proto;,package mpesaoverlay.grpc;\noption go_package = "./grpc";,g' grpc/requests.proto
@@ -102,6 +102,9 @@ proto:
 
 run:
 	docker-compose -f docker/docker-compose.yml --env-file docker/.env up -d
+
+logs:
+	docker-compose -f docker/docker-compose.yml --env-file docker/.env logs -f
 
 stop:
 	docker-compose -f docker/docker-compose.yml --env-file docker/.env down
