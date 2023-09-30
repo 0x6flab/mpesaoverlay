@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/schema.json",
   "name": "Mpesa Overlay",
-  "favicon": "/favicon.png",
+  "favicon": "/icon.png",
   "colors": {
     "primary": "#9563FF",
     "light": "#AE87FF",
@@ -41,14 +41,15 @@
   "navigation": [
     {
       "group": "Get Started",
-      "pages": ["introduction", "quickstart", "development"]
+      "pages": ["introduction", "quickstart", "development", "platform", "deployment"]
     },
     {
-      "group": "Essentials",
+      "group": "Adapters",
       "pages": [
-        "essentials/markdown",
-        "essentials/images",
-        "essentials/settings"
+        "adapters/sdk",
+        "adapters/cli",
+        "adapters/grpc",
+        "adapters/mqtt"
       ]
     },
     {
