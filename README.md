@@ -40,4 +40,4 @@ MpesaOverlay platform is comprised of the following services:
 - pubsub-adapter Provides a Pub/Sub interface for accessing communication channels
 - mpesa-cli Command line interface
 
-![Mpesa Overlay Architecture](assets/architecture.png)
+![Mpesa Overlay Architecture](docs/assets/architecture.png)
