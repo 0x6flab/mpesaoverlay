@@ -5,7 +5,7 @@ DOCKERS = $(addprefix docker_,$(SERVICES))
 DOCKERS_DEV = $(addprefix docker_dev_,$(SERVICES))
 CGO_ENABLED ?= 0
 GOARCH ?= amd64
-VERSION ?= $(shell git describe --tags --abbrev=0 2>/dev/null || echo "0.1.0")
+VERSION ?= $(shell git describe --tags --abbrev=0 2>/dev/null || echo "v0.1.0")
 COMMIT ?= $(shell git rev-parse HEAD)
 TIME ?= $(shell date +%F_%T)
 
@@ -32,6 +32,7 @@ define make_docker
 		--build-arg COMMIT=$(COMMIT) \
 		--build-arg TIME=$(TIME) \
 		--tag=$(MO_DOCKER_IMAGE_NAME_PREFIX)/$(svc):latest \
+		--tag=$(MO_DOCKER_IMAGE_NAME_PREFIX)/$(svc):$(VERSION) \
 		-f docker/Dockerfile .
 endef
 
