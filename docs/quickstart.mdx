@@ -1,86 +1,220 @@
 ---
-title: 'Quickstart'
-description: 'Start building awesome documentation in under 5 minutes'
+title: "Quickstart"
+description: "Start building with mpesaoverlay in under 5 minutes"
 ---
 
 ## Setup your development
 
-Learn how to update your docs locally and and deploy them to the public.
+This guide will help you get started with mpesaoverlay. You'll learn how to:
+
+- Get credentials from MPESA Daraja API
+- Clone the repository
+- Run development server
+- Run example app
 
 ### Edit and preview
 
 <AccordionGroup>
+
+  <Accordion icon="download" title="Prerequisites" defaultOpen="true">
+
+    1. Make sure you have git installed. You can check if you have git installed by running the command
+
+        ```bash
+        git --version
+        ```
+
+        You should see something like this
+
+        ```bash
+        git version 2.42.0
+        ```
+
+    2. Make sure you have docker installed. You can check if you have docker installed by running the command
+
+        ```bash
+        docker --version
+        ```
+
+        You should see something like this
+
+        ```bash
+        Docker version 24.0.5, build ced0996600
+        ```
+
+    3. Make sure you have docker-compose installed. You can check if you have docker-compose installed by running the command
+
+        ```bash
+        docker compose version
+        ```
+        You should see something like this
+
+        ```bash
+        Docker Compose version 2.20.3
+        ```
+
+    4. Make sure you have make installed. You can check if you have make installed by running the command
+
+        ```bash
+        make --version
+        ```
+
+        You should see something like this
+
+        ```bash
+        GNU Make 4.4.1
+        Built for x86_64-pc-linux-gnu
+        Copyright (C) 1988-2023 Free Software Foundation, Inc.
+        License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
+        This is free software: you are free to change and redistribute it.
+        There is NO WARRANTY, to the extent permitted by law.
+        ```
+
+    5. Make sure you have go installed. You can check if you have go installed by running the command
+
+        ```bash
+        go version
+        ```
+
+        You should see something like this
+
+        ```bash
+        go version go1.21.1 linux/amd64
+        ```
+
+  </Accordion>
+
+  <Accordion icon="key" title="Get credentials from MPESA Daraja API">
+
+    1. Go to [MPESA Daraja API](https://developer.safaricom.co.ke/) and register for an account or login if you already have one.
+
+    2. Create a a [sandbox app](https://developer.safaricom.co.ke/MyApps). You can click on all the options available at the moment. That includes
+        - Lipa Na M-Pesa sandbox
+        - M-Pesa sandbox
+        - Pre-Tups Sandbox
+        - Bill Manager Sandbox
+
+    3. Copy the Consumer Key and Consumer Secret and paste them in the `docker/.env` file in the root of the project. For example
+
+        ```bash
+        MPESA_CONSUMER_KEY=<consumer-key>
+        MPESA_CONSUMER_SECRET=<consumer-secret>
+        MPESA_BASE_URL=https://sandbox.safaricom.co.ke
+        ```
+
+  </Accordion>
+
   <Accordion icon="github" title="Clone your docs locally">
-    During the onboarding process, we created a repository on your Github with
-    your docs content. You can find this repository on our
-    [dashboard](https://dashboard.mintlify.com). To clone the repository
-    locally, follow these
-    [instructions](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
-    in your terminal.
+
+    1. Clone the repository locally using the command
+
+        ```bash
+        git clone https://github.com/0x6flab/mpesaoverlay.git
+        ```
+
+    2. Change directory to the cloned repository
+
+        ```bash
+        cd mpesaoverlay
+        ```
+
   </Accordion>
+
+  <Accordion icon="docker" title="Run docker compose">
+
+    1. When running the docker container, the `docker/.env` file will be used to set the environment variables. If you want to run examples you need to
+       set the environment variables depending on your OS. This [guide](https://www.twilio.com/blog/how-to-set-environment-variables-html)
+       will help you set environment variables on your OS.
+
+    2. Run the docker compose setup using make command
+
+        ```bash
+        make run
+        ```
+
+    3. You can check the logs using the command
+
+        ```bash
+        make logs
+        ```
+
+        You should be able to see the logs something like this
+
+        ```bash
+        docker-compose -f docker/docker-compose.yml --env-file docker/.env logs -f
+        mpesaoverlay-grpc                    | {"level":"info","ts":1696023073.3833413,"caller":"grpc/main.go:130","msg":"grpc-adapter gRPC service started using http on url grpc:9000"}
+        mpesaoverlay-mqtt                    | time=2023-09-29T21:31:13.618Z level=INFO msg="added hook" hook=allow-all-auth
+        mpesaoverlay-mqtt                    | time=2023-09-29T21:31:13.618Z level=INFO msg="added hook" hook=mpesaoverlay-mqtt
+        mpesaoverlay-mqtt                    | {"level":"info","ts":1696023073.6185555,"caller":"mqtt/hook.go:56","msg":"initializing mqtt hook"}
+        mpesaoverlay-mqtt                    | time=2023-09-29T21:31:13.619Z level=INFO msg="attached listener" id=mqtt-adapter-mqtt protocol=tcp address=:1883
+        mpesaoverlay-mqtt                    | time=2023-09-29T21:31:13.619Z level=INFO msg="mochi mqtt starting" version=2.4.0
+        mpesaoverlay-mqtt                    | time=2023-09-29T21:31:13.619Z level=INFO msg="mochi mqtt server started"
+        mpesaoverlay-prometheus-pushgateway  | ts=2023-09-29T21:31:13.638Z caller=main.go:86 level=info msg="starting pushgateway" version="(version=1.6.2, branch=HEAD, revision=dd0ca68e2cf68ba061ed9e73b19e1928a4f6338f)"
+        mpesaoverlay-prometheus-pushgateway  | ts=2023-09-29T21:31:13.638Z caller=main.go:87 level=info build_context="(go=go1.21.1, platform=linux/amd64, user=root@5fb64a530f19, date=20230913-16:37:18, tags=netgo)"
+        mpesaoverlay-prometheus-pushgateway  | ts=2023-09-29T21:31:13.640Z caller=tls_config.go:274 level=info msg="Listening on" address=[::]:9091
+        mpesaoverlay-prometheus-pushgateway  | ts=2023-09-29T21:31:13.640Z caller=tls_config.go:277 level=info msg="TLS is disabled." http2=false address=[::]:9091
+        ```
+
+  </Accordion>
+
   <Accordion icon="rectangle-terminal" title="Preview changes">
-    Previewing helps you make sure your changes look as intended. We built a
-    command line interface to render these changes locally. 1. Install the
-    [Mintlify CLI](https://www.npmjs.com/package/mintlify) to preview the
-    documentation changes locally with this command: ``` npm i -g mintlify ```
-    2. Run the following command at the root of your documentation (where
-    `mint.json` is): ``` mintlify dev ```
+  
+    1. Install CLI
+
+        ```bash
+        make cli && make install
+        ```
+
+    2. Run the CLI
+
+        ```bash
+        mpesa-cli --help
+        ```
+
+        You should see something like this
+
+        ```bash
+        usage: mpesa [<flags>] <command> [<args> ...]
+
+        Mpesa Daraja CLI
+
+          See 'mpesa cheat' for a quick tutorial.
+
+        Commands:
+          cheat              Shows cheats for mpesa
+          token              Get a token
+          stkpush            Simulate STK Push
+          stkpushquery       Query STK Push
+          b2c                Simulate B2C Payment
+          balance            Check Account Balance
+          c2bregisterurl     Register C2B URL
+          c2bsimulate        Simulate C2B Payment
+          qrcode             Generate QR Code
+          reversal           Simulate Reversal
+          remittax           Simulate Remittance Tax
+          transactionstatus  Simulate Transaction Status
+
+        Global Flags:
+              --help                             Show context-sensitive help
+              --version                          Show application version.
+          -k, --consumer-key=CONSUMER-KEY        Mpesa Consumer Key ($MPESA_CONSUMER_KEY)
+          -s, --consumer-secret=CONSUMER-SECRET  Mpesa Consumer Secret ($MPESA_CONSUMER_SECRET)
+          -b, --base-url=BASE-URL                Mpesa Base URL ($MPESA_BASE_URL)
+        ```
+
+    3. Run the command
+        ```bash
+        mpesa-cli token
+        ```
+
+        You should see something like this
+
+        ```bash
+        {
+          "access_token": "VA5zCvMAGB02oDdICKtpM7Bm8JBp",
+          "expires_in": "3599"
+        }
+        ```
+
   </Accordion>
 </AccordionGroup>
-
-### Deploy your changes
-
-<AccordionGroup>
-
-<Accordion icon="message-bot" title="Install our Github app">
-  Our Github app automatically deploys your changes to your docs site, so you
-  don't need to manage deployments yourself. You can find the link to install on
-  your [dashboard](https://dashboard.mintlify.com). Once the bot has been
-  successfully installed, there should be a check mark next to the commit hash
-  of the repo.
-</Accordion>
-<Accordion icon="rocket" title="Push your changes">
-  [Commit and push your changes to
-  Git](https://docs.github.com/en/get-started/using-git/pushing-commits-to-a-remote-repository#about-git-push)
-  for your changes to update in your docs site. If you push and don't see that
-  the Github app successfully deployed your changes, you can also manually
-  update your docs through our [dashboard](https://dashboard.mintlify.com).
-</Accordion>
-
-</AccordionGroup>
-
-## Update your docs
-
-Add content directly in your files with MDX syntax and React components. You can use any of our components, or even build your own.
-
-<CardGroup>
-
-<Card title="Style Your Docs" icon="paintbrush" href="/settings/global">
-  Add flair to your docs with personalized branding.
-</Card>
-
-<Card
-  title="Add API Endpoints"
-  icon="square-code"
-  href="/api-playground/configuration"
->
-  Implement your OpenAPI spec and enable API user interaction.
-</Card>
-
-<Card
-  title="Integrate Analytics"
-  icon="chart-mixed"
-  href="/analytics/supported-integrations"
->
-  Draw insights from user interactions with your documentation.
-</Card>
-
-<Card
-  title="Host on a Custom Domain"
-  icon="browser"
-  href="/settings/custom-domain/subdomain"
->
-  Keep your docs on your own website's subdomain.
-</Card>
-
-</CardGroup>
