@@ -1,12 +1,138 @@
 ---
 title: "Development"
-description: "Learn how to preview changes locally"
+description: "Learn how to develop mpesaoverlay and contribute to the project."
 ---
 
 <Info>
-  **Prerequisite** You should have installed Node.js (version 18.10.0 or
-  higher).
+  **Prerequisite**
+
+Make sure you have the following installed on your machine:
+
+- Docker (version 24.0.5 or higher).
+
+- Docker compose (version 2.20.3 or higher).
+
+- golang (version 1.21 or higher).
+
+- Make (version 4.4.1 or higher).
+
+- Node.js (version 18.10.0 orhigher).
+
 </Info>
+
+## Code
+
+### Compiling
+
+To compile the different services run the following command:
+
+```bash
+make all
+```
+
+This will compile the different services and place them in the `build` folder.
+
+To build a specific service for example the cli run the following command:
+
+```bash
+make cli
+```
+
+To install the different services run the following command:
+
+```bash
+make install
+```
+
+### Docker
+
+Step 1. To build the docker images run the following command:
+
+```bash
+make dockers_dev
+```
+
+If you want to build the docker images for production run the following command:
+
+```bash
+make dockers
+```
+
+Step 2. To run the different services run the following command:
+
+```bash
+make run
+```
+
+This will run the different services using docker compose in the background.
+
+Step 3. To watch the logs of the different services run the following command:
+
+```bash
+make logs
+```
+
+Step 4. To stop the different services run the following command:
+
+```bash
+make stop
+```
+
+This will stop the different services using docker compose.
+
+### Env Variables
+
+Mpesaoverlay uses port `9000` by default for the grpc adapter and `1883` for the mqtt adapter. You can set up the different ports in the `docker/.env` to customize the ports. For example:
+
+```bash
+### GRPC Adapter
+MO_GRPC_HOST=localhost
+MO_GRPC_PORT=9001
+MO_GRPC_URL=${MO_GRPC_HOST}:${MO_GRPC_PORT}
+
+### MQTT Adapter
+MO_MQTT_HOST=localhost
+MO_MQTT_PORT=9002
+MO_MQTT_URL=${MO_MQTT_HOST}:${MO_MQTT_PORT}
+```
+
+You will see an error if you try to run mpesaoverlay in a port that's already taken
+
+### Proto Files
+
+Make sure that you have [Protocol Buffers](https://developers.google.com/protocol-buffers/) (version 21.12) compiler `protoc` installed.
+
+[Go Protobuf](https://github.com/golang/protobuf) installation instructions are [here](https://github.com/golang/protobuf#installation).
+Go Protobuf uses C bindings, so you will need to install [C++ protobuf](https://github.com/google/protobuf) as a prerequisite.
+Protocol Buffers for Go with Gadgets installation instructions can be found [here]("google.golang.org/protobuf/proto").
+
+If you change SDK `requests.go` and `responses.go` run the following command to generate the new proto files:
+
+```bash
+make proto
+```
+
+This will sync the proto files with the gRPC server and gRPC client.
+
+### Testing
+
+To run the tests run the following command:
+
+```bash
+make test
+```
+
+This will also generate a mock interface for the SDK which will be used in the tests.
+
+To run linting run the following command:
+
+```bash
+make lint
+```
+
+This will run the linting for the different services.
+
+## Documentation
 
 Step 1. Install Mintlify on your OS:
 
@@ -23,6 +149,10 @@ yarn global add mintlify
 </CodeGroup>
 
 Step 2. Go to the docs are located (where you can find `mint.json`) and run the following command:
+
+```bash
+cd docs
+```
 
 ```bash
 mintlify dev
@@ -44,7 +174,7 @@ You will see an error like this if you try to run Mintlify in a port that's alre
 Error: listen EADDRINUSE: address already in use :::3000
 ```
 
-## Mintlify Versions
+### Mintlify Versions
 
 Each CLI is linked to a specific version of Mintlify. Please update the CLI if your local website looks different than production.
 
@@ -60,26 +190,19 @@ yarn global upgrade mintlify
 
 </CodeGroup>
 
-## Troubleshooting
+## Continuous Integration
 
-Here's how to solve some common problems when working with the CLI.
+Github Actions is used for continuous integration. The workflow is located in `.github/workflows/ci.yml`.
 
-<AccordionGroup>
-  <Accordion title="Mintlify is not loading">
-    Update to Node v18. Run `mintlify install` and try again.
-  </Accordion>
-  <Accordion title="No such file or directory on Windows">
-Go to the `C:/Users/Username/.mintlify/` directory and remove the `mint`
-folder. Then Open the Git Bash in this location and run `git clone
-https://github.com/mintlify/mint.git`.
+The following steps are run in the workflow:
 
-Repeat step 3.
+1. Build all services across different platforms.
+2. Build docker images for all services.
+3. Run tests for all services.
+4. Run linting for all services.
 
-  </Accordion>
-  <Accordion title="Getting an unknown error">
-    Try navigating to the root of your device and delete the ~/.mintlify folder.
-    Then run `mintlify dev` again.
-  </Accordion>
-</AccordionGroup>
+## Continuous Delivery
 
-Curious about what changed in a CLI version? [Check out the CLI changelog.](/changelog/command-line)
+Github Actions is used for continuous delivery. The workflow is located in `.github/workflows/cd.yml`.
+
+Building the docker images and pushing them to github container registry is done in the workflow.
