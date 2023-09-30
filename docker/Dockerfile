@@ -1,5 +1,4 @@
 FROM golang:1.21-alpine AS builder
-LABEL org.opencontainers.image.source https://github.com/0x6flab/mpesaoverlay
 ARG SVC
 ARG GOARCH
 ARG GOARM
@@ -18,6 +17,7 @@ RUN apk update \
     && mv build/mpesa-$SVC /exe
 
 FROM scratch
+LABEL org.opencontainers.image.source https://github.com/0x6flab/mpesaoverlay
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 COPY --from=builder /exe /
 ENTRYPOINT ["/exe"]
