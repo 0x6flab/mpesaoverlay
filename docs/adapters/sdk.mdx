@@ -1,7 +1,693 @@
 ---
-title: 'SDK'
-description: 'Documentation for the Golang mpesa sdk'
-icon: 'kite'
+title: "SDK"
+description: "Documentation for the Golang mpesa sdk"
+icon: "kite"
 ---
 
-<Info>**Prerequisite** Documentation is coming soon.</Info>
+# SDK
+
+SDK is a library that provides a wrapper around the Mpesa API. It provides a simple interface to interact with the API.
+
+## Usage
+
+The SDK is available as a package on [Go Pkg](https://pkg.go.dev/github.com/0x6flab/mpesaoverlay/pkg/mpesa). To use it, import it into your project.
+
+```go
+import "github.com/0x6flab/mpesaoverlay/pkg/mpesa"
+```
+
+<AccordionGroup>
+
+  <Accordion icon="code" title="GetToken">
+  
+    <CodeGroup>
+
+        ```go main.go
+        // Copyright (c) MpesaOverlay. All rights reserved.
+        // Use of this source code is governed by a Apache-2.0 license that can be
+        // found in the LICENSE file.
+        //
+        // SPDX-License-Identifier: Apache-2.0
+
+        // Package main provides an example of how to use Token method.
+        package main
+
+        import (
+            "log"
+            "os"
+
+            "github.com/0x6flab/mpesaoverlay/pkg/mpesa"
+        )
+
+        var (
+            cKey    = os.Getenv("MPESA_CONSUMER_KEY")
+            cSecret = os.Getenv("MPESA_CONSUMER_SECRET")
+        )
+
+        func main() {
+            conf := mpesa.Config{
+                BaseURL:   "https://sandbox.safaricom.co.ke",
+                AppKey:    cKey,
+                AppSecret: cSecret,
+            }
+
+            mp, err := mpesa.NewSDK(conf)
+            if err != nil {
+                log.Fatal(err)
+            }
+
+            token, err := mp.Token()
+            if err != nil {
+                log.Fatal(err)
+            }
+
+            log.Printf("Token: %+v\n", token)
+        }
+        ```
+
+    </CodeGroup>
+
+  </Accordion>
+
+  <Accordion icon="code" title="ExpressQuery">
+
+    <CodeGroup>
+
+        ```go main.go
+        // Copyright (c) MpesaOverlay. All rights reserved.
+        // Use of this source code is governed by a Apache-2.0 license that can be
+        // found in the LICENSE file.
+        //
+        // SPDX-License-Identifier: Apache-2.0
+
+        // Package main provides an example of how to use ExpressQuery method.
+        package main
+
+        import (
+            "log"
+            "os"
+
+            "github.com/0x6flab/mpesaoverlay/pkg/mpesa"
+        )
+
+        var (
+            cKey    = os.Getenv("MPESA_CONSUMER_KEY")
+            cSecret = os.Getenv("MPESA_CONSUMER_SECRET")
+        )
+
+        func main() {
+            conf := mpesa.Config{
+                BaseURL:   "https://sandbox.safaricom.co.ke",
+                AppKey:    cKey,
+                AppSecret: cSecret,
+            }
+
+            mp, err := mpesa.NewSDK(conf)
+            if err != nil {
+                log.Fatal(err)
+            }
+
+            qrReq := mpesa.ExpressQueryReq{
+                PassKey:           "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919", // Get this from the developer portal under the test credentials section
+                BusinessShortCode: 174379,
+                CheckoutRequestID: "ws_CO_07092023195244460720136609",
+            }
+
+            resp, err := mp.ExpressQuery(qrReq)
+            if err != nil {
+                log.Fatal(err)
+            }
+
+            log.Printf("Resp: %+v\n", resp)
+        }
+        ```
+
+    </CodeGroup>
+
+  </Accordion>
+
+  <Accordion icon="code" title="ExpressSimulate">
+
+    <CodeGroup>
+
+        ```go main.go
+        // Copyright (c) MpesaOverlay. All rights reserved.
+        // Use of this source code is governed by a Apache-2.0 license that can be
+        // found in the LICENSE file.
+        //
+        // SPDX-License-Identifier: Apache-2.0
+
+        // Package main provides an example of how to use ExpressSimulate method.
+        package main
+
+        import (
+            "log"
+            "os"
+
+            "github.com/0x6flab/mpesaoverlay/pkg/mpesa"
+        )
+
+        var (
+            cKey    = os.Getenv("MPESA_CONSUMER_KEY")
+            cSecret = os.Getenv("MPESA_CONSUMER_SECRET")
+        )
+
+        func main() {
+            conf := mpesa.Config{
+                BaseURL:   "https://sandbox.safaricom.co.ke",
+                AppKey:    cKey,
+                AppSecret: cSecret,
+            }
+
+            mp, err := mpesa.NewSDK(conf)
+            if err != nil {
+                log.Fatal(err)
+            }
+
+            qrReq := mpesa.ExpressSimulateReq{
+                PassKey:           "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919", // Get this from the developer portal under the test credentials section
+                BusinessShortCode: 174379,
+                TransactionType:   "CustomerPayBillOnline",
+                PhoneNumber:       254712345678, // You can use your own phone number here
+                Amount:            1,
+                PartyA:            254712345678,
+                PartyB:            174379,
+                CallBackURL:       "https://69a2-105-163-2-116.ngrok.io",
+                AccountReference:  "CompanyXLTD",
+                TransactionDesc:   "Payment of X",
+            }
+
+            resp, err := mp.ExpressSimulate(qrReq)
+            if err != nil {
+                log.Fatal(err)
+            }
+
+            log.Printf("Resp: %+v\n", resp)
+        }
+        ```
+
+    </CodeGroup>
+
+  </Accordion>
+
+  <Accordion icon="code" title="B2CPayment">
+
+    <CodeGroup>
+
+        ```go main.go
+        // Copyright (c) MpesaOverlay. All rights reserved.
+        // Use of this source code is governed by a Apache-2.0 license that can be
+        // found in the LICENSE file.
+        //
+        // SPDX-License-Identifier: Apache-2.0
+
+        // Package main provides an example of how to use B2C payment method.
+        package main
+
+        import (
+            "log"
+            "os"
+
+            "github.com/0x6flab/mpesaoverlay/pkg/mpesa"
+            "github.com/oklog/ulid/v2"
+        )
+
+        var (
+            cKey    = os.Getenv("MPESA_CONSUMER_KEY")
+            cSecret = os.Getenv("MPESA_CONSUMER_SECRET")
+        )
+
+        func main() {
+            conf := mpesa.Config{
+                BaseURL:   "https://sandbox.safaricom.co.ke",
+                AppKey:    cKey,
+                AppSecret: cSecret,
+            }
+
+            mp, err := mpesa.NewSDK(conf)
+            if err != nil {
+                log.Fatal(err)
+            }
+
+            b2cReq := mpesa.B2CPaymentReq{
+                OriginatorConversationID: ulid.Make().String(),
+                InitiatorName:            "testapi",
+                InitiatorPassword:        "Safaricom999!*!",
+                CommandID:                "BusinessPayment",
+                Amount:                   10,
+                PartyA:                   600986,
+                PartyB:                   254712345678,
+                QueueTimeOutURL:          "https://example.com/timeout",
+                ResultURL:                "https://example.com/result",
+                Remarks:                  "test",
+                Occasion:                 "test",
+            }
+
+            resp, err := mp.B2CPayment(b2cReq)
+            if err != nil {
+                log.Fatal(err)
+            }
+
+            log.Printf("Resp: %+v\n", resp)
+        }
+        ```
+
+    </CodeGroup>
+
+  </Accordion>
+
+  <Accordion icon="code" title="AccountBalance">
+
+    <CodeGroup>
+
+        ```go main.go
+        // Copyright (c) MpesaOverlay. All rights reserved.
+        // Use of this source code is governed by a Apache-2.0 license that can be
+        // found in the LICENSE file.
+        //
+        // SPDX-License-Identifier: Apache-2.0
+
+        // Package main provides an example of how to use AccountBalance method.
+        package main
+
+        import (
+            "log"
+            "os"
+
+            "github.com/0x6flab/mpesaoverlay/pkg/mpesa"
+        )
+
+        var (
+            cKey    = os.Getenv("MPESA_CONSUMER_KEY")
+            cSecret = os.Getenv("MPESA_CONSUMER_SECRET")
+        )
+
+        func main() {
+            conf := mpesa.Config{
+                BaseURL:   "https://sandbox.safaricom.co.ke",
+                AppKey:    cKey,
+                AppSecret: cSecret,
+            }
+
+            mp, err := mpesa.NewSDK(conf)
+            if err != nil {
+                log.Fatal(err)
+            }
+
+            balReq := mpesa.AccountBalanceReq{
+                InitiatorName:     "testapi",
+                InitiatorPassword: "Safaricom999!*!",
+                CommandID:         "AccountBalance",
+                IdentifierType:    4,
+                PartyA:            600772,
+                QueueTimeOutURL:   "https://example.com/timeout",
+                ResultURL:         "https://example.com/result",
+                Remarks:           "test",
+            }
+
+            resp, err := mp.AccountBalance(balReq)
+            if err != nil {
+                log.Fatal(err)
+            }
+
+            log.Printf("Resp: %+v\n", resp)
+        }
+        ```
+
+    </CodeGroup>
+
+  </Accordion>
+
+  <Accordion icon="code" title="C2BRegisterURL">
+
+    <CodeGroup>
+
+        ```go main.go
+        // Copyright (c) MpesaOverlay. All rights reserved.
+        // Use of this source code is governed by a Apache-2.0 license that can be
+        // found in the LICENSE file.
+        //
+        // SPDX-License-Identifier: Apache-2.0
+
+        // Package main provides an example of how to use C2BRegisterURL method.
+        package main
+
+        import (
+            "log"
+            "os"
+
+            "github.com/0x6flab/mpesaoverlay/pkg/mpesa"
+        )
+
+        var (
+            cKey    = os.Getenv("MPESA_CONSUMER_KEY")
+            cSecret = os.Getenv("MPESA_CONSUMER_SECRET")
+        )
+
+        func main() {
+            conf := mpesa.Config{
+                BaseURL:   "https://sandbox.safaricom.co.ke",
+                AppKey:    cKey,
+                AppSecret: cSecret,
+            }
+
+            mp, err := mpesa.NewSDK(conf)
+            if err != nil {
+                log.Fatal(err)
+            }
+
+            c2bReq := mpesa.C2BRegisterURLReq{
+                ShortCode:       600981,
+                ResponseType:    "Completed",
+                ConfirmationURL: "https://example.com/confirmation",
+                ValidationURL:   "https://example.com/validation",
+            }
+
+            resp, err := mp.C2BRegisterURL(c2bReq)
+            if err != nil {
+                log.Fatal(err)
+            }
+
+            log.Printf("Resp: %+v\n", resp)
+        }
+        ```
+
+    </CodeGroup>
+
+  </Accordion>
+
+  <Accordion icon="code" title="C2BSimulate">
+
+    <CodeGroup>
+
+        ```go main.go
+        // Copyright (c) MpesaOverlay. All rights reserved.
+        // Use of this source code is governed by a Apache-2.0 license that can be
+        // found in the LICENSE file.
+        //
+        // SPDX-License-Identifier: Apache-2.0
+
+        // Package main provides an example of how to use C2BSimulate method.
+        package main
+
+        import (
+            "log"
+            "os"
+
+            "github.com/0x6flab/mpesaoverlay/pkg/mpesa"
+        )
+
+        var (
+            cKey    = os.Getenv("MPESA_CONSUMER_KEY")
+            cSecret = os.Getenv("MPESA_CONSUMER_SECRET")
+        )
+
+        func main() {
+            conf := mpesa.Config{
+                BaseURL:   "https://sandbox.safaricom.co.ke",
+                AppKey:    cKey,
+                AppSecret: cSecret,
+            }
+
+            mp, err := mpesa.NewSDK(conf)
+            if err != nil {
+                log.Fatal(err)
+            }
+
+            c2bReq := mpesa.C2BSimulateReq{
+                CommandID:     "CustomerBuyGoodsOnline",
+                Amount:        10,
+                Msisdn:        "254712345678",
+                BillRefNumber: "",
+                ShortCode:     600986,
+            }
+
+            resp, err := mp.C2BSimulate(c2bReq)
+            if err != nil {
+                log.Fatal(err)
+            }
+
+            log.Printf("Resp: %+v\n", resp)
+        }
+        ```
+
+    </CodeGroup>
+
+  </Accordion>
+
+  <Accordion icon="code" title="GenerateQR">
+
+    <CodeGroup>
+
+        ```go main.go
+        // Copyright (c) MpesaOverlay. All rights reserved.
+        // Use of this source code is governed by a Apache-2.0 license that can be
+        // found in the LICENSE file.
+        //
+        // SPDX-License-Identifier: Apache-2.0
+
+        // Package main provides an example of how to use GenerateQR method.
+        package main
+
+        import (
+            "log"
+            "os"
+
+            "github.com/0x6flab/mpesaoverlay/pkg/mpesa"
+        )
+
+        var (
+            cKey    = os.Getenv("MPESA_CONSUMER_KEY")
+            cSecret = os.Getenv("MPESA_CONSUMER_SECRET")
+        )
+
+        func main() {
+            conf := mpesa.Config{
+                BaseURL:   "https://sandbox.safaricom.co.ke",
+                AppKey:    cKey,
+                AppSecret: cSecret,
+            }
+
+            mp, err := mpesa.NewSDK(conf)
+            if err != nil {
+                log.Fatal(err)
+            }
+
+            qrReq := mpesa.GenerateQRReq{
+                MerchantName: "Test Supermarket",
+                RefNo:        "Invoice No",
+                Amount:       2000,
+                TrxCode:      "BG",
+                CPI:          "174379",
+                Size:         "300",
+            }
+
+            qrcode, err := mp.GenerateQR(qrReq)
+            if err != nil {
+                log.Fatal(err)
+            }
+
+            log.Printf("QR Code: %+v\n", qrcode)
+        }
+        ```
+
+    </CodeGroup>
+
+  </Accordion>
+
+  <Accordion icon="code" title="Reverse">
+
+    <CodeGroup>
+
+        ```go main.go
+        // Copyright (c) MpesaOverlay. All rights reserved.
+        // Use of this source code is governed by a Apache-2.0 license that can be
+        // found in the LICENSE file.
+        //
+        // SPDX-License-Identifier: Apache-2.0
+
+        // Package main provides an example of how to use Reverse method.
+        package main
+
+        import (
+            "log"
+            "os"
+
+            "github.com/0x6flab/mpesaoverlay/pkg/mpesa"
+        )
+
+        var (
+            cKey    = os.Getenv("MPESA_CONSUMER_KEY")
+            cSecret = os.Getenv("MPESA_CONSUMER_SECRET")
+        )
+
+        func main() {
+            conf := mpesa.Config{
+                BaseURL:   "https://sandbox.safaricom.co.ke",
+                AppKey:    cKey,
+                AppSecret: cSecret,
+            }
+
+            mp, err := mpesa.NewSDK(conf)
+            if err != nil {
+                log.Fatal(err)
+            }
+
+            reverseReq := mpesa.ReverseReq{
+                InitiatorName:          "testapi",
+                InitiatorPassword:      "Safaricom999!*!",
+                CommandID:              "TransactionReversal",
+                TransactionID:          "RI704KI9RW",
+                Amount:                 10,
+                ReceiverParty:          600992,
+                RecieverIdentifierType: 11,
+                QueueTimeOutURL:        "https://example.com/timeout",
+                ResultURL:              "https://example.com/result",
+                Remarks:                "test",
+                Occasion:               "test",
+            }
+
+            resp, err := mp.Reverse(reverseReq)
+            if err != nil {
+                log.Fatal(err)
+            }
+
+            log.Printf("Resp: %+v\n", resp)
+        }
+        ```
+
+    </CodeGroup>
+
+  </Accordion>
+
+  <Accordion icon="code" title="TransactionStatus">
+
+    <CodeGroup>
+
+        ```go main.go
+        // Copyright (c) MpesaOverlay. All rights reserved.
+        // Use of this source code is governed by a Apache-2.0 license that can be
+        // found in the LICENSE file.
+        //
+        // SPDX-License-Identifier: Apache-2.0
+
+        // Package main provides an example of how to use TransactionStatus method.
+        package main
+
+        import (
+            "log"
+            "os"
+
+            "github.com/0x6flab/mpesaoverlay/pkg/mpesa"
+        )
+
+        var (
+            cKey    = os.Getenv("MPESA_CONSUMER_KEY")
+            cSecret = os.Getenv("MPESA_CONSUMER_SECRET")
+        )
+
+        func main() {
+            conf := mpesa.Config{
+                BaseURL:   "https://sandbox.safaricom.co.ke",
+                AppKey:    cKey,
+                AppSecret: cSecret,
+            }
+
+            mp, err := mpesa.NewSDK(conf)
+            if err != nil {
+                log.Fatal(err)
+            }
+
+            trxReq := mpesa.TransactionStatusReq{
+                InitiatorName:     "testapi",
+                InitiatorPassword: "Safaricom999!*!",
+                CommandID:         "TransactionStatusQuery",
+                IdentifierType:    1,
+                TransactionID:     "RI704KI9RW",
+                PartyA:            254759764065,
+                QueueTimeOutURL:   "https://example.com/timeout",
+                ResultURL:         "https://example.com/result",
+                Remarks:           "test",
+                Occasion:          "test",
+            }
+
+            resp, err := mp.TransactionStatus(trxReq)
+            if err != nil {
+                log.Fatal(err)
+            }
+
+            log.Printf("Resp: %+v\n", resp)
+        }
+        ```
+
+    </CodeGroup>
+
+  </Accordion>
+
+  <Accordion icon="code" title="RemitTax">
+
+    <CodeGroup>
+
+        ```go main.go
+        // Copyright (c) MpesaOverlay. All rights reserved.
+        // Use of this source code is governed by a Apache-2.0 license that can be
+        // found in the LICENSE file.
+        //
+        // SPDX-License-Identifier: Apache-2.0
+
+        // Package main provides an example of how to use RemitTax method.
+        package main
+
+        import (
+            "log"
+            "os"
+
+            "github.com/0x6flab/mpesaoverlay/pkg/mpesa"
+        )
+
+        var (
+            cKey    = os.Getenv("MPESA_CONSUMER_KEY")
+            cSecret = os.Getenv("MPESA_CONSUMER_SECRET")
+        )
+
+        func main() {
+            conf := mpesa.Config{
+                BaseURL:   "https://sandbox.safaricom.co.ke",
+                AppKey:    cKey,
+                AppSecret: cSecret,
+            }
+
+            mp, err := mpesa.NewSDK(conf)
+            if err != nil {
+                log.Fatal(err)
+            }
+
+            taxReq := mpesa.RemitTaxReq{
+                InitiatorName:          "testapi",
+                InitiatorPassword:      "Safaricom999!*!",
+                CommandID:              "PayTaxToKRA",
+                SenderIdentifierType:   4,
+                RecieverIdentifierType: 4,
+                Amount:                 239,
+                PartyA:                 600978,
+                PartyB:                 572572,
+                AccountReference:       "353353",
+                QueueTimeOutURL:        "https://example.com/timeout",
+                ResultURL:              "https://example.com/result",
+                Remarks:                "test",
+            }
+
+            resp, err := mp.RemitTax(taxReq)
+            if err != nil {
+                log.Fatal(err)
+            }
+
+            log.Printf("Resp: %+v\n", resp)
+        }
+        ```
+
+    </CodeGroup>
+
+  </Accordion>
+
+</AccordionGroup>
