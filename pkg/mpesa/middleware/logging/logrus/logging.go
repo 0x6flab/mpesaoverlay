@@ -254,7 +254,7 @@ func (lm *loggingMiddleware) RemitTax(rReq mpesa.RemitTaxReq) (resp mpesa.RemitT
 			"CommandID":              rReq.CommandID,
 			"InitiatorName":          rReq.InitiatorName,
 			"SenderIdentifierType":   rReq.SenderIdentifierType,
-			"ReceiverIdentifierType": rReq.RecieverIdentifierType,
+			"RecieverIdentifierType": rReq.RecieverIdentifierType,
 			"Amount":                 rReq.Amount,
 			"PartyA":                 rReq.PartyA,
 			"PartyB":                 rReq.PartyB,
