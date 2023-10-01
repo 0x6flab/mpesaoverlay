@@ -167,7 +167,7 @@ func (lm *loggingMiddleware) Reverse(rReq mpesa.ReverseReq) (resp mpesa.ReverseR
 			log.String("TransactionID", rReq.TransactionID),
 			log.Uint64("Amount", rReq.Amount),
 			log.Uint64("ReceiverParty", rReq.ReceiverParty),
-			log.Int("ReceiverIdentifierType", int(rReq.RecieverIdentifierType)),
+			log.Int("RecieverIdentifierType", int(rReq.RecieverIdentifierType)),
 		)
 	}(time.Now())
 
@@ -201,7 +201,7 @@ func (lm *loggingMiddleware) RemitTax(rReq mpesa.RemitTaxReq) (resp mpesa.RemitT
 			log.String("InitiatorName", rReq.InitiatorName),
 			log.String("CommandID", rReq.CommandID),
 			log.Int("SenderIdentifierType", int(rReq.SenderIdentifierType)),
-			log.Int("ReceiverIdentifierType", int(rReq.RecieverIdentifierType)),
+			log.Int("RecieverIdentifierType", int(rReq.RecieverIdentifierType)),
 			log.Uint64("Amount", rReq.Amount),
 			log.Uint64("PartyA", rReq.PartyA),
 			log.Uint64("PartyB", rReq.PartyB),
