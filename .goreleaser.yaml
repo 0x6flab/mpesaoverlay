@@ -108,35 +108,6 @@ snapshot:
 checksum:
   name_template: "{{ .ProjectName }}-{{ .Version }}-checksums.txt"
 
-changelog:
-  sort: asc
-  filters:
-    exclude:
-      - "^Bump*"
-      - Merge pull request
-      - Merge branch
-  groups:
-    - title: Dependency updates
-      regexp: "(deps|Dep|Update|Upgrade)"
-      order: 300
-    - title: "New Features"
-      regexp: "(feat|Feat|Feature|Add|Create)"
-      order: 100
-    - title: "Security updates"
-      regexp: "(sec|security|Security)"
-      order: 150
-    - title: "Bug fixes"
-      regexp: "(fix|Fix|Bug|bug)"
-      order: 200
-    - title: "Documentation updates"
-      regexp: "(docs|doc|Docs|Doc)"
-      order: 400
-    - title: "Build process updates"
-      regexp: "(build|Build|CI|CD)"
-      order: 400
-    - title: Other work
-      order: 9999
-
 source:
   enabled: true
   name_template: "{{ .ProjectName }}-{{ .Version }}-source"
