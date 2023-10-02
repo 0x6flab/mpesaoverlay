@@ -86,8 +86,9 @@ test:
 	go generate ./...
 	go test -mod=vendor -v -race -count 1 -tags test -covermode=atomic -coverprofile cover.out $(shell go list ./... | grep -v 'vendor\|cmd')
 
-changelog:
-	git log $(shell git describe --tags --abbrev=0)..HEAD --pretty=format:"- %s"
+version:
+	# npm i -g standard-version
+	standard-version
 
 proto:
 	go install github.com/anjmao/go2proto@latest
