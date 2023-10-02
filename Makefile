@@ -87,9 +87,9 @@ test:
 	go test -mod=vendor -v -race -count 1 -tags test -covermode=atomic -coverprofile cover.out $(shell go list ./... | grep -v 'vendor\|cmd')
 
 version:
-	# npm i -g standard-version
 	standard-version
-	goreleaser release --clean
+	goreleaser release --clean --release-notes CHANGELOG.md
+	git push --follow-tags origin main
 
 proto:
 	go install github.com/anjmao/go2proto@latest
