@@ -111,13 +111,3 @@ checksum:
 source:
   enabled: true
   name_template: "{{ .ProjectName }}-{{ .Version }}-source"
-
-release:
-  footer: |
-    ## Where to go next?
-
-    * Find examples and usage in this [website](https://mpesaoverlay.rodneyosodo.com/).
-
-    ## Stargazers over time
-
-    [![Stargazers over time](https://starchart.cc/0x6flab/mpesaoverlay.svg)](https://starchart.cc/0x6flab/mpesaoverlay)
