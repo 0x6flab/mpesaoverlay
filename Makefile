@@ -15,7 +15,6 @@ define compile_service
 	-X 'github.com/0x6flab/mpesaoverlay.BuildTime=$(TIME)' \
 	-X 'github.com/0x6flab/mpesaoverlay.Version=$(VERSION)' \
 	-X 'github.com/0x6flab/mpesaoverlay.Commit=$(COMMIT)'" \
-	-gcflags "all=-N -l" \
 	-o ${BUILD_DIR}/mpesa-$(1) cmd/$(1)/main.go
 endef
 

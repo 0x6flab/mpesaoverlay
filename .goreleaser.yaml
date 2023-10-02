@@ -14,8 +14,6 @@ builds:
     binary: mpesa-cli
     ldflags:
       - "-s -w -X github.com/0x6flab/mpesaoverlay.Version={{.Version}} -X github.com/0x6flab/mpesaoverlay.Commit={{.FullCommit}} -X github.com/0x6flab/mpesaoverlay.BuildTime={{.Timestamp}}"
-    gcflags:
-      - "all=-N -l"
     goos:
       - linux
       - windows
@@ -41,8 +39,6 @@ builds:
     binary: mpesa-grpc
     ldflags:
       - "-s -w -X github.com/0x6flab/mpesaoverlay.Version={{.Version}} -X github.com/0x6flab/mpesaoverlay.Commit={{.FullCommit}} -X github.com/0x6flab/mpesaoverlay.BuildTime={{.Timestamp}}"
-    gcflags:
-      - "all=-N -l"
     goos:
       - linux
       - windows
@@ -68,8 +64,6 @@ builds:
     binary: mpesa-mqtt
     ldflags:
       - "-s -w -X github.com/0x6flab/mpesaoverlay.Version={{.Version}} -X github.com/0x6flab/mpesaoverlay.Commit={{.FullCommit}} -X github.com/0x6flab/mpesaoverlay.BuildTime={{.Timestamp}}"
-    gcflags:
-      - "all=-N -l"
     goos:
       - linux
       - windows
