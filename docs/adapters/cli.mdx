@@ -4,4 +4,122 @@ description: "The command line interface for mpesaoverlay."
 icon: "terminal"
 ---
 
-<Info>**Prerequisite** Documentation is coming soon.</Info>
+# CLI
+
+Mpesaoverlay has a simple CLI that can be used to interact with the Mpesa API.
+
+## Running
+
+To run the CLI, you can use the following command:
+
+```bash
+make cli
+make install
+```
+
+## Usage
+
+```bash
+$ mpesa-cli --help
+
+usage: mpesa [<flags>] <command> [<args> ...]
+
+Mpesa Daraja CLI
+
+  See 'mpesa cheat' for a quick tutorial.
+
+Commands:
+  cheat              Shows cheats for mpesa
+  token              Get a token
+  stkpush            Simulate STK Push
+  stkpushquery       Query STK Push
+  b2c                Simulate B2C Payment
+  balance            Check Account Balance
+  c2bregisterurl     Register C2B URL
+  c2bsimulate        Simulate C2B Payment
+  qrcode             Generate QR Code
+  reversal           Simulate Reversal
+  remittax           Simulate Remittance Tax
+  transactionstatus  Simulate Transaction Status
+
+Global Flags:
+      --help                             Show context-sensitive help
+      --version                          Show application version.
+  -k, --consumer-key=CONSUMER-KEY        Mpesa Consumer Key ($MPESA_CONSUMER_KEY)
+  -s, --consumer-secret=CONSUMER-SECRET  Mpesa Consumer Secret ($MPESA_CONSUMER_SECRET)
+  -b, --base-url=BASE-URL                Mpesa Base URL ($MPESA_BASE_URL)
+```
+
+<AccordionGroup>
+
+  <Accordion icon="code" title="GetToken">
+    
+    [![asciicast](https://asciinema.org/a/611606.svg)](https://asciinema.org/a/611606)
+
+  </Accordion>
+
+  <Accordion icon="code" title="ExpressQuery">
+    
+    [![asciicast](https://asciinema.org/a/611615.svg)](https://asciinema.org/a/611615)
+
+  </Accordion>
+
+  <Accordion icon="code" title="ExpressSimulate">
+    
+    [![asciicast](https://asciinema.org/a/611618.svg)](https://asciinema.org/a/611618)
+
+  </Accordion>
+
+  <Accordion icon="code" title="B2CPayment">
+    
+    [![asciicast](https://asciinema.org/a/611608.svg)](https://asciinema.org/a/611608)
+
+  </Accordion>
+
+  <Accordion icon="code" title="AccountBalance">
+    
+    [![asciicast](https://asciinema.org/a/611609.svg)](https://asciinema.org/a/611609)
+
+  </Accordion>
+
+  <Accordion icon="code" title="C2BRegisterURL">
+    
+    [![asciicast](https://asciinema.org/a/611610.svg)](https://asciinema.org/a/611610)
+
+  </Accordion>
+
+  <Accordion icon="code" title="C2BSimulate">
+    
+    [![asciicast](https://asciinema.org/a/611612.svg)](https://asciinema.org/a/611612)
+
+  </Accordion>
+
+  <Accordion icon="code" title="GenerateQR">
+    
+    [![asciicast](https://asciinema.org/a/611613.svg)](https://asciinema.org/a/611613)
+
+  </Accordion>
+
+  <Accordion icon="code" title="Reverse">
+    
+    [![asciicast](https://asciinema.org/a/611616.svg)](https://asciinema.org/a/611616)
+
+  </Accordion>
+
+  <Accordion icon="code" title="TransactionStatus">
+    
+    [![asciicast](https://asciinema.org/a/611620.svg)](https://asciinema.org/a/611620)
+
+  </Accordion>
+
+  <Accordion icon="code" title="RemitTax">
+    
+    [![asciicast](https://asciinema.org/a/611619.svg)](https://asciinema.org/a/611619)
+
+  </Accordion>
+
+</AccordionGroup>
+
+## Supprt
+
+- [ ] CLI arguments are not supported.
