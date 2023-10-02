@@ -118,27 +118,27 @@ changelog:
   sort: asc
   filters:
     exclude:
-      - "^chore(deps):"
+      - "^Bump*"
       - Merge pull request
       - Merge branch
   groups:
     - title: Dependency updates
-      regexp: '^.*?(feat|fix)\(deps\)!?:.+$'
+      regexp: "(deps|Dep|Update|Upgrade)"
       order: 300
     - title: "New Features"
-      regexp: '^.*?feat(\([[:word:]]+\))??!?:.+$'
+      regexp: "(feat|Feat|Feature|Add|Create)"
       order: 100
     - title: "Security updates"
-      regexp: '^.*?sec(\([[:word:]]+\))??!?:.+$'
+      regexp: "(sec|security|Security)"
       order: 150
     - title: "Bug fixes"
-      regexp: '^.*?fix(\([[:word:]]+\))??!?:.+$'
+      regexp: "(fix|Fix|Bug|bug)"
       order: 200
     - title: "Documentation updates"
-      regexp: ^.*?doc(\([[:word:]]+\))??!?:.+$
+      regexp: "(docs|doc|Docs|Doc)"
       order: 400
     - title: "Build process updates"
-      regexp: ^.*?build(\([[:word:]]+\))??!?:.+$
+      regexp: "(build|Build|CI|CD)"
       order: 400
     - title: Other work
       order: 9999
@@ -149,8 +149,6 @@ source:
 
 release:
   footer: |
-    **Full Changelog**: https://github.com/0x6flab/mpesaoverlay/compare/{{ .PreviousTag }}...{{ .Tag }}
-
     ## Where to go next?
 
     * Find examples and usage in this [website](https://mpesaoverlay.rodneyosodo.com/).
