@@ -1,13 +1,14 @@
 # MpesaOverlay
 
 [![CI](https://github.com/0x6flab/mpesaoverlay/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/0x6flab/mpesaoverlay/actions/workflows/ci.yaml)
-[![docker](https://github.com/0x6flab/mpesaoverlay/actions/workflows/docker.yaml/badge.svg)](https://github.com/0x6flab/mpesaoverlay/actions/workflows/docker.yaml)
+[![CD](https://github.com/0x6flab/mpesaoverlay/actions/workflows/cd.yaml/badge.svg)](https://github.com/0x6flab/mpesaoverlay/actions/workflows/cd.yaml)
+[![CodeQL](https://github.com/0x6flab/mpesaoverlay/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/0x6flab/mpesaoverlay/actions/workflows/github-code-scanning/codeql)
 ![GitHub](https://img.shields.io/github/license/0x6flab/mpesaoverlay)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/0x6flab/mpesaoverlay)
 ![GitHub go.mod Go version (subdirectory of monorepo)](https://img.shields.io/github/go-mod/go-version/0x6flab/mpesaoverlay)
 [![go.dev reference](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white&style=flat-square)](https://pkg.go.dev/github.com/0x6flab/mpesaoverlay)
 [![Go Report Card](https://goreportcard.com/badge/github.com/0x6flab/mpesaoverlay)](https://goreportcard.com/report/github.com/0x6flab/mpesaoverlay)
-[![Coverage Status](https://coveralls.io/repos/github/0x6flab/mpesaoverlay/badge.svg?branch=main%0Amo-28)](https://coveralls.io/github/0x6flab/mpesaoverlay?branch=main%0Amo-28)
+[![Coverage Status](https://coveralls.io/repos/github/0x6flab/mpesaoverlay/badge.svg?branch=main)](https://coveralls.io/github/0x6flab/mpesaoverlay?branch=main)
 
 MpesaOverlay is modern, scalable, secure open source and patent-free API overlay for the Daraja API by Safaricom written in Go.
 
