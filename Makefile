@@ -89,6 +89,7 @@ test:
 version:
 	# npm i -g standard-version
 	standard-version
+	goreleaser release --clean
 
 proto:
 	go install github.com/anjmao/go2proto@latest
