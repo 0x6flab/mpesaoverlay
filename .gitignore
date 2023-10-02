@@ -19,3 +19,4 @@ vendor/
 
 # Build directory
 build/
+dist/
