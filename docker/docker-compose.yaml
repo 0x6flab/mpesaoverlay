@@ -4,6 +4,10 @@ networks:
   mpesaoverlay-base-net:
     driver: bridge
 
+volumes:
+  mpesaoverlay-grafana-loki:
+  mpesaoverlay-grafana:
+
 services:
   proxy:
     image: traefik:v2.10.4
@@ -62,5 +66,43 @@ services:
     restart: on-failure
     ports:
       - ${MO_PROMETHEUS_PUSH_GATEWAY_PORT}:${MO_PROMETHEUS_PUSH_GATEWAY_PORT}
+    networks:
+      - mpesaoverlay-base-net
+
+  loki:
+    image: grafana/loki:2.9.1
+    container_name: mpesaoverlay-loki
+    restart: on-failure
+    ports:
+      - ${MO_LOKI_PORT}
+    volumes:
+      - mpesaoverlay-grafana-loki:/loki
+    networks:
+      - mpesaoverlay-base-net
+
+  promtail:
+    image: grafana/promtail:2.9.1
+    container_name: mpesaoverlay-promtail
+    restart: on-failure
+    volumes:
+      - ./promtail/config.yaml:/etc/promtail/config.yaml
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: -config.file=/etc/promtail/config.yaml
+    depends_on:
+      - loki
+    networks:
+      - mpesaoverlay-base-net
+
+  grafana:
+    image: grafana/grafana:10.1.4
+    container_name: mpesaoverlay-grafana
+    restart: on-failure
+    ports:
+      - ${MO_GRAFANA_PORT}:${MO_GRAFANA_PORT}
+    volumes:
+      - mpesaoverlay-grafana:/var/lib/grafana
+      - ./grafana/example.json:/var/lib/grafana/dashboards/example.json
+      - ./grafana/datasources.yaml:/etc/grafana/provisioning/datasources/loki.yaml
     networks:
       - mpesaoverlay-base-net
