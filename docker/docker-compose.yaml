@@ -5,7 +5,26 @@ networks:
     driver: bridge
 
 services:
-  grpc:
+  proxy:
+    image: traefik:v2.10.4
+    container_name: mpesaoverlay-traefik
+    restart: on-failure
+    depends_on:
+      - grpc-adapter
+      - mqtt-adapter
+    ports:
+      - ${MO_HTTP_PORT}:${MO_HTTP_PORT}
+      - ${MO_HTTPS_PORT}:${MO_HTTPS_PORT}
+      - ${MO_MQTT_PORT}:${MO_MQTT_PORT}
+      - ${MO_MQTTS_PORT}:${MO_MQTTS_PORT}
+      - 8080:8080 # dashboard
+    volumes:
+      - ./traefik/traefik.yaml:/etc/traefik/traefik.yaml
+      - ./traefik/dynamic.yaml:/etc/traefik/dynamic.yaml
+    networks:
+      - mpesaoverlay-base-net
+
+  grpc-adapter:
     image: ghcr.io/0x6flab/mpesaoverlay/grpc:${MO_RELEASE_TAG}
     container_name: mpesaoverlay-grpc
     restart: on-failure
@@ -18,12 +37,10 @@ services:
       MO_GRPC_SERVER_CERT: ${MO_GRPC_SERVER_CERT}
       MO_GRPC_SERVER_KEY: ${MO_GRPC_SERVER_KEY}
       MO_PROMETHEUS_URL: ${MO_PROMETHEUS_URL}
-    ports:
-      - ${MO_GRPC_PORT}:${MO_GRPC_PORT}
     networks:
       - mpesaoverlay-base-net
 
-  mqtt:
+  mqtt-adapter:
     image: ghcr.io/0x6flab/mpesaoverlay/mqtt:${MO_RELEASE_TAG}
     container_name: mpesaoverlay-mqtt
     restart: on-failure
@@ -36,8 +53,6 @@ services:
       MO_MQTT_SERVER_CERT: ${MO_MQTT_SERVER_CERT}
       MO_MQTT_SERVER_KEY: ${MO_MQTT_SERVER_KEY}
       MO_PROMETHEUS_URL: ${MO_PROMETHEUS_URL}
-    ports:
-      - ${MO_MQTT_PORT}:${MO_MQTT_PORT}
     networks:
       - mpesaoverlay-base-net
 
