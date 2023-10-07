@@ -5,3 +5,9 @@ datasources:
     type: loki
     url: http://loki:3100
     isDefault: true
+
+  - name: Prometheus
+    type: prometheus
+    url: http://mpesaoverlay-prometheus:9090
+    access: proxy
+    editable: true
