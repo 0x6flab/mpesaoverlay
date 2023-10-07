@@ -20,6 +20,8 @@ import (
 
 	mqttadapter "github.com/0x6flab/mpesaoverlay/mqtt"
 	"github.com/0x6flab/mpesaoverlay/pkg/mpesa"
+	zapm "github.com/0x6flab/mpesaoverlay/pkg/mpesa/middleware/logging/zap"
+	prometheusm "github.com/0x6flab/mpesaoverlay/pkg/mpesa/middleware/metrics/prometheus"
 	"github.com/caarlos0/env/v9"
 	mqtt "github.com/mochi-mqtt/server/v2"
 	"github.com/mochi-mqtt/server/v2/hooks/auth"
@@ -94,7 +96,12 @@ func newService(cfg config, logger *zap.Logger) (*mqttadapter.Hook, error) {
 		AppSecret: cfg.ConsumerSecret,
 	}
 
-	sdk, err := mpesa.NewSDK(mpesaCfg)
+	var opts = []mpesa.Option{zapm.WithLogger(logger)}
+	if cfg.PrometheusURL != "" {
+		opts = append(opts, prometheusm.WithMetrics(svcName, cfg.PrometheusURL))
+	}
+
+	sdk, err := mpesa.NewSDK(mpesaCfg, opts...)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create mpesa sdk: %w", err)
 	}
