@@ -102,12 +102,16 @@ proto:
 	sed -i 's,package proto;,package mpesaoverlay.grpc;\noption go_package = "./grpc";,g' grpc/responses.proto
 	sed -i 's/uint8/uint32/g' grpc/responses.proto
 	protoc -I. --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative grpc/*.proto
+cert:
+	openssl req -x509 -nodes -days 365 -newkey rsa:4096 -keyout docker/certs/cert.key -out docker/certs/cert.crt -subj "/C=KE/ST=Nairobi/L=Nairobi/O=0x6flab/CN=mpesaoverlay" && \
+	chmod 644 docker/certs/cert.key && \
+	chmod 600 docker/certs/cert.crt
 
 run:
-	docker-compose -f docker/docker-compose.yml --env-file docker/.env up -d
+	docker-compose -f docker/docker-compose.yaml --env-file .env up
 
 logs:
-	docker-compose -f docker/docker-compose.yml --env-file docker/.env logs -f
+	docker-compose -f docker/docker-compose.yaml --env-file .env logs -f
 
 stop:
-	docker-compose -f docker/docker-compose.yml --env-file docker/.env down
+	docker-compose -f docker/docker-compose.yaml --env-file .env down
