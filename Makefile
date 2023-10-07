@@ -114,4 +114,4 @@ logs:
 	docker-compose -f docker/docker-compose.yaml --env-file .env logs -f
 
 stop:
-	docker-compose -f docker/docker-compose.yaml --env-file .env down
+	docker-compose -f docker/docker-compose.yaml --env-file .env down -v
