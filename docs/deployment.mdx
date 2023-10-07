@@ -3,4 +3,173 @@ title: "Deployment"
 description: "How to deploy your application to the cloud."
 ---
 
-<Info>**Prerequisite** Documentation is coming soon.</Info>
+To ensure robust monitoring and observability, this deployment guide explores the integration of Traefik as a reverse proxy,
+along with essential components like Loki and Prometheus for log and metric management.
+
+## Introduction
+
+MpesaOverlay is a versatile platform designed to bridge the gap between different client applications and the Daraja API by Safaricom.
+One critical aspect of managing such a system is efficient monitoring, log aggregation, and metric collection.
+This is where Traefik, Loki, and Prometheus come into play.
+
+### Traefik: The Reverse Proxy
+
+Traefik is a popular reverse proxy and load balancer that excels at routing traffic to various services.
+In our deployment configuration, Traefik plays a pivotal role in handling both HTTP and TCP traffic,
+ensuring that requests are directed to the appropriate services within the MpesaOverlay platform.
+
+### HTTP Routing
+
+Traefik's HTTP routers are configured to handle requests to the gRPC adapter service.
+They utilize rules that match specific path prefixes, such as `/mpesaoverlay.grpc.Service/` and `/grpc.reflection.v1alpha.ServerReflection/`.
+These routers are equipped with essential middlewares like `compression`, `retry`, and `realip`, which enhance the request-response pipeline.
+
+### TCP Routing
+
+On the TCP front, Traefik sets up routers to handle MQTT traffic.
+These routers use `HostSNI` rules to match all Host Server Name Indicators, effectively routing MQTT requests to the MQTT adapter service.
+The `inflightconn` middleware is applied here to manage the number of concurrent connections.
+
+### Configuration Providers
+
+Traefik's configuration can be dynamically updated using providers.
+In this configuration, a file provider watches for changes in a dynamic configuration file, allowing for real-time adjustments to routing and settings.
+
+### Entry Points
+
+Entry points define the ports and protocols through which traffic enters Traefik. In our setup, we have defined entry points for gRPC, MQTT, and MQTT Secure.
+
+## Service Containers
+
+The Docker containers for each service are specified with images, container names, restart policies, and environment variables.
+Ports are exposed to enable external access to the services.
+
+```yaml
+version: "3.7"
+
+networks:
+  mpesaoverlay-base-net:
+    driver: bridge
+
+volumes:
+  mpesaoverlay-grafana-loki:
+  mpesaoverlay-grafana:
+  mpesaoverlay-prometheus:
+
+services:
+  proxy:
+    image: traefik:v2.10.4
+    container_name: mpesaoverlay-traefik
+    restart: on-failure
+    depends_on:
+      - grpc-adapter
+      - mqtt-adapter
+    ports:
+      - ${MO_HTTP_PORT}:${MO_HTTP_PORT}
+      - ${MO_HTTPS_PORT}:${MO_HTTPS_PORT}
+      - ${MO_MQTT_PORT}:${MO_MQTT_PORT}
+      - ${MO_MQTTS_PORT}:${MO_MQTTS_PORT}
+      - 8080:8080 # dashboard
+    volumes:
+      - ./traefik/traefik.yaml:/etc/traefik/traefik.yaml
+      - ./traefik/dynamic.yaml:/etc/traefik/dynamic.yaml
+    networks:
+      - mpesaoverlay-base-net
+
+  grpc-adapter:
+    image: ghcr.io/0x6flab/mpesaoverlay/grpc:${MO_RELEASE_TAG}
+    container_name: mpesaoverlay-grpc
+    restart: on-failure
+    environment:
+      MO_LOG_LEVEL: ${MO_LOG_LEVEL}
+      MPESA_CONSUMER_KEY: ${MPESA_CONSUMER_KEY}
+      MPESA_CONSUMER_SECRET: ${MPESA_CONSUMER_SECRET}
+      MPESA_BASE_URL: ${MPESA_BASE_URL}
+      MO_GRPC_URL: ${MO_GRPC_URL}
+      MO_GRPC_SERVER_CERT: ${MO_GRPC_SERVER_CERT}
+      MO_GRPC_SERVER_KEY: ${MO_GRPC_SERVER_KEY}
+      MO_PROMETHEUS_URL: ${MO_PROMETHEUS_URL}
+    networks:
+      - mpesaoverlay-base-net
+
+  mqtt-adapter:
+    image: ghcr.io/0x6flab/mpesaoverlay/mqtt:${MO_RELEASE_TAG}
+    container_name: mpesaoverlay-mqtt
+    restart: on-failure
+    environment:
+      MO_LOG_LEVEL: ${MO_LOG_LEVEL}
+      MPESA_CONSUMER_KEY: ${MPESA_CONSUMER_KEY}
+      MPESA_CONSUMER_SECRET: ${MPESA_CONSUMER_SECRET}
+      MPESA_BASE_URL: ${MPESA_BASE_URL}
+      MO_MQTT_URL: ${MO_MQTT_URL}
+      MO_MQTT_SERVER_CERT: ${MO_MQTT_SERVER_CERT}
+      MO_MQTT_SERVER_KEY: ${MO_MQTT_SERVER_KEY}
+      MO_PROMETHEUS_URL: ${MO_PROMETHEUS_URL}
+    networks:
+      - mpesaoverlay-base-net
+
+  prometheus-pushgateway:
+    image: prom/pushgateway:v1.6.2
+    container_name: mpesaoverlay-prometheus-pushgateway
+    restart: on-failure
+    ports:
+      - ${MO_PROMETHEUS_PUSH_GATEWAY_PORT}:${MO_PROMETHEUS_PUSH_GATEWAY_PORT}
+    networks:
+      - mpesaoverlay-base-net
+
+  prometheus:
+    image: prom/prometheus:v2.47.1
+    container_name: mpesaoverlay-prometheus
+    restart: on-failure
+    volumes:
+      - ./prometheus/config.yaml:/etc/prometheus/prometheus.yaml
+      - mpesaoverlay-prometheus:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yaml"
+    ports:
+      - ${MO_PROMETHEUS_PORT}:${MO_PROMETHEUS_PORT}
+    networks:
+      - mpesaoverlay-base-net
+
+  loki:
+    image: grafana/loki:2.9.1
+    container_name: mpesaoverlay-loki
+    restart: on-failure
+    ports:
+      - ${MO_LOKI_PORT}
+    volumes:
+      - mpesaoverlay-grafana-loki:/loki
+    networks:
+      - mpesaoverlay-base-net
+
+  promtail:
+    image: grafana/promtail:2.9.1
+    container_name: mpesaoverlay-promtail
+    restart: on-failure
+    volumes:
+      - ./promtail/config.yaml:/etc/promtail/config.yaml
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: -config.file=/etc/promtail/config.yaml
+    depends_on:
+      - loki
+    networks:
+      - mpesaoverlay-base-net
+
+  grafana:
+    image: grafana/grafana:10.1.4
+    container_name: mpesaoverlay-grafana
+    restart: on-failure
+    ports:
+      - ${MO_GRAFANA_PORT}:${MO_GRAFANA_PORT}
+    volumes:
+      - mpesaoverlay-grafana:/var/lib/grafana
+      - ./grafana/datasources.yaml:/etc/grafana/provisioning/datasources/loki.yaml
+      - ./grafana/dashboard.yaml:/etc/grafana/provisioning/dashboards/main.yaml
+      - ./grafana/example.json:/var/lib/grafana/dashboards/example-dashboard.json
+    networks:
+      - mpesaoverlay-base-net
+```
+
+With Traefik as a reverse proxy and load balancer, HTTP and TCP traffic can be efficiently routed to the appropriate services.
+Meanwhile, Loki and Prometheus handle log aggregation and metric collection, ensuring that you have a clear view of the platform's performance.
