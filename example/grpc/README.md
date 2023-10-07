@@ -9,7 +9,7 @@ A [postman collection](https://www.postman.com/ox6flab/workspace/mpesaoverlay) i
 ## Token
 
 ```bash
-grpcurl -plaintext -d @ localhost:9000 mpesaoverlay.grpc.Service/Token <<EOM
+grpcurl -plaintext -d @ localhost:443 mpesaoverlay.grpc.Service/Token <<EOM
 {}
 EOM
 ```
@@ -17,7 +17,7 @@ EOM
 ## STKPush
 
 ```bash
-grpcurl -plaintext -d @ localhost:9000 mpesaoverlay.grpc.Service/ExpressSimulate <<EOM
+grpcurl -plaintext -d @ localhost:443 mpesaoverlay.grpc.Service/ExpressSimulate <<EOM
 {
     "accountReference": "CompanyXLTD",
     "amount": "1",
@@ -36,7 +36,7 @@ EOM
 ## STKQuery
 
 ```bash
-grpcurl -plaintext -d @ localhost:9000 mpesaoverlay.grpc.Service/ExpressQuery <<EOM
+grpcurl -plaintext -d @ localhost:443 mpesaoverlay.grpc.Service/ExpressQuery <<EOM
 {
     "businessShortCode": "174379",
     "checkoutRequestID": "ws_CO_01102023223251412720136609",
@@ -48,7 +48,7 @@ EOM
 ## B2CPayment
 
 ```bash
-grpcurl -plaintext -d @ localhost:9000 mpesaoverlay.grpc.Service/B2CPayment <<EOM
+grpcurl -plaintext -d @ localhost:443 mpesaoverlay.grpc.Service/B2CPayment <<EOM
 {
     "amount": "10",
     "commandID": "BusinessPayment",
@@ -68,7 +68,7 @@ EOM
 ## AccountBalance
 
 ```bash
-grpcurl -plaintext -d @ localhost:9000 mpesaoverlay.grpc.Service/AccountBalance <<EOM
+grpcurl -plaintext -d @ localhost:443 mpesaoverlay.grpc.Service/AccountBalance <<EOM
 {
     "commandID": "AccountBalance",
     "identifierType": 4,
@@ -85,7 +85,7 @@ EOM
 ## C2BRegisterURL
 
 ```bash
-grpcurl -plaintext -d @ localhost:9000 mpesaoverlay.grpc.Service/C2BRegisterURL <<EOM
+grpcurl -plaintext -d @ localhost:443 mpesaoverlay.grpc.Service/C2BRegisterURL <<EOM
 {
     "confirmationURL": "https://example.com",
     "responseType": "Completed",
@@ -98,7 +98,7 @@ EOM
 ## C2BSimulate
 
 ```bash
-grpcurl -plaintext -d @ localhost:9000 mpesaoverlay.grpc.Service/C2BSimulate <<EOM
+grpcurl -plaintext -d @ localhost:443 mpesaoverlay.grpc.Service/C2BSimulate <<EOM
 {
     "amount": "10",
     "billRefNumber": "veniam ullamco",
@@ -112,7 +112,7 @@ EOM
 ## GenerateQR
 
 ```bash
-grpcurl -plaintext -d @ localhost:9000 mpesaoverlay.grpc.Service/GenerateQR <<EOM
+grpcurl -plaintext -d @ localhost:443 mpesaoverlay.grpc.Service/GenerateQR <<EOM
 {
     "amount": "2000",
     "cPI": "174379",
@@ -127,7 +127,7 @@ EOM
 ## Reverse
 
 ```bash
-grpcurl -plaintext -d @ localhost:9000 mpesaoverlay.grpc.Service/Reverse <<EOM
+grpcurl -plaintext -d @ localhost:443 mpesaoverlay.grpc.Service/Reverse <<EOM
 {
     "amount": "10",
     "commandID": "TransactionReversal",
@@ -147,7 +147,7 @@ EOM
 ## TransactionStatus
 
 ```bash
-grpcurl -plaintext -d @ localhost:9000 mpesaoverlay.grpc.Service/TransactionStatus <<EOM
+grpcurl -plaintext -d @ localhost:443 mpesaoverlay.grpc.Service/TransactionStatus <<EOM
 {
     "commandID": "TransactionStatusQuery",
     "identifierType": 1,
@@ -166,7 +166,7 @@ EOM
 ## RemitTax
 
 ```bash
-grpcurl -plaintext -d @ localhost:9000 mpesaoverlay.grpc.Service/RemitTax <<EOM
+grpcurl -plaintext -d @ localhost:443 mpesaoverlay.grpc.Service/RemitTax <<EOM
 {
     "accountReference": "353353",
     "amount": "10",
