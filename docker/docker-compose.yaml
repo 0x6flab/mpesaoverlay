@@ -7,6 +7,7 @@ networks:
 volumes:
   mpesaoverlay-grafana-loki:
   mpesaoverlay-grafana:
+  mpesaoverlay-prometheus:
 
 services:
   proxy:
@@ -69,6 +70,20 @@ services:
     networks:
       - mpesaoverlay-base-net
 
+  prometheus:
+    image: prom/prometheus:v2.47.1
+    container_name: mpesaoverlay-prometheus
+    restart: on-failure
+    volumes:
+      - ./prometheus/config.yaml:/etc/prometheus/prometheus.yaml
+      - mpesaoverlay-prometheus:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yaml"
+    ports:
+      - ${MO_PROMETHEUS_PORT}:${MO_PROMETHEUS_PORT}
+    networks:
+      - mpesaoverlay-base-net
+
   loki:
     image: grafana/loki:2.9.1
     container_name: mpesaoverlay-loki
@@ -102,7 +117,8 @@ services:
       - ${MO_GRAFANA_PORT}:${MO_GRAFANA_PORT}
     volumes:
       - mpesaoverlay-grafana:/var/lib/grafana
-      - ./grafana/example.json:/var/lib/grafana/dashboards/example.json
       - ./grafana/datasources.yaml:/etc/grafana/provisioning/datasources/loki.yaml
+      - ./grafana/dashboard.yaml:/etc/grafana/provisioning/dashboards/main.yaml
+      - ./grafana/example.json:/var/lib/grafana/dashboards/example-dashboard.json      
     networks:
       - mpesaoverlay-base-net
