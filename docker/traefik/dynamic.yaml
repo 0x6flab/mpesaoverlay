@@ -1,0 +1,56 @@
+http:
+  routers:
+    grpc-adapter:
+      rule: PathPrefix(`/mpesaoverlay.grpc.Service/`) || PathPrefix(`/grpc.reflection.v1alpha.ServerReflection/`)
+      entrypoints: grpc
+      service: grpc-adapter
+      middlewares:
+        - compress
+        - retry
+        - realip
+
+  services:
+    grpc-adapter:
+      loadBalancer:
+        servers:
+          - url: h2c://grpc-adapter:9000
+
+  middlewares:
+    compress:
+      compress: {}
+
+    retry:
+      retry:
+        attempts: 5
+        initialInterval: 100ms
+
+    realip:
+      plugin:
+        realip:
+          retrievers:
+            - header: X-Forwarded-For
+              depth: 1
+          headers:
+            - X-Real-IP
+
+tcp:
+  routers:
+    mqtt-adapter:
+      rule: "HostSNI(`*`)"
+      entrypoints:
+        - mqtt
+        - mqttsecure
+      service: mqtt-adapter
+      middlewares:
+        - inflightconn
+
+  services:
+    mqtt-adapter:
+      loadBalancer:
+        servers:
+          - address: mqtt-adapter:1883
+
+  middlewares:
+    inflightconn:
+      inFlightConn:
+        amount: 10

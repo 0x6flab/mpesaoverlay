@@ -1,0 +1,34 @@
+log:
+  level: INFO
+  filePath: "/var/log/traefik/traefik.log"
+  format: json
+
+accessLog:
+  filePath: "/var/log/traefik/access.log"
+  bufferingSize: 1000
+  format: json
+
+api:
+  dashboard: true
+  insecure: true
+
+providers:
+  file:
+    filename: /etc/traefik/dynamic.yaml
+    watch: true
+
+entryPoints:
+  grpc:
+    address: ":443"
+
+  mqtt:
+    address: ":1883"
+
+  mqttsecure:
+    address: ":8883"
+
+experimental:
+  plugins:
+    realip:
+      moduleName: github.com/Desuuuu/traefik-real-ip-plugin
+      version: v1.1.0
