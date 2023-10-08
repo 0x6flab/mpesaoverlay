@@ -36,6 +36,7 @@ const (
 	reversalEndpoint        = "mpesa/reversal/v1/request"
 	transactionEndpoint     = "mpesa/transactionstatus/v1/query"
 	taxEndpoint             = "mpesa/b2b/v1/remittax"
+	b2bEndpoint             = "mpesa/b2b/v1/paymentrequest"
 	prodCertificate         = "https://developer.safaricom.co.ke/api/v1/GenerateSecurityCredential/ProductionCertificate.cer"
 	sandboxCertificate      = "https://developer.safaricom.co.ke/api/v1/GenerateSecurityCredential/SandboxCertificate.cer"
 )
@@ -325,6 +326,37 @@ type SDK interface {
 	// Output:
 	//  2023/09/07 22:30:00 Resp: {ValidResp:{OriginatorConversationID: ConversationID:AG_20230907_201001484b176c67b3fb ResponseDescription:Accept the service request successfully. ResponseCode:0}}
 	RemitTax(rReq RemitTaxReq) (RemitTaxResp, error)
+
+	// BusinessPayBill enables you to pay bills directly from your business account to a pay bill number, or a paybill store.
+	//
+	// Documentation: https://developer.safaricom.co.ke/APIs/BusinessPayBill
+	//
+	// Example:
+	//  b2cReq := mpesa.BusinessPayBillReq{
+	//  	Initiator:              "testapi",
+	//  	InitiatorPassword:      "Safaricom999!*!",
+	//  	CommandID:              "BusinessPayBill",
+	//  	SenderIdentifierType:   4,
+	//  	RecieverIdentifierType: 4,
+	//  	Amount:                 10,
+	//  	PartyA:                 600992,
+	//  	PartyB:                 600992,
+	//  	AccountReference:       "353353",
+	//  	Requester:              254700000000,
+	//  	QueueTimeOutURL:        "https://example.com/timeout",
+	//  	ResultURL:              "https://example.com/result",
+	//  	Remarks:                "test",
+	//  }
+
+	//  resp, err := mp.BusinessPayBill(b2cReq)
+	//  if err != nil {
+	//  	log.Fatal(err)
+	//  }
+	//
+	//  log.Printf("Resp: %+v\n", resp)
+	// Output:
+	//  2023/10/08 14:17:20 Resp: {ValidResp:{OriginatorConversationID: ConversationID:AG_20231008_201077c9426503a5c3ab ResponseDescription:Accept the service request successfully. ResponseCode:0}}
+	BusinessPayBill(bpbReq BusinessPayBillReq) (BusinessPayBillResp, error)
 }
 
 // mSDK implements SDK interface.

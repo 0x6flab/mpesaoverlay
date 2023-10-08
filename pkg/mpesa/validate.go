@@ -236,6 +236,30 @@ func (r RemitTaxReq) Validate() error {
 	return nil
 }
 
+// Validate validate the struct.
+func (r BusinessPayBillReq) Validate() error {
+	if !isValidURL(r.QueueTimeOutURL) || !isValidURL(r.ResultURL) {
+		return errInvalidURL
+	}
+	if r.CommandID != "BusinessPayBill" {
+		return errInvalidCommandID
+	}
+	if !isShortCode(r.PartyA) || !isShortCode(r.PartyB) {
+		return errInvalidShortCode
+	}
+	if len(r.AccountReference) > maxAccountReferenceLen {
+		return errInvalidAccountReference
+	}
+	if r.Remarks != "" && len(r.Remarks) > maxRemarksLen {
+		return errInvalidRemarks
+	}
+	if r.SenderIdentifierType != 4 || r.RecieverIdentifierType != 4 {
+		return errInvalidIdentifierType
+	}
+
+	return nil
+}
+
 // isPhoneNumber checks if the number is a valid phone number.
 // MSISDN (12 digits Mobile Number) e.g. 2547XXXXXXXX.
 func isPhoneNumber(number uint64) bool {

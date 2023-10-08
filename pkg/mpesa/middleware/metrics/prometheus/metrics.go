@@ -19,7 +19,7 @@ import (
 
 var _ mpesa.SDK = (*metricsMiddleware)(nil)
 
-var funcNames = []string{"Token", "ExpressQuery", "ExpressSimulate", "B2CPayment", "AccountBalance", "C2BRegisterURL", "C2BSimulate", "GenerateQR", "Reverse", "TransactionStatus", "RemitTax"}
+var funcNames = []string{"Token", "ExpressQuery", "ExpressSimulate", "B2CPayment", "AccountBalance", "C2BRegisterURL", "C2BSimulate", "GenerateQR", "Reverse", "TransactionStatus", "RemitTax", "BusinessPayBill"}
 
 type metricsMiddleware struct {
 	counters  map[string]prom.Counter
@@ -188,6 +188,18 @@ func (mm *metricsMiddleware) RemitTax(rReq mpesa.RemitTaxReq) (resp mpesa.RemitT
 	}(time.Now())
 
 	return mm.sdk.RemitTax(rReq)
+}
+
+func (mm *metricsMiddleware) BusinessPayBill(bpbReq mpesa.BusinessPayBillReq) (resp mpesa.BusinessPayBillResp, err error) {
+	defer func(begin time.Time) {
+		mm.counters["BusinessPayBill"].Inc()
+		mm.latencies["BusinessPayBill"].Observe(time.Since(begin).Seconds())
+		if err1 := mm.pusher.Add(); err1 != nil {
+			err = fmt.Errorf("%w: %w", err, err1)
+		}
+	}(time.Now())
+
+	return mm.sdk.BusinessPayBill(bpbReq)
 }
 
 func (mm *metricsMiddleware) counter(name string) prom.Counter {

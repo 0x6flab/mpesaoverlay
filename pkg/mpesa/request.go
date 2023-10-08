@@ -135,3 +135,20 @@ type RemitTaxReq struct {
 	ResultURL              string `json:"ResultURL,omitempty"`              // The path that stores information of transaction
 	Remarks                string `json:"Remarks,omitempty"`                // Comments that are sent along with the transaction.
 }
+
+type BusinessPayBillReq struct {
+	Initiator              string `json:"Initiator,omitempty"`              // The name of Initiator to initiating  the request
+	InitiatorPassword      string `json:"InitiatorPassword,omitempty"`      // The password of the API user. This is the same password used while creating the API user.
+	SecurityCredential     string `json:"SecurityCredential,omitempty"`     // Encrypted Credential of user getting transaction amoun
+	CommandID              string `json:"CommandID,omitempty"`              // Takes only the 'BusinessPayBill' Command ID.
+	SenderIdentifierType   uint8  `json:"SenderIdentifierType,omitempty"`   // The type of shortcode from which money is deducted. For this API, only "4" is allowed.
+	RecieverIdentifierType uint8  `json:"RecieverIdentifierType,omitempty"` // The type of shortcode to which money is credited. For this API, only "4" is allowed.
+	Amount                 uint64 `json:"Amount,omitempty"`                 // The amount of money being sent to the customer.
+	PartyA                 uint64 `json:"PartyA,omitempty"`                 // This is your own shortcode from which the money will be deducted.
+	PartyB                 uint64 `json:"PartyB,omitempty"`                 // The account to which money will be credited.
+	AccountReference       string `json:"AccountReference,omitempty"`       // The account number to be associated with the payment. Up to 13 characters.
+	QueueTimeOutURL        string `json:"QueueTimeOutURL,omitempty"`        // The path that stores information of time out transaction
+	ResultURL              string `json:"ResultURL,omitempty"`              // The path that stores information of transaction
+	Remarks                string `json:"Remarks,omitempty"`                // Comments that are sent along with the transaction.
+	Requester              uint64 `json:"Requester,omitempty"`              // Optional. The consumer’s mobile number on behalf of whom you are paying.
+}
