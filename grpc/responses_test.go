@@ -455,3 +455,29 @@ func TestValidResp(t *testing.T) {
 	val = resp.String()
 	assert.Empty(t, val)
 }
+
+func TestBusinessPayBillResp(t *testing.T) {
+	var resp = grpc.BusinessPayBillResp{
+		ValidResp: validGRPCResp,
+	}
+
+	val := resp.String()
+	assert.NotEmpty(t, val)
+
+	resp.ProtoMessage()
+
+	val1 := resp.ProtoReflect()
+	assert.NotEmpty(t, val1)
+
+	val2 := resp.GetValidResp()
+	assert.NotEmpty(t, val2)
+
+	val3, val4 := resp.Descriptor()
+	assert.NotEmpty(t, val3)
+	assert.NotEmpty(t, val4)
+
+	resp.Reset()
+
+	val = resp.String()
+	assert.Empty(t, val)
+}
