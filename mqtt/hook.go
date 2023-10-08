@@ -142,7 +142,7 @@ func (h *Hook) handleMessages(pk packets.Packet) {
 		h.logger.Info("handling express simulate")
 		resp, err := h.ExpressSimulate(pk)
 		if err != nil {
-			h.logger.Error("failed to handle express query", zap.Error(err))
+			h.logger.Error("failed to handle express simulate", zap.Error(err))
 
 			return
 		}
@@ -152,7 +152,7 @@ func (h *Hook) handleMessages(pk packets.Packet) {
 		h.logger.Info("handling b2c payment")
 		resp, err := h.B2CPayment(pk)
 		if err != nil {
-			h.logger.Error("failed to handle express query", zap.Error(err))
+			h.logger.Error("failed to handle b2c payment", zap.Error(err))
 
 			return
 		}
@@ -162,7 +162,7 @@ func (h *Hook) handleMessages(pk packets.Packet) {
 		h.logger.Info("handling account balance")
 		resp, err := h.AccountBalance(pk)
 		if err != nil {
-			h.logger.Error("failed to handle express query", zap.Error(err))
+			h.logger.Error("failed to handle account balance", zap.Error(err))
 
 			return
 		}
@@ -172,7 +172,7 @@ func (h *Hook) handleMessages(pk packets.Packet) {
 		h.logger.Info("handling c2b register")
 		resp, err := h.C2BRegisterURL(pk)
 		if err != nil {
-			h.logger.Error("failed to handle express query", zap.Error(err))
+			h.logger.Error("failed to handle c2b register", zap.Error(err))
 
 			return
 		}
@@ -182,7 +182,7 @@ func (h *Hook) handleMessages(pk packets.Packet) {
 		h.logger.Info("handling c2b simulate")
 		resp, err := h.C2BSimulate(pk)
 		if err != nil {
-			h.logger.Error("failed to handle express query", zap.Error(err))
+			h.logger.Error("failed to handle c2b simulate", zap.Error(err))
 
 			return
 		}
@@ -192,7 +192,7 @@ func (h *Hook) handleMessages(pk packets.Packet) {
 		h.logger.Info("handling generate qr")
 		resp, err := h.GenerateQR(pk)
 		if err != nil {
-			h.logger.Error("failed to handle express query", zap.Error(err))
+			h.logger.Error("failed to handle generate qr", zap.Error(err))
 
 			return
 		}
@@ -202,7 +202,7 @@ func (h *Hook) handleMessages(pk packets.Packet) {
 		h.logger.Info("handling reverse")
 		resp, err := h.Reverse(pk)
 		if err != nil {
-			h.logger.Error("failed to handle express query", zap.Error(err))
+			h.logger.Error("failed to handle reverse", zap.Error(err))
 
 			return
 		}
@@ -212,7 +212,7 @@ func (h *Hook) handleMessages(pk packets.Packet) {
 		h.logger.Info("handling transaction status")
 		resp, err := h.TransactionStatus(pk)
 		if err != nil {
-			h.logger.Error("failed to handle express query", zap.Error(err))
+			h.logger.Error("failed to handle transaction status", zap.Error(err))
 
 			return
 		}
@@ -222,11 +222,21 @@ func (h *Hook) handleMessages(pk packets.Packet) {
 		h.logger.Info("handling remit tax")
 		resp, err := h.RemitTax(pk)
 		if err != nil {
-			h.logger.Error("failed to handle express query", zap.Error(err))
+			h.logger.Error("failed to handle remit tax", zap.Error(err))
 
 			return
 		}
 		h.publish("mpesa/remit/tax", resp)
+
+	case "mpesa/b2b/payment":
+		h.logger.Info("handling b2b payment")
+		resp, err := h.BusinessPayBill(pk)
+		if err != nil {
+			h.logger.Error("failed to handle b2b payment", zap.Error(err))
+
+			return
+		}
+		h.publish("mpesa/b2b/payment", resp)
 
 	default:
 		switch strings.HasSuffix(pk.TopicName, "/response") {

@@ -70,3 +70,9 @@ type remitTaxReq struct {
 	mpesa.RemitTaxReq
 	id string
 }
+
+type businessPayBillReq struct {
+	gorm.Model
+	mpesa.BusinessPayBillReq
+	id string
+}

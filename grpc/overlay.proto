@@ -38,4 +38,6 @@ service Service {
     rpc TransactionStatus (mpesaoverlay.grpc.TransactionStatusReq) returns (mpesaoverlay.grpc.TransactionStatusResp) { }
 
     rpc RemitTax (mpesaoverlay.grpc.RemitTaxReq) returns (mpesaoverlay.grpc.RemitTaxResp) { }
+
+    rpc BusinessPayBill (mpesaoverlay.grpc.BusinessPayBillReq) returns (mpesaoverlay.grpc.BusinessPayBillResp) { }
 }

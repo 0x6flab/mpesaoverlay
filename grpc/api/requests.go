@@ -94,3 +94,11 @@ type remitTaxReq struct {
 func (req remitTaxReq) validate() error {
 	return req.RemitTaxReq.Validate()
 }
+
+type businessPayBillReq struct {
+	mpesa.BusinessPayBillReq
+}
+
+func (req businessPayBillReq) validate() error {
+	return req.BusinessPayBillReq.Validate()
+}

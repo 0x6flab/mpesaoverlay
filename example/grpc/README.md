@@ -183,3 +183,25 @@ grpcurl -plaintext -d @ localhost:443 mpesaoverlay.grpc.Service/RemitTax <<EOM
 }
 EOM
 ```
+
+## BusinessPayBill
+
+```bash
+grpcurl -plaintext -d @ localhost:443 mpesaoverlay.grpc.Service/BusinessPayBill <<EOM
+{
+    "amount": "10",
+    "commandID": "BusinessPayBill",
+    "initiator": "testapi",
+    "initiatorPassword": "Safaricom999!*!",
+    "partyA": "600992",
+    "partyB": "600992",
+    "senderIdentifierType": 4,
+    "recieverIdentifierType": 4,
+    "accountReference": "353353",
+    "requester": "254700000000",
+    "queueTimeOutURL": "https://example.com/timeout",
+    "remarks": "test",
+    "resultURL": "https://example.com/result"
+}
+EOM
+```

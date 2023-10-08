@@ -89,3 +89,8 @@ type ReverseResp struct {
 type RemitTaxResp struct {
 	ValidResp
 }
+
+// BusinessPayBillResp is the response from the BusinessPayBill endpoint.
+type BusinessPayBillResp struct {
+	ValidResp
+}

@@ -49,3 +49,7 @@ This provides a terminal recording of the examples below.
 ## RemitTax
 
 [![asciicast](https://asciinema.org/a/611619.svg)](https://asciinema.org/a/611619)
+
+## BusinessPayBill
+
+[![asciicast](https://asciinema.org/a/612620.svg)](https://asciinema.org/a/612620)

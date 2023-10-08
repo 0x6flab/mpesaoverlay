@@ -36,6 +36,8 @@ type Service interface {
 	TransactionStatus(pk packets.Packet) (mpesa.TransactionStatusResp, error)
 
 	RemitTax(pk packets.Packet) (mpesa.RemitTaxResp, error)
+
+	BusinessPayBill(pk packets.Packet) (mpesa.BusinessPayBillResp, error)
 }
 
 // service implements the Service interface.
@@ -142,4 +144,13 @@ func (s *service) RemitTax(pk packets.Packet) (mpesa.RemitTaxResp, error) {
 	}
 
 	return s.sdk.RemitTax(req)
+}
+
+func (s *service) BusinessPayBill(pk packets.Packet) (mpesa.BusinessPayBillResp, error) {
+	var req mpesa.BusinessPayBillReq
+	if err := json.Unmarshal(pk.Payload, &req); err != nil {
+		return mpesa.BusinessPayBillResp{}, err
+	}
+
+	return s.sdk.BusinessPayBill(req)
 }

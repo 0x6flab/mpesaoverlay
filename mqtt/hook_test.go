@@ -402,6 +402,20 @@ func TestHandleMessages(_ *testing.T) {
 			payload: invalidPayload,
 			mockErr: errInvalidJSON,
 		},
+		{
+			name:  "handle mpesa/b2b/payment success",
+			topic: "mpesa/b2b/payment",
+			payload: []byte(`{
+				"CommandID": "test"
+			}`),
+			mockErr: nil,
+		},
+		{
+			name:    "handle mpesa/b2b/payment failure",
+			topic:   "mpesa/b2b/payment",
+			payload: invalidPayload,
+			mockErr: errInvalidJSON,
+		},
 	}
 
 	for _, c := range cases {
@@ -449,6 +463,9 @@ func TestHandleMessages(_ *testing.T) {
 		call11 := mockSDK.On("RemitTax", mock.Anything).Return(mpesa.RemitTaxResp{
 			ValidResp: validResp,
 		}, c.mockErr)
+		call12 := mockSDK.On("BusinessPayBill", mock.Anything).Return(mpesa.BusinessPayBillResp{
+			ValidResp: validResp,
+		}, c.mockErr)
 
 		hook.handleMessages(packets.Packet{
 			TopicName: c.topic,
@@ -466,5 +483,6 @@ func TestHandleMessages(_ *testing.T) {
 		call9.Unset()
 		call10.Unset()
 		call11.Unset()
+		call12.Unset()
 	}
 }

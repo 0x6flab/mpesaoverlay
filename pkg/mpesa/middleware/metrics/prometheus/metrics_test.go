@@ -571,3 +571,44 @@ func TestB2CPayment(t *testing.T) {
 		call.Unset()
 	}
 }
+
+func TestBusinessPayBill(t *testing.T) {
+	mockSDK := new(mocks.SDK)
+	s := generateMockMetricsMiddleware(mockSDK)
+
+	cases := []struct {
+		name         string
+		req          mpesa.BusinessPayBillReq
+		expectedResp mpesa.BusinessPayBillResp
+		expectedErr  error
+	}{
+		{
+			name: "BusinessPayBill success",
+			req:  mpesa.BusinessPayBillReq{},
+			expectedResp: mpesa.BusinessPayBillResp{
+				ValidResp: validResp,
+			},
+			expectedErr: nil,
+		},
+		{
+			name:         "BusinessPayBill error",
+			req:          mpesa.BusinessPayBillReq{},
+			expectedResp: mpesa.BusinessPayBillResp{},
+			expectedErr:  errMock,
+		},
+	}
+
+	for _, tc := range cases {
+		call := mockSDK.On("BusinessPayBill", mock.Anything).Return(tc.expectedResp, tc.expectedErr)
+
+		resp, err := s.BusinessPayBill(tc.req)
+		if err != nil {
+			assert.Contains(t, err.Error(), tc.expectedErr.Error(), fmt.Sprintf("%s: expected error: %v, got: %v", tc.name, tc.expectedErr, err))
+		} else {
+			assert.Nil(t, err, fmt.Sprintf("%s: expected error: %v, got: %v", tc.name, tc.expectedErr, err))
+		}
+		assert.Equal(t, tc.expectedResp, resp, fmt.Sprintf("expected response: %v, got: %v", tc.expectedResp, resp))
+
+		call.Unset()
+	}
+}

@@ -633,3 +633,58 @@ func TestB2CPayment(t *testing.T) {
 		call.Unset()
 	}
 }
+
+func TestBusinessPayBill(t *testing.T) {
+	mockSDK := new(mocks.SDK)
+	s := mqtt.NewService(mockSDK)
+
+	cases := []struct {
+		name         string
+		packet       packets.Packet
+		expectedResp mpesa.BusinessPayBillResp
+		expectedErr  error
+	}{
+		{
+			name: "BusinessPayBill success",
+			packet: packets.Packet{
+				Payload: []byte(`{
+					"Occasion": "test"
+				}`),
+			},
+			expectedResp: mpesa.BusinessPayBillResp{
+				ValidResp: validResp,
+			},
+			expectedErr: nil,
+		},
+		{
+			name: "BusinessPayBill error",
+			packet: packets.Packet{
+				Payload: []byte(`{
+					"Occasion": "test"
+				}`),
+			},
+			expectedResp: mpesa.BusinessPayBillResp{},
+			expectedErr:  errMock,
+		},
+		{
+			name:         "BusinessPayBill invalid payload",
+			packet:       invalidPacket,
+			expectedResp: mpesa.BusinessPayBillResp{},
+			expectedErr:  errInvalidJSON,
+		},
+	}
+
+	for _, tc := range cases {
+		call := mockSDK.On("BusinessPayBill", mock.Anything).Return(tc.expectedResp, tc.expectedErr)
+
+		resp, err := s.BusinessPayBill(tc.packet)
+		if err != nil {
+			assert.Contains(t, err.Error(), tc.expectedErr.Error(), fmt.Sprintf("%s: expected error: %v, got: %v", tc.name, tc.expectedErr, err))
+		} else {
+			assert.Equal(t, tc.expectedResp, resp, fmt.Sprintf("expected response: %v, got: %v", tc.expectedResp, resp))
+		}
+		assert.Equal(t, tc.expectedResp, resp, fmt.Sprintf("expected response: %v, got: %v", tc.expectedResp, resp))
+
+		call.Unset()
+	}
+}

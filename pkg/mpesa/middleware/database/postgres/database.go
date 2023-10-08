@@ -38,6 +38,7 @@ func WithDatabase(url string) mpesa.Option {
 			&reverseReq{},
 			&transactionStatusReq{},
 			&remitTaxReq{},
+			&businessPayBillReq{},
 		}
 
 		if err := db.AutoMigrate(tables...); err != nil {
@@ -170,4 +171,16 @@ func (pm *postgresMiddleware) RemitTax(rtReq mpesa.RemitTaxReq) (resp mpesa.Remi
 	}()
 
 	return pm.sdk.RemitTax(rtReq)
+}
+
+func (pm *postgresMiddleware) BusinessPayBill(bpbReq mpesa.BusinessPayBillReq) (resp mpesa.BusinessPayBillResp, err error) {
+	defer func() {
+		var req = businessPayBillReq{
+			BusinessPayBillReq: bpbReq,
+			id:                 ulid.Make().String(),
+		}
+		_ = pm.db.Create(&req)
+	}()
+
+	return pm.sdk.BusinessPayBill(bpbReq)
 }

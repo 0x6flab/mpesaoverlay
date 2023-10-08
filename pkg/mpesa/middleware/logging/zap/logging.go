@@ -211,3 +211,24 @@ func (lm *loggingMiddleware) RemitTax(rReq mpesa.RemitTaxReq) (resp mpesa.RemitT
 
 	return lm.sdk.RemitTax(rReq)
 }
+
+func (lm *loggingMiddleware) BusinessPayBill(b2bReq mpesa.BusinessPayBillReq) (resp mpesa.BusinessPayBillResp, err error) {
+	defer func(begin time.Time) {
+		lm.logger.Info(
+			"BusinessPayBill",
+			log.Error(err),
+			log.String("duration", time.Since(begin).String()),
+			log.String("CommandID", b2bReq.CommandID),
+			log.String("Initiator", b2bReq.Initiator),
+			log.Uint8("SenderIdentifierType", b2bReq.SenderIdentifierType),
+			log.Uint8("RecieverIdentifierType", b2bReq.RecieverIdentifierType),
+			log.Uint64("Amount", b2bReq.Amount),
+			log.Uint64("PartyA", b2bReq.PartyA),
+			log.Uint64("PartyB", b2bReq.PartyB),
+			log.String("AccountReference", b2bReq.AccountReference),
+			log.Uint64("Requester", b2bReq.Requester),
+		)
+	}(time.Now())
+
+	return lm.sdk.BusinessPayBill(b2bReq)
+}

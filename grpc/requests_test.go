@@ -658,3 +658,90 @@ func TestTransactionStatusReq(t *testing.T) {
 	val = req.String()
 	assert.Empty(t, val)
 }
+
+func TestBusinessPayBillReq(t *testing.T) {
+	var req = grpc.BusinessPayBillReq{
+		Initiator:              "testapi",
+		InitiatorPassword:      "Safaricom999!*!",
+		CommandID:              "BusinessPayBill",
+		SenderIdentifierType:   4,
+		RecieverIdentifierType: 4,
+		Amount:                 239,
+		PartyA:                 600978,
+		PartyB:                 572572,
+		AccountReference:       "353353",
+		Requester:              254700000000,
+		QueueTimeOutURL:        "https://example.com/timeout",
+		ResultURL:              "https://example.com/result",
+		Remarks:                "test",
+	}
+
+	val := req.String()
+	assert.NotEmpty(t, val)
+
+	req.ProtoMessage()
+
+	val1 := req.ProtoReflect()
+	assert.NotEmpty(t, val1)
+
+	val2 := req.GetInitiator()
+	assert.NotEmpty(t, val2)
+	assert.Equal(t, req.Initiator, val2)
+
+	val2 = req.GetInitiatorPassword()
+	assert.NotEmpty(t, val2)
+	assert.Equal(t, req.InitiatorPassword, val2)
+
+	val2 = req.GetCommandID()
+	assert.NotEmpty(t, val2)
+	assert.Equal(t, req.CommandID, val2)
+
+	val3 := req.GetSenderIdentifierType()
+	assert.NotEmpty(t, val3)
+	assert.Equal(t, req.SenderIdentifierType, val3)
+
+	val31 := req.GetRecieverIdentifierType()
+	assert.NotEmpty(t, val31)
+	assert.Equal(t, req.RecieverIdentifierType, val31)
+
+	val32 := req.GetAmount()
+	assert.NotEmpty(t, val32)
+	assert.Equal(t, req.Amount, val32)
+
+	val32 = req.GetPartyA()
+	assert.NotEmpty(t, val32)
+	assert.Equal(t, req.PartyA, val32)
+
+	val32 = req.GetPartyB()
+	assert.NotEmpty(t, val32)
+	assert.Equal(t, req.PartyB, val32)
+
+	val32 = req.GetRequester()
+	assert.NotEmpty(t, val32)
+	assert.Equal(t, req.Requester, val32)
+
+	val2 = req.GetAccountReference()
+	assert.NotEmpty(t, val2)
+	assert.Equal(t, req.AccountReference, val2)
+
+	val2 = req.GetQueueTimeOutURL()
+	assert.NotEmpty(t, val2)
+	assert.Equal(t, req.QueueTimeOutURL, val2)
+
+	val2 = req.GetResultURL()
+	assert.NotEmpty(t, val2)
+	assert.Equal(t, req.ResultURL, val2)
+
+	val2 = req.GetRemarks()
+	assert.NotEmpty(t, val2)
+	assert.Equal(t, req.Remarks, val2)
+
+	val9, val10 := req.Descriptor()
+	assert.NotEmpty(t, val9)
+	assert.NotEmpty(t, val10)
+
+	req.Reset()
+
+	val = req.String()
+	assert.Empty(t, val)
+}

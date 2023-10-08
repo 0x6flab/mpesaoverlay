@@ -108,4 +108,13 @@ For example: mpesa-cli transactionstatus`)
 	transactionstatus.Alias("status")
 	transactionstatus.Alias("transstatus")
 	transactionstatus.Alias("transstat")
+
+	b2b := app.Command("b2b", "Simulate B2B Payment")
+	b2b.Action(func(_ *fisk.ParseContext) error {
+		return BusinessPayBill(sdk)
+	})
+	b2b.Cheat("b2b", `Simulate B2B Payment
+For example: mpesa-cli b2b`)
+	b2b.Alias("businesspaybill")
+	b2b.Alias("paybill")
 }

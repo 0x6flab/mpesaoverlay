@@ -192,3 +192,19 @@ func remitTaxEndpoint(svc grpc.Service) endpoint.Endpoint {
 		return remitTaxResp{resp}, nil
 	}
 }
+
+func businessPayBillEndpoint(svc grpc.Service) endpoint.Endpoint {
+	return func(_ context.Context, request interface{}) (interface{}, error) {
+		req := request.(businessPayBillReq)
+		if err := req.validate(); err != nil {
+			return businessPayBillResp{}, errors.Join(errValidation, err)
+		}
+
+		resp, err := svc.BusinessPayBill(req.BusinessPayBillReq)
+		if err != nil {
+			return businessPayBillResp{}, err
+		}
+
+		return businessPayBillResp{resp}, nil
+	}
+}

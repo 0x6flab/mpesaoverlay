@@ -19,21 +19,17 @@ func TestToken(t *testing.T) {
 
 	call := sdk.On("Token").Return(mpesa.TokenResp{}, nil)
 
-	err := Token(sdk)
-
-	call.Unset()
-
-	if err != nil {
+	if err := Token(sdk); err != nil {
 		t.Errorf("Token() error = %v", err)
 	}
+
+	call.Unset()
 }
 
 func TestSTKPush(t *testing.T) {
 	sdk := new(mocks.SDK)
 
-	err := STKPush(sdk)
-
-	if err != nil {
+	if err := STKPush(sdk); err != nil {
 		t.Errorf("STKPush() error = %v", err)
 	}
 }
@@ -41,9 +37,7 @@ func TestSTKPush(t *testing.T) {
 func TestB2CPayment(t *testing.T) {
 	sdk := new(mocks.SDK)
 
-	err := B2CPayment(sdk)
-
-	if err != nil {
+	if err := B2CPayment(sdk); err != nil {
 		t.Errorf("B2CPayment() error = %v", err)
 	}
 }
@@ -51,9 +45,7 @@ func TestB2CPayment(t *testing.T) {
 func TestAccountBalance(t *testing.T) {
 	sdk := new(mocks.SDK)
 
-	err := AccountBalance(sdk)
-
-	if err != nil {
+	if err := AccountBalance(sdk); err != nil {
 		t.Errorf("AccountBalance() error = %v", err)
 	}
 }
@@ -61,9 +53,7 @@ func TestAccountBalance(t *testing.T) {
 func TestC2BRegisterURL(t *testing.T) {
 	sdk := new(mocks.SDK)
 
-	err := C2BRegisterURL(sdk)
-
-	if err != nil {
+	if err := C2BRegisterURL(sdk); err != nil {
 		t.Errorf("C2BRegisterURL() error = %v", err)
 	}
 }
@@ -71,9 +61,7 @@ func TestC2BRegisterURL(t *testing.T) {
 func TestSTKPushQuery(t *testing.T) {
 	sdk := new(mocks.SDK)
 
-	err := STKPushQuery(sdk)
-
-	if err != nil {
+	if err := STKPushQuery(sdk); err != nil {
 		t.Errorf("STKPushQuery() error = %v", err)
 	}
 }
@@ -81,9 +69,7 @@ func TestSTKPushQuery(t *testing.T) {
 func TestC2BSimulate(t *testing.T) {
 	sdk := new(mocks.SDK)
 
-	err := C2BSimulate(sdk)
-
-	if err != nil {
+	if err := C2BSimulate(sdk); err != nil {
 		t.Errorf("C2BSimulate() error = %v", err)
 	}
 }
@@ -91,9 +77,7 @@ func TestC2BSimulate(t *testing.T) {
 func TestQRGenerate(t *testing.T) {
 	sdk := new(mocks.SDK)
 
-	err := QRCode(sdk)
-
-	if err != nil {
+	if err := QRCode(sdk); err != nil {
 		t.Errorf("QRGenerate() error = %v", err)
 	}
 }
@@ -101,9 +85,7 @@ func TestQRGenerate(t *testing.T) {
 func TestReversal(t *testing.T) {
 	sdk := new(mocks.SDK)
 
-	err := Reversal(sdk)
-
-	if err != nil {
+	if err := Reversal(sdk); err != nil {
 		t.Errorf("Reversal() error = %v", err)
 	}
 }
@@ -111,9 +93,7 @@ func TestReversal(t *testing.T) {
 func TestRemitTax(t *testing.T) {
 	sdk := new(mocks.SDK)
 
-	err := RemitTax(sdk)
-
-	if err != nil {
+	if err := RemitTax(sdk); err != nil {
 		t.Errorf("RemitTax() error = %v", err)
 	}
 }
@@ -121,10 +101,16 @@ func TestRemitTax(t *testing.T) {
 func TestTransactionStatus(t *testing.T) {
 	sdk := new(mocks.SDK)
 
-	err := TransactionStatus(sdk)
-
-	if err != nil {
+	if err := TransactionStatus(sdk); err != nil {
 		t.Errorf("TransactionStatus() error = %v", err)
+	}
+}
+
+func TestBusinessPayBill(t *testing.T) {
+	sdk := new(mocks.SDK)
+
+	if err := BusinessPayBill(sdk); err != nil {
+		t.Errorf("BusinessPayBill() error = %v", err)
 	}
 }
 

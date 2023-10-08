@@ -33,6 +33,8 @@ type Service interface {
 	TransactionStatus(tReq mpesa.TransactionStatusReq) (mpesa.TransactionStatusResp, error)
 
 	RemitTax(rReq mpesa.RemitTaxReq) (mpesa.RemitTaxResp, error)
+
+	BusinessPayBill(bpbReq mpesa.BusinessPayBillReq) (mpesa.BusinessPayBillResp, error)
 }
 
 // service implements the Service interface.
@@ -89,4 +91,8 @@ func (s *service) TransactionStatus(tReq mpesa.TransactionStatusReq) (mpesa.Tran
 
 func (s *service) RemitTax(rReq mpesa.RemitTaxReq) (mpesa.RemitTaxResp, error) {
 	return s.sdk.RemitTax(rReq)
+}
+
+func (s *service) BusinessPayBill(bpbReq mpesa.BusinessPayBillReq) (mpesa.BusinessPayBillResp, error) {
+	return s.sdk.BusinessPayBill(bpbReq)
 }

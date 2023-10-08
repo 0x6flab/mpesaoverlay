@@ -600,3 +600,57 @@ func TestB2CPayment(t *testing.T) {
 		call.Unset()
 	}
 }
+
+func TestBusinessPayBill(t *testing.T) {
+	mpesaAddr := fmt.Sprintf("localhost:%d", port)
+	conn, err := grpc.Dial(mpesaAddr, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithBlock())
+	require.Nil(t, err, fmt.Sprintf("unexpected error: %s\n", err))
+
+	cli := grpcapi.NewClient(conn, time.Minute)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
+	defer cancel()
+
+	cases := map[string]struct {
+		code        codes.Code
+		req         *grpcadapter.BusinessPayBillReq
+		sdkResponse mpesa.BusinessPayBillResp
+		sdkError    error
+	}{
+		"b2b payment success": {
+			code: codes.OK,
+			req: &grpcadapter.BusinessPayBillReq{
+				Initiator:              "testapi",
+				InitiatorPassword:      "Safaricom999!*!",
+				CommandID:              "BusinessPayBill",
+				SenderIdentifierType:   4,
+				RecieverIdentifierType: 4,
+				Amount:                 10,
+				PartyA:                 600986,
+				PartyB:                 600992,
+				Requester:              254700000000,
+				AccountReference:       "353353",
+				QueueTimeOutURL:        "https://example.com/timeout",
+				ResultURL:              "https://example.com/result",
+				Remarks:                "test",
+			},
+			sdkResponse: mpesa.BusinessPayBillResp{
+				ValidResp: validResp,
+			},
+			sdkError: nil,
+		},
+		"b2b payment failure": {
+			code:        codes.InvalidArgument,
+			sdkResponse: mpesa.BusinessPayBillResp{},
+			sdkError:    errMock,
+		},
+	}
+
+	for desc, tc := range cases {
+		call := sdk.On("BusinessPayBill", mock.Anything).Return(tc.sdkResponse, tc.sdkError)
+		_, err := cli.BusinessPayBill(ctx, tc.req)
+		e, ok := status.FromError(err)
+		assert.True(t, ok, "OK expected to be true")
+		assert.Equal(t, tc.code, e.Code(), fmt.Sprintf("%s: expected %s got %s\n", desc, tc.code, e.Code()))
+		call.Unset()
+	}
+}
