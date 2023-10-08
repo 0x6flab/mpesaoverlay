@@ -31,6 +31,23 @@ message B2CPaymentReq {
   uint64 amount = 13;
 }
 
+message BusinessPayBillReq {
+  string initiator = 1;
+  string initiatorPassword = 2;
+  string securityCredential = 3;
+  string commandID = 4;
+  uint32 senderIdentifierType = 5;
+  uint32 recieverIdentifierType = 6;
+  uint64 amount = 7;
+  uint64 partyA = 8;
+  uint64 partyB = 9;
+  string accountReference = 10;
+  string queueTimeOutURL = 11;
+  string resultURL = 12;
+  string remarks = 13;
+  uint64 requester = 14;
+}
+
 message C2BRegisterURLReq {
   string validationURL = 1;
   string confirmationURL = 2;

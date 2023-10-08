@@ -11,6 +11,10 @@ message B2CPaymentResp {
   ValidResp validResp = 1;
 }
 
+message BusinessPayBillResp {
+  ValidResp validResp = 1;
+}
+
 message C2BRegisterURLResp {
   ValidResp validResp = 1;
 }

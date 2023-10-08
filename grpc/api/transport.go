@@ -32,6 +32,7 @@ type grpcServer struct {
 	reverse           kitgrpc.Handler
 	transactionStatus kitgrpc.Handler
 	remitTax          kitgrpc.Handler
+	businessPayBill   kitgrpc.Handler
 	grpc.UnimplementedServiceServer
 }
 
@@ -93,6 +94,11 @@ func NewServer(svc grpc.Service) grpc.ServiceServer {
 			remitTaxEndpoint(svc),
 			decodeRemitTaxRequest,
 			encodeRemitTaxResponse,
+		),
+		businessPayBill: kitgrpc.NewServer(
+			businessPayBillEndpoint(svc),
+			decodeBusinessPayBillRequest,
+			encodeBusinessPayBillResponse,
 		),
 	}
 }
@@ -487,6 +493,48 @@ func encodeRemitTaxResponse(_ context.Context, grpcRes interface{}) (interface{}
 	res := grpcRes.(remitTaxResp)
 
 	return &grpc.RemitTaxResp{
+		ValidResp: &grpc.ValidResp{
+			ConversationID:           res.ConversationID,
+			OriginatorConversationID: res.OriginatorConversationID,
+			ResponseCode:             res.ResponseCode,
+			ResponseDescription:      res.ResponseDescription,
+		},
+	}, nil
+}
+
+func (s *grpcServer) BusinessPayBill(ctx context.Context, req *grpc.BusinessPayBillReq) (*grpc.BusinessPayBillResp, error) {
+	_, res, err := s.businessPayBill.ServeGRPC(ctx, req)
+	if err != nil {
+		return nil, encodeError(err)
+	}
+
+	return res.(*grpc.BusinessPayBillResp), nil
+}
+
+func decodeBusinessPayBillRequest(_ context.Context, grpcReq interface{}) (interface{}, error) {
+	req := grpcReq.(*grpc.BusinessPayBillReq)
+
+	return businessPayBillReq{BusinessPayBillReq: mpesa.BusinessPayBillReq{
+		Initiator:              req.GetInitiator(),
+		InitiatorPassword:      req.GetInitiatorPassword(),
+		CommandID:              req.GetCommandID(),
+		SenderIdentifierType:   uint8(req.GetSenderIdentifierType()),
+		RecieverIdentifierType: uint8(req.GetRecieverIdentifierType()),
+		Amount:                 req.GetAmount(),
+		PartyA:                 req.GetPartyA(),
+		PartyB:                 req.GetPartyB(),
+		Remarks:                req.GetRemarks(),
+		Requester:              req.GetRequester(),
+		AccountReference:       req.GetAccountReference(),
+		QueueTimeOutURL:        req.GetQueueTimeOutURL(),
+		ResultURL:              req.GetResultURL(),
+	}}, nil
+}
+
+func encodeBusinessPayBillResponse(_ context.Context, grpcRes interface{}) (interface{}, error) {
+	res := grpcRes.(businessPayBillResp)
+
+	return &grpc.BusinessPayBillResp{
 		ValidResp: &grpc.ValidResp{
 			ConversationID:           res.ConversationID,
 			OriginatorConversationID: res.OriginatorConversationID,

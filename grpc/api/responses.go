@@ -51,3 +51,7 @@ type transactionStatusResp struct {
 type remitTaxResp struct {
 	mpesa.RemitTaxResp
 }
+
+type businessPayBillResp struct {
+	mpesa.BusinessPayBillResp
+}
