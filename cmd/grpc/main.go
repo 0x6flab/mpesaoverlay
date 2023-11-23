@@ -26,7 +26,6 @@ import (
 	zapm "github.com/0x6flab/mpesaoverlay/pkg/mpesa/middleware/logging/zap"
 	prometheusm "github.com/0x6flab/mpesaoverlay/pkg/mpesa/middleware/metrics/prometheus"
 	"github.com/caarlos0/env/v9"
-	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"go.uber.org/zap"
 	"golang.org/x/sync/errgroup"
 	"google.golang.org/grpc"
@@ -110,9 +109,7 @@ func newService(cfg config, logger *zap.Logger) (grpcadapter.Service, error) {
 }
 
 func initGRPCServer(svc grpcadapter.Service, cfg config, logger *zap.Logger) (*grpc.Server, error) {
-	grpcServerOptions := []grpc.ServerOption{
-		grpc.UnaryInterceptor(otelgrpc.UnaryServerInterceptor()),
-	}
+	grpcServerOptions := []grpc.ServerOption{}
 
 	var server *grpc.Server
 	if cfg.GRPCServerCert != "" || cfg.GRPCServerKey != "" {
