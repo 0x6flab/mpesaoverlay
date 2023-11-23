@@ -11,7 +11,7 @@ TIME ?= $(shell date +%F_%T)
 
 define compile_service
 	CGO_ENABLED=$(CGO_ENABLED) GOOS=$(GOOS) GOARCH=$(GOARCH) GOARM=$(GOARM) \
-	go build -mod=vendor -ldflags "-s -w \
+	go build -ldflags "-s -w \
 	-X 'github.com/0x6flab/mpesaoverlay.BuildTime=$(TIME)' \
 	-X 'github.com/0x6flab/mpesaoverlay.Version=$(VERSION)' \
 	-X 'github.com/0x6flab/mpesaoverlay.Commit=$(COMMIT)'" \
@@ -84,7 +84,7 @@ lint:
 test:
 	go install github.com/vektra/mockery/v2@latest
 	go generate ./...
-	go test -mod=vendor -v -race -count 1 -tags test -covermode=atomic -coverprofile cover.out $(shell go list ./... | grep -v 'vendor\|cmd')
+	go test -v -race -count 1 -tags test -covermode=atomic -coverprofile cover.out $(shell go list ./... | grep -v 'vendor\|cmd')
 
 version:
 	standard-version
