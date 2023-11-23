@@ -24,9 +24,11 @@ jobs:
           cache-dependency-path: "go.sum"
 
       - name: Set up QEMU
+        if: matrix.os == 'ubuntu-latest'
         uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
+        if: matrix.os == 'ubuntu-latest'
         uses: docker/setup-buildx-action@v3
 
       - name: Build Binaries
@@ -34,7 +36,7 @@ jobs:
           make all -j $(nproc)
 
       - name: Build docker images
-        if: github.event_name == 'pull_request'
+        if: matrix.os == 'ubuntu-latest' && github.event_name == 'pull_request'
         run: |
           make dockers -j $(nproc)
 
