@@ -12,9 +12,9 @@ import (
 )
 
 func STKPush(sdk mpesa.SDK) error {
-	var req = mpesa.ExpressSimulateReq{}
+	req := mpesa.ExpressSimulateReq{}
 
-	var qs = []*survey.Question{
+	qs := []*survey.Question{
 		{
 			Name: "PassKey",
 			Prompt: &survey.Password{
@@ -127,9 +127,9 @@ func STKPush(sdk mpesa.SDK) error {
 }
 
 func STKPushQuery(sdk mpesa.SDK) error {
-	var req = mpesa.ExpressQueryReq{}
+	req := mpesa.ExpressQueryReq{}
 
-	var qs = []*survey.Question{
+	qs := []*survey.Question{
 		{
 			Name: "PassKey",
 			Prompt: &survey.Password{

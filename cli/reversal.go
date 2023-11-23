@@ -12,9 +12,9 @@ import (
 )
 
 func Reversal(sdk mpesa.SDK) error {
-	var req = mpesa.ReverseReq{}
+	req := mpesa.ReverseReq{}
 
-	var qs = []*survey.Question{
+	qs := []*survey.Question{
 		{
 			Name: "InitiatorName",
 			Prompt: &survey.Input{
@@ -78,7 +78,6 @@ func Reversal(sdk mpesa.SDK) error {
 		{
 			Name: "QueueTimeOutURL",
 			Prompt: &survey.Input{
-
 				Message: "QueueTimeOutURL",
 				Help:    "URL to send notification incase the payment request is timed out",
 				Default: "https://example.com/timeout",

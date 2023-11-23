@@ -36,14 +36,14 @@ const (
 )
 
 type config struct {
-	LogLevel       string `env:"MO_LOG_LEVEL"            envDefault:"info"`
+	LogLevel       string `env:"MO_LOG_LEVEL"          envDefault:"info"`
 	ConsumerKey    string `env:"MPESA_CONSUMER_KEY"`
 	ConsumerSecret string `env:"MPESA_CONSUMER_SECRET"`
-	BaseURL        string `env:"MPESA_BASE_URL"          envDefault:"https://sandbox.safaricom.co.ke"`
-	MQTTURL        string `env:"MO_MQTT_URL"             envDefault:"localhost:1883"`
+	BaseURL        string `env:"MPESA_BASE_URL"        envDefault:"https://sandbox.safaricom.co.ke"`
+	MQTTURL        string `env:"MO_MQTT_URL"           envDefault:"localhost:1883"`
 	MQTTServerCert string `env:"MO_MQTT_SERVER_CERT"`
 	MQTTServerKey  string `env:"MO_MQTT_SERVER_KEY"`
-	PrometheusURL  string `env:"MO_PROMETHEUS_URL"       envDefault:""`
+	PrometheusURL  string `env:"MO_PROMETHEUS_URL"     envDefault:""`
 }
 
 func main() {
@@ -96,7 +96,7 @@ func newService(cfg config, logger *zap.Logger) (*mqttadapter.Hook, error) {
 		AppSecret: cfg.ConsumerSecret,
 	}
 
-	var opts = []mpesa.Option{zapm.WithLogger(logger)}
+	opts := []mpesa.Option{zapm.WithLogger(logger)}
 	if cfg.PrometheusURL != "" {
 		opts = append(opts, prometheusm.WithMetrics(svcName, cfg.PrometheusURL))
 	}

@@ -79,7 +79,7 @@ install:
 	cp ${BUILD_DIR}/* $(GOBIN)
 
 lint:
-	golangci-lint run  --timeout 3m
+	golangci-lint run
 
 test:
 	go install github.com/vektra/mockery/v2@latest

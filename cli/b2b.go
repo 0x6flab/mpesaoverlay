@@ -13,9 +13,9 @@ import (
 
 // BusinessPayBill initiates a B2B payment request.
 func BusinessPayBill(sdk mpesa.SDK) error {
-	var req = mpesa.BusinessPayBillReq{}
+	req := mpesa.BusinessPayBillReq{}
 
-	var qs = []*survey.Question{
+	qs := []*survey.Question{
 		{
 			Name: "Initiator",
 			Prompt: &survey.Input{

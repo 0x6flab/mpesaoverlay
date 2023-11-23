@@ -15,7 +15,7 @@ import (
 )
 
 func TestAccountBalanceReq(t *testing.T) {
-	var req = grpc.AccountBalanceReq{
+	req := grpc.AccountBalanceReq{
 		InitiatorName:     "testapi",
 		InitiatorPassword: "Safaricom999!*!",
 		CommandID:         "AccountBalance",
@@ -77,7 +77,7 @@ func TestAccountBalanceReq(t *testing.T) {
 }
 
 func TestB2CPaymentReq(t *testing.T) {
-	var req = grpc.B2CPaymentReq{
+	req := grpc.B2CPaymentReq{
 		OriginatorConversationID: ulid.Make().String(),
 		InitiatorName:            "testapi",
 		InitiatorPassword:        "Safaricom999!*!",
@@ -154,7 +154,7 @@ func TestB2CPaymentReq(t *testing.T) {
 }
 
 func TestC2BRegisterURLReq(t *testing.T) {
-	var req = grpc.C2BRegisterURLReq{
+	req := grpc.C2BRegisterURLReq{
 		ShortCode:       600981,
 		ResponseType:    "Completed",
 		ConfirmationURL: "https://example.com/confirmation",
@@ -196,7 +196,7 @@ func TestC2BRegisterURLReq(t *testing.T) {
 }
 
 func TestC2BSimulateReq(t *testing.T) {
-	var req = grpc.C2BSimulateReq{
+	req := grpc.C2BSimulateReq{
 		CommandID:     "CustomerBuyGoodsOnline",
 		Amount:        10,
 		Msisdn:        "254712345678",
@@ -243,7 +243,7 @@ func TestC2BSimulateReq(t *testing.T) {
 }
 
 func TestExpressQueryReq(t *testing.T) {
-	var req = grpc.ExpressQueryReq{
+	req := grpc.ExpressQueryReq{
 		PassKey:           "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919",
 		BusinessShortCode: 174379,
 		CheckoutRequestID: "ws_CO_07092023195244460720136609",
@@ -280,7 +280,7 @@ func TestExpressQueryReq(t *testing.T) {
 }
 
 func TestExpressSimulateReq(t *testing.T) {
-	var req = grpc.ExpressSimulateReq{
+	req := grpc.ExpressSimulateReq{
 		PassKey:           "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919",
 		BusinessShortCode: 174379,
 		TransactionType:   "CustomerPayBillOnline",
@@ -352,7 +352,7 @@ func TestExpressSimulateReq(t *testing.T) {
 }
 
 func TestGenerateQRReq(t *testing.T) {
-	var req = grpc.GenerateQRReq{
+	req := grpc.GenerateQRReq{
 		MerchantName: "Test Supermarket",
 		RefNo:        "Invoice No",
 		Amount:       2000,
@@ -404,7 +404,7 @@ func TestGenerateQRReq(t *testing.T) {
 }
 
 func TestRemitTaxReq(t *testing.T) {
-	var req = grpc.RemitTaxReq{
+	req := grpc.RemitTaxReq{
 		InitiatorName:          "testapi",
 		InitiatorPassword:      "Safaricom999!*!",
 		CommandID:              "PayTaxToKRA",
@@ -486,7 +486,7 @@ func TestRemitTaxReq(t *testing.T) {
 }
 
 func TestReverseReq(t *testing.T) {
-	var req = grpc.ReverseReq{
+	req := grpc.ReverseReq{
 		InitiatorName:          "testapi",
 		InitiatorPassword:      "Safaricom999!*!",
 		CommandID:              "TransactionReversal",
@@ -567,7 +567,7 @@ func TestReverseReq(t *testing.T) {
 }
 
 func TestEmpty(t *testing.T) {
-	var req = grpc.Empty{}
+	req := grpc.Empty{}
 
 	val := req.String()
 	assert.Empty(t, val)
@@ -588,7 +588,7 @@ func TestEmpty(t *testing.T) {
 }
 
 func TestTransactionStatusReq(t *testing.T) {
-	var req = grpc.TransactionStatusReq{
+	req := grpc.TransactionStatusReq{
 		InitiatorName:     "testapi",
 		InitiatorPassword: "Safaricom999!*!",
 		CommandID:         "TransactionStatusQuery",
@@ -660,7 +660,7 @@ func TestTransactionStatusReq(t *testing.T) {
 }
 
 func TestBusinessPayBillReq(t *testing.T) {
-	var req = grpc.BusinessPayBillReq{
+	req := grpc.BusinessPayBillReq{
 		Initiator:              "testapi",
 		InitiatorPassword:      "Safaricom999!*!",
 		CommandID:              "BusinessPayBill",

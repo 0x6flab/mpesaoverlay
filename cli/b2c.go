@@ -14,9 +14,9 @@ import (
 
 // B2CPayment initiates a B2C payment request.
 func B2CPayment(sdk mpesa.SDK) error {
-	var req = mpesa.B2CPaymentReq{}
+	req := mpesa.B2CPaymentReq{}
 
-	var qs = []*survey.Question{
+	qs := []*survey.Question{
 		{
 			Name: "InitiatorName",
 			Prompt: &survey.Input{

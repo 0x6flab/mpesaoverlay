@@ -42,7 +42,7 @@ func (h *Hook) ID() string {
 }
 
 func (h *Hook) Provides(b byte) bool {
-	return bytes.Contains( // nolint: gocritic
+	return bytes.Contains( //nolint: gocritic
 		[]byte{
 			mqtt.OnConnect,
 			mqtt.OnDisconnect,
@@ -69,7 +69,7 @@ func (h *Hook) OnConnect(cl *mqtt.Client, _ packets.Packet) error {
 }
 
 func (h *Hook) OnDisconnect(cl *mqtt.Client, err error, expire bool) {
-	var fields = []zapcore.Field{
+	fields := []zapcore.Field{
 		zap.String("client_id", cl.ID),
 		zap.String("username", string(cl.Properties.Username)),
 		zap.Bool("expired", expire),

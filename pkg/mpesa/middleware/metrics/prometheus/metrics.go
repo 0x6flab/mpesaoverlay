@@ -32,15 +32,15 @@ type metricsMiddleware struct {
 // WithMetrics returns a SDK middleware that instruments various metrics.
 func WithMetrics(svcName, url string) mpesa.Option {
 	return func(sdk mpesa.SDK) (mpesa.SDK, error) {
-		var mm = &metricsMiddleware{
+		mm := &metricsMiddleware{
 			svcName: fmt.Sprintf("%s_%s", mpesaoverlay.SVCName, strings.ReplaceAll(svcName, "-", "_")),
 			sdk:     sdk,
 		}
 
-		var counters = make(map[string]prom.Counter)
-		var latencies = make(map[string]prom.Histogram)
+		counters := make(map[string]prom.Counter)
+		latencies := make(map[string]prom.Histogram)
 
-		var registry = prom.NewRegistry()
+		registry := prom.NewRegistry()
 
 		for _, name := range funcNames {
 			counters[name] = mm.counter(name)

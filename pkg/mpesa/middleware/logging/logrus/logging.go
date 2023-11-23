@@ -34,7 +34,7 @@ func WithLogger(logger *log.Logger) mpesa.Option {
 
 func (lm *loggingMiddleware) Token() (resp mpesa.TokenResp, err error) {
 	defer func(begin time.Time) {
-		var fields = log.Fields{
+		fields := log.Fields{
 			"duration": time.Since(begin).String(),
 		}
 		switch err {
@@ -51,7 +51,7 @@ func (lm *loggingMiddleware) Token() (resp mpesa.TokenResp, err error) {
 
 func (lm *loggingMiddleware) ExpressQuery(eqReq mpesa.ExpressQueryReq) (resp mpesa.ExpressQueryResp, err error) {
 	defer func(begin time.Time) {
-		var fields = log.Fields{
+		fields := log.Fields{
 			"duration":          time.Since(begin).String(),
 			"BusinessShortCode": eqReq.BusinessShortCode,
 			"CheckoutRequestID": eqReq.CheckoutRequestID,
@@ -70,7 +70,7 @@ func (lm *loggingMiddleware) ExpressQuery(eqReq mpesa.ExpressQueryReq) (resp mpe
 
 func (lm *loggingMiddleware) ExpressSimulate(eReq mpesa.ExpressSimulateReq) (resp mpesa.ExpressSimulateResp, err error) {
 	defer func(begin time.Time) {
-		var fields = log.Fields{
+		fields := log.Fields{
 			"duration":          time.Since(begin).String(),
 			"BusinessShortCode": eReq.BusinessShortCode,
 			"TransactionType":   eReq.TransactionType,
@@ -94,7 +94,7 @@ func (lm *loggingMiddleware) ExpressSimulate(eReq mpesa.ExpressSimulateReq) (res
 
 func (lm *loggingMiddleware) B2CPayment(b2cReq mpesa.B2CPaymentReq) (resp mpesa.B2CPaymentResp, err error) {
 	defer func(begin time.Time) {
-		var fields = log.Fields{
+		fields := log.Fields{
 			"duration":               time.Since(begin).String(),
 			"InitiatorName":          b2cReq.InitiatorName,
 			"OriginatorConversation": b2cReq.OriginatorConversationID,
@@ -118,7 +118,7 @@ func (lm *loggingMiddleware) B2CPayment(b2cReq mpesa.B2CPaymentReq) (resp mpesa.
 
 func (lm *loggingMiddleware) AccountBalance(abReq mpesa.AccountBalanceReq) (resp mpesa.AccountBalanceResp, err error) {
 	defer func(begin time.Time) {
-		var fields = log.Fields{
+		fields := log.Fields{
 			"duration":           time.Since(begin).String(),
 			"CommandID":          abReq.CommandID,
 			"PartyA":             abReq.PartyA,
@@ -140,7 +140,7 @@ func (lm *loggingMiddleware) AccountBalance(abReq mpesa.AccountBalanceReq) (resp
 
 func (lm *loggingMiddleware) C2BRegisterURL(c2bReq mpesa.C2BRegisterURLReq) (resp mpesa.C2BRegisterURLResp, err error) {
 	defer func(begin time.Time) {
-		var fields = log.Fields{
+		fields := log.Fields{
 			"duration":     time.Since(begin).String(),
 			"ResponseType": c2bReq.ResponseType,
 			"ShortCode":    c2bReq.ShortCode,
@@ -159,7 +159,7 @@ func (lm *loggingMiddleware) C2BRegisterURL(c2bReq mpesa.C2BRegisterURLReq) (res
 
 func (lm *loggingMiddleware) C2BSimulate(c2bReq mpesa.C2BSimulateReq) (resp mpesa.C2BSimulateResp, err error) {
 	defer func(begin time.Time) {
-		var fields = log.Fields{
+		fields := log.Fields{
 			"duration":      time.Since(begin).String(),
 			"CommandID":     c2bReq.CommandID,
 			"Amount":        c2bReq.Amount,
@@ -181,7 +181,7 @@ func (lm *loggingMiddleware) C2BSimulate(c2bReq mpesa.C2BSimulateReq) (resp mpes
 
 func (lm *loggingMiddleware) GenerateQR(qReq mpesa.GenerateQRReq) (resp mpesa.GenerateQRResp, err error) {
 	defer func(begin time.Time) {
-		var fields = log.Fields{
+		fields := log.Fields{
 			"duration":     time.Since(begin).String(),
 			"MerchantName": qReq.MerchantName,
 			"RefNo":        qReq.RefNo,
@@ -204,7 +204,7 @@ func (lm *loggingMiddleware) GenerateQR(qReq mpesa.GenerateQRReq) (resp mpesa.Ge
 
 func (lm *loggingMiddleware) Reverse(rReq mpesa.ReverseReq) (resp mpesa.ReverseResp, err error) {
 	defer func(begin time.Time) {
-		var fields = log.Fields{
+		fields := log.Fields{
 			"duration":               time.Since(begin).String(),
 			"CommandID":              rReq.CommandID,
 			"InitiatorName":          rReq.InitiatorName,
@@ -227,7 +227,7 @@ func (lm *loggingMiddleware) Reverse(rReq mpesa.ReverseReq) (resp mpesa.ReverseR
 
 func (lm *loggingMiddleware) TransactionStatus(tReq mpesa.TransactionStatusReq) (resp mpesa.TransactionStatusResp, err error) {
 	defer func(begin time.Time) {
-		var fields = log.Fields{
+		fields := log.Fields{
 			"duration":       time.Since(begin).String(),
 			"CommandID":      tReq.CommandID,
 			"Initiator":      tReq.InitiatorName,
@@ -249,7 +249,7 @@ func (lm *loggingMiddleware) TransactionStatus(tReq mpesa.TransactionStatusReq) 
 
 func (lm *loggingMiddleware) RemitTax(rReq mpesa.RemitTaxReq) (resp mpesa.RemitTaxResp, err error) {
 	defer func(begin time.Time) {
-		var fields = log.Fields{
+		fields := log.Fields{
 			"duration":               time.Since(begin).String(),
 			"CommandID":              rReq.CommandID,
 			"InitiatorName":          rReq.InitiatorName,
@@ -274,7 +274,7 @@ func (lm *loggingMiddleware) RemitTax(rReq mpesa.RemitTaxReq) (resp mpesa.RemitT
 
 func (lm *loggingMiddleware) BusinessPayBill(bReq mpesa.BusinessPayBillReq) (resp mpesa.BusinessPayBillResp, err error) {
 	defer func(begin time.Time) {
-		var fields = log.Fields{
+		fields := log.Fields{
 			"duration":               time.Since(begin).String(),
 			"Initiator":              bReq.Initiator,
 			"CommandID":              bReq.CommandID,

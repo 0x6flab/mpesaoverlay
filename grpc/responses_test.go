@@ -13,17 +13,15 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var (
-	validGRPCResp = &grpc.ValidResp{
-		OriginatorConversationID: "AG_20230907_2010325b025970fde878",
-		ConversationID:           "AG_20230907_2010325b025970fde878",
-		ResponseDescription:      "Accept the service request successfully.",
-		ResponseCode:             "0",
-	}
-)
+var validGRPCResp = &grpc.ValidResp{
+	OriginatorConversationID: "AG_20230907_2010325b025970fde878",
+	ConversationID:           "AG_20230907_2010325b025970fde878",
+	ResponseDescription:      "Accept the service request successfully.",
+	ResponseCode:             "0",
+}
 
 func TestAccountBalanceResp(t *testing.T) {
-	var resp = grpc.AccountBalanceResp{
+	resp := grpc.AccountBalanceResp{
 		ValidResp: validGRPCResp,
 	}
 
@@ -49,7 +47,7 @@ func TestAccountBalanceResp(t *testing.T) {
 }
 
 func TestB2CPaymentResp(t *testing.T) {
-	var resp = grpc.B2CPaymentResp{
+	resp := grpc.B2CPaymentResp{
 		ValidResp: validGRPCResp,
 	}
 
@@ -75,7 +73,7 @@ func TestB2CPaymentResp(t *testing.T) {
 }
 
 func TestC2BRegisterURLResp(t *testing.T) {
-	var resp = grpc.C2BRegisterURLResp{
+	resp := grpc.C2BRegisterURLResp{
 		ValidResp: validGRPCResp,
 	}
 
@@ -101,7 +99,7 @@ func TestC2BRegisterURLResp(t *testing.T) {
 }
 
 func TestC2BSimulateResp(t *testing.T) {
-	var resp = grpc.C2BSimulateResp{
+	resp := grpc.C2BSimulateResp{
 		ValidResp: validGRPCResp,
 	}
 
@@ -127,7 +125,7 @@ func TestC2BSimulateResp(t *testing.T) {
 }
 
 func TestExpressQueryResp(t *testing.T) {
-	var resp = grpc.ExpressQueryResp{
+	resp := grpc.ExpressQueryResp{
 		ResponseDescription: "The service request has been accepted successsfully",
 		ResponseCode:        "0",
 		MerchantRequestID:   "92643-47073138-2",
@@ -184,7 +182,7 @@ func TestExpressQueryResp(t *testing.T) {
 }
 
 func TestExpressSimulateResp(t *testing.T) {
-	var resp = grpc.ExpressSimulateResp{
+	resp := grpc.ExpressSimulateResp{
 		ResponseDescription: "Success. Request accepted for processing",
 		ResponseCode:        "0",
 		MerchantRequestID:   "27260-79456854-2",
@@ -231,7 +229,7 @@ func TestExpressSimulateResp(t *testing.T) {
 }
 
 func TestGenerateQRResp(t *testing.T) {
-	var resp = grpc.GenerateQRResp{
+	resp := grpc.GenerateQRResp{
 		ResponseDescription: "The service request is processed successfully.",
 		ResponseCode:        "00",
 		RequestID:           "QRCode:...",
@@ -273,7 +271,7 @@ func TestGenerateQRResp(t *testing.T) {
 }
 
 func TestRemitTaxResp(t *testing.T) {
-	var resp = grpc.RemitTaxResp{
+	resp := grpc.RemitTaxResp{
 		ValidResp: validGRPCResp,
 	}
 
@@ -299,7 +297,7 @@ func TestRemitTaxResp(t *testing.T) {
 }
 
 func TestRespError(t *testing.T) {
-	var resp = grpc.RespError{
+	resp := grpc.RespError{
 		RequestID: "AG_20230907_2010325b025970fde878",
 		Code:      "500",
 		Message:   "Internal Server Error",
@@ -336,7 +334,7 @@ func TestRespError(t *testing.T) {
 }
 
 func TestReverseResp(t *testing.T) {
-	var resp = grpc.ReverseResp{
+	resp := grpc.ReverseResp{
 		ValidResp: validGRPCResp,
 	}
 
@@ -362,7 +360,7 @@ func TestReverseResp(t *testing.T) {
 }
 
 func TestTokenResp(t *testing.T) {
-	var resp = grpc.TokenResp{
+	resp := grpc.TokenResp{
 		AccessToken: "access_token",
 		Expiry:      "3600",
 	}
@@ -394,7 +392,7 @@ func TestTokenResp(t *testing.T) {
 }
 
 func TestTransactionStatusResp(t *testing.T) {
-	var resp = grpc.TransactionStatusResp{
+	resp := grpc.TransactionStatusResp{
 		ValidResp: validGRPCResp,
 	}
 
@@ -420,7 +418,7 @@ func TestTransactionStatusResp(t *testing.T) {
 }
 
 func TestValidResp(t *testing.T) {
-	var resp = validGRPCResp
+	resp := validGRPCResp
 
 	val := resp.String()
 	assert.NotEmpty(t, val)
@@ -457,7 +455,7 @@ func TestValidResp(t *testing.T) {
 }
 
 func TestBusinessPayBillResp(t *testing.T) {
-	var resp = grpc.BusinessPayBillResp{
+	resp := grpc.BusinessPayBillResp{
 		ValidResp: validGRPCResp,
 	}
 

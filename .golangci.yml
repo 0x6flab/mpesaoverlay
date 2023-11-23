@@ -1,49 +1,28 @@
+run:
+  timeout: 3m
+
+issues:
+  max-issues-per-linter: 10
+  max-same-issues: 10
+
 linters:
-  disable-all: true
+  enable-all: true
   fast: true
-  enable:
-    - goheader
-    - godot
-    - errcheck
-    - gosimple
-    - govet
-    - ineffassign
-    - staticcheck
-    - typecheck
-    - unused
-    - bodyclose
-    - durationcheck
-    - exhaustive
-    - goconst
+  disable:
     - misspell
-    - makezero
-    - nakedret
-    - nestif
-    - nilerr
-    - nilnil
-    - rowserrcheck
-    - stylecheck
-    - tenv
-    - unconvert
-    - unparam
-    - wastedassign
-    - containedctx
-    - revive
-    - gocritic
-    - whitespace
-    - errorlint
-    - contextcheck
-    - dogsled
-    - errname
-    - funlen
-    - gci
-    - goerr113
-    - gofmt
-    - goimports
-    - loggercheck
-    - nilnil
-    - nilerr
-    - nlreturn
+    - lll
+    - wsl
+    - depguard
+    - scopelint
+    - nosnakecase
+    - ifshort
+    - gocognit
+    - gochecknoinits
+    - dupl
+    - testpackage
+    - tagliatelle
+    - interfacebloat
+    - forcetypeassert
 
 linters-settings:
   goheader:
@@ -59,3 +38,6 @@ linters-settings:
   funlen:
     lines: -1
     statements: -1
+  gomnd:
+    ignored-files:
+      - "example/.*/.*/main.go"

@@ -13,9 +13,9 @@ import (
 
 // AccountBalance gets the account balance from the mpesa api.
 func AccountBalance(sdk mpesa.SDK) error {
-	var req = mpesa.AccountBalanceReq{}
+	req := mpesa.AccountBalanceReq{}
 
-	var qs = []*survey.Question{
+	qs := []*survey.Question{
 		{
 			Name: "InitiatorName",
 			Prompt: &survey.Input{
