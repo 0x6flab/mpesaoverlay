@@ -63,7 +63,7 @@ func TestToken(t *testing.T) {
 				w.WriteHeader(tc.statusCode)
 
 				if tc.statusCode == http.StatusOK {
-					var tr = TokenResp{
+					tr := TokenResp{
 						AccessToken: tc.expectedToken,
 						Expiry:      tc.expectedExpiry,
 					}

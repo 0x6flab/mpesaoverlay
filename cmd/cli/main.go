@@ -25,7 +25,7 @@ import (
 type Config struct {
 	ConsumerKey    string `env:"MPESA_CONSUMER_KEY"`
 	ConsumerSecret string `env:"MPESA_CONSUMER_SECRET"`
-	BaseURL        string `env:"MPESA_BASE_URL"         envDefault:"https://sandbox.safaricom.co.ke"`
+	BaseURL        string `env:"MPESA_BASE_URL"        envDefault:"https://sandbox.safaricom.co.ke"`
 }
 
 var help = `Mpesa Daraja CLI
@@ -34,7 +34,7 @@ var help = `Mpesa Daraja CLI
 	`
 
 func main() {
-	var cfg = Config{}
+	cfg := Config{}
 	if err := env.Parse(&cfg); err != nil {
 		log.Fatalf(fmt.Sprintf("failed to parse env: %v", err))
 	}

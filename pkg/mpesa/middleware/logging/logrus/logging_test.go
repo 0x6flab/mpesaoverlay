@@ -29,7 +29,7 @@ var (
 )
 
 func generateMockLoggingMiddleware(sdk mpesa.SDK) *loggingMiddleware {
-	var lm = &loggingMiddleware{
+	lm := &loggingMiddleware{
 		logger: logrus.New(),
 		sdk:    sdk,
 	}

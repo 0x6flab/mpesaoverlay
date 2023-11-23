@@ -12,9 +12,9 @@ import (
 )
 
 func QRCode(sdk mpesa.SDK) error {
-	var req = mpesa.GenerateQRReq{}
+	req := mpesa.GenerateQRReq{}
 
-	var qs = []*survey.Question{
+	qs := []*survey.Question{
 		{
 			Name: "MerchantName",
 			Prompt: &survey.Input{

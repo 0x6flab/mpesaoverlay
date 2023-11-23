@@ -12,9 +12,9 @@ import (
 )
 
 func RemitTax(sdk mpesa.SDK) error {
-	var req = mpesa.RemitTaxReq{}
+	req := mpesa.RemitTaxReq{}
 
-	var qs = []*survey.Question{
+	qs := []*survey.Question{
 		{
 			Name: "InitiatorName",
 			Prompt: &survey.Input{

@@ -55,7 +55,7 @@ func (pm *postgresMiddleware) Token() (resp mpesa.TokenResp, err error) {
 
 func (pm *postgresMiddleware) ExpressQuery(eqReq mpesa.ExpressQueryReq) (resp mpesa.ExpressQueryResp, err error) {
 	defer func() {
-		var req = expressQueryReq{
+		req := expressQueryReq{
 			ExpressQueryReq: eqReq,
 			id:              ulid.Make().String(),
 		}
@@ -67,7 +67,7 @@ func (pm *postgresMiddleware) ExpressQuery(eqReq mpesa.ExpressQueryReq) (resp mp
 
 func (pm *postgresMiddleware) ExpressSimulate(eReq mpesa.ExpressSimulateReq) (resp mpesa.ExpressSimulateResp, err error) {
 	defer func() {
-		var req = expressSimulateReq{
+		req := expressSimulateReq{
 			ExpressSimulateReq: eReq,
 			id:                 ulid.Make().String(),
 		}
@@ -79,7 +79,7 @@ func (pm *postgresMiddleware) ExpressSimulate(eReq mpesa.ExpressSimulateReq) (re
 
 func (pm *postgresMiddleware) B2CPayment(b2cReq mpesa.B2CPaymentReq) (resp mpesa.B2CPaymentResp, err error) {
 	defer func() {
-		var req = b2cPaymentReq{
+		req := b2cPaymentReq{
 			B2CPaymentReq: b2cReq,
 			id:            ulid.Make().String(),
 		}
@@ -91,7 +91,7 @@ func (pm *postgresMiddleware) B2CPayment(b2cReq mpesa.B2CPaymentReq) (resp mpesa
 
 func (pm *postgresMiddleware) AccountBalance(abReq mpesa.AccountBalanceReq) (resp mpesa.AccountBalanceResp, err error) {
 	defer func() {
-		var req = accountBalanceReq{
+		req := accountBalanceReq{
 			AccountBalanceReq: abReq,
 			id:                ulid.Make().String(),
 		}
@@ -103,7 +103,7 @@ func (pm *postgresMiddleware) AccountBalance(abReq mpesa.AccountBalanceReq) (res
 
 func (pm *postgresMiddleware) C2BRegisterURL(c2bReq mpesa.C2BRegisterURLReq) (resp mpesa.C2BRegisterURLResp, err error) {
 	defer func() {
-		var req = c2bRegisterURLReq{
+		req := c2bRegisterURLReq{
 			C2BRegisterURLReq: c2bReq,
 			id:                ulid.Make().String(),
 		}
@@ -115,7 +115,7 @@ func (pm *postgresMiddleware) C2BRegisterURL(c2bReq mpesa.C2BRegisterURLReq) (re
 
 func (pm *postgresMiddleware) C2BSimulate(c2bReq mpesa.C2BSimulateReq) (resp mpesa.C2BSimulateResp, err error) {
 	defer func() {
-		var req = c2bSimulateReq{
+		req := c2bSimulateReq{
 			C2BSimulateReq: c2bReq,
 			id:             ulid.Make().String(),
 		}
@@ -127,7 +127,7 @@ func (pm *postgresMiddleware) C2BSimulate(c2bReq mpesa.C2BSimulateReq) (resp mpe
 
 func (pm *postgresMiddleware) GenerateQR(gqrReq mpesa.GenerateQRReq) (resp mpesa.GenerateQRResp, err error) {
 	defer func() {
-		var req = generateQRReq{
+		req := generateQRReq{
 			GenerateQRReq: gqrReq,
 			id:            ulid.Make().String(),
 		}
@@ -139,7 +139,7 @@ func (pm *postgresMiddleware) GenerateQR(gqrReq mpesa.GenerateQRReq) (resp mpesa
 
 func (pm *postgresMiddleware) Reverse(rReq mpesa.ReverseReq) (resp mpesa.ReverseResp, err error) {
 	defer func() {
-		var req = reverseReq{
+		req := reverseReq{
 			ReverseReq: rReq,
 			id:         ulid.Make().String(),
 		}
@@ -151,7 +151,7 @@ func (pm *postgresMiddleware) Reverse(rReq mpesa.ReverseReq) (resp mpesa.Reverse
 
 func (pm *postgresMiddleware) TransactionStatus(tsReq mpesa.TransactionStatusReq) (resp mpesa.TransactionStatusResp, err error) {
 	defer func() {
-		var req = transactionStatusReq{
+		req := transactionStatusReq{
 			TransactionStatusReq: tsReq,
 			id:                   ulid.Make().String(),
 		}
@@ -163,7 +163,7 @@ func (pm *postgresMiddleware) TransactionStatus(tsReq mpesa.TransactionStatusReq
 
 func (pm *postgresMiddleware) RemitTax(rtReq mpesa.RemitTaxReq) (resp mpesa.RemitTaxResp, err error) {
 	defer func() {
-		var req = remitTaxReq{
+		req := remitTaxReq{
 			RemitTaxReq: rtReq,
 			id:          ulid.Make().String(),
 		}
@@ -175,7 +175,7 @@ func (pm *postgresMiddleware) RemitTax(rtReq mpesa.RemitTaxReq) (resp mpesa.Remi
 
 func (pm *postgresMiddleware) BusinessPayBill(bpbReq mpesa.BusinessPayBillReq) (resp mpesa.BusinessPayBillResp, err error) {
 	defer func() {
-		var req = businessPayBillReq{
+		req := businessPayBillReq{
 			BusinessPayBillReq: bpbReq,
 			id:                 ulid.Make().String(),
 		}

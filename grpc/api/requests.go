@@ -8,8 +8,7 @@ package api
 
 import "github.com/0x6flab/mpesaoverlay/pkg/mpesa"
 
-type tokenReq struct {
-}
+type tokenReq struct{}
 
 func (req tokenReq) validate() error {
 	return nil

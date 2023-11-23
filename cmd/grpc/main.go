@@ -40,14 +40,14 @@ const (
 )
 
 type config struct {
-	LogLevel       string `env:"MO_LOG_LEVEL"            envDefault:"info"`
+	LogLevel       string `env:"MO_LOG_LEVEL"          envDefault:"info"`
 	ConsumerKey    string `env:"MPESA_CONSUMER_KEY"`
 	ConsumerSecret string `env:"MPESA_CONSUMER_SECRET"`
-	BaseURL        string `env:"MPESA_BASE_URL"          envDefault:"https://sandbox.safaricom.co.ke"`
-	GRPCURL        string `env:"MO_GRPC_URL"             envDefault:"localhost:9000"`
+	BaseURL        string `env:"MPESA_BASE_URL"        envDefault:"https://sandbox.safaricom.co.ke"`
+	GRPCURL        string `env:"MO_GRPC_URL"           envDefault:"localhost:9000"`
 	GRPCServerCert string `env:"MO_GRPC_SERVER_CERT"`
 	GRPCServerKey  string `env:"MO_GRPC_SERVER_KEY"`
-	PrometheusURL  string `env:"MO_PROMETHEUS_URL"       envDefault:""`
+	PrometheusURL  string `env:"MO_PROMETHEUS_URL"     envDefault:""`
 }
 
 func main() {
@@ -93,7 +93,7 @@ func newService(cfg config, logger *zap.Logger) (grpcadapter.Service, error) {
 		AppKey:    cfg.ConsumerKey,
 		AppSecret: cfg.ConsumerSecret,
 	}
-	var opts = []mpesa.Option{zapm.WithLogger(logger)}
+	opts := []mpesa.Option{zapm.WithLogger(logger)}
 	if cfg.PrometheusURL != "" {
 		opts = append(opts, prometheusm.WithMetrics(svcName, cfg.PrometheusURL))
 	}

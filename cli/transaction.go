@@ -12,9 +12,9 @@ import (
 )
 
 func TransactionStatus(sdk mpesa.SDK) error {
-	var req = mpesa.TransactionStatusReq{}
+	req := mpesa.TransactionStatusReq{}
 
-	var qs = []*survey.Question{
+	qs := []*survey.Question{
 		{
 			Name: "InitiatorName",
 			Prompt: &survey.Input{

@@ -13,9 +13,9 @@ import (
 
 // C2BRegisterURL registers the confirmation and validation urls.
 func C2BRegisterURL(sdk mpesa.SDK) error {
-	var req = mpesa.C2BRegisterURLReq{}
+	req := mpesa.C2BRegisterURLReq{}
 
-	var qs = []*survey.Question{
+	qs := []*survey.Question{
 		{
 			Name: "ShortCode",
 			Prompt: &survey.Input{
@@ -77,9 +77,9 @@ func C2BRegisterURL(sdk mpesa.SDK) error {
 }
 
 func C2BSimulate(sdk mpesa.SDK) error {
-	var req = mpesa.C2BSimulateReq{}
+	req := mpesa.C2BSimulateReq{}
 
-	var qs = []*survey.Question{
+	qs := []*survey.Question{
 		{
 			Name: "CommandID",
 			Prompt: &survey.Select{

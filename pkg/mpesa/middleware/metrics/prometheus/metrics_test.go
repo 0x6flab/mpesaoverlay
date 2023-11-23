@@ -77,15 +77,15 @@ func TestMain(m *testing.M) {
 }
 
 func generateMockMetricsMiddleware(sdk mpesa.SDK) *metricsMiddleware {
-	var mm = &metricsMiddleware{
+	mm := &metricsMiddleware{
 		svcName: "test",
 		sdk:     sdk,
 	}
 
-	var counters = make(map[string]prom.Counter)
-	var latencies = make(map[string]prom.Histogram)
+	counters := make(map[string]prom.Counter)
+	latencies := make(map[string]prom.Histogram)
 
-	var registry = prom.NewRegistry()
+	registry := prom.NewRegistry()
 
 	for _, name := range funcNames {
 		counters[name] = mm.counter(name)
