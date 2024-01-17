@@ -5,7 +5,7 @@ go 1.21
 require (
 	github.com/AlecAivazis/survey/v2 v2.3.7
 	github.com/caarlos0/env/v9 v9.0.0
-	github.com/choria-io/fisk v0.6.1
+	github.com/choria-io/fisk v0.6.2
 	github.com/eclipse/paho.mqtt.golang v1.4.3
 	github.com/fatih/color v1.16.0
 	github.com/go-kit/kit v0.13.0
