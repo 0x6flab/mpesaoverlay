@@ -10,7 +10,7 @@ require (
 	github.com/fatih/color v1.16.0
 	github.com/go-kit/kit v0.13.0
 	github.com/hokaccha/go-prettyjson v0.0.0-20211117102719-0474bc63780f
-	github.com/mochi-mqtt/server/v2 v2.4.2
+	github.com/mochi-mqtt/server/v2 v2.4.5
 	github.com/oklog/ulid/v2 v2.1.0
 	github.com/ory/dockertest/v3 v3.10.0
 	github.com/prometheus/client_golang v1.18.0
