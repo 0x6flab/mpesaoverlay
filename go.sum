@@ -103,8 +103,8 @@ github.com/mitchellh/mapstructure v1.5.0 h1:jeMsZIYE/09sWLaz43PL7Gy6RuMjD2eJVyua
 github.com/mitchellh/mapstructure v1.5.0/go.mod h1:bFUtVrKA4DC2yAKiSyO/QUcy7e+RRV2QTWOzhPopBRo=
 github.com/moby/term v0.0.0-20201216013528-df9cb8a40635 h1:rzf0wL0CHVc8CEsgyygG0Mn9CNCCPZqOPaz8RiiHYQk=
 github.com/moby/term v0.0.0-20201216013528-df9cb8a40635/go.mod h1:FBS0z0QWA44HXygs7VXDUOGoN/1TV3RuWkLO04am3wc=
-github.com/mochi-mqtt/server/v2 v2.4.5 h1:qbmMOmEk4NjFF8xeD+jcYcRFNwaT5mS808qLAfJrgIQ=
-github.com/mochi-mqtt/server/v2 v2.4.5/go.mod h1:M1lZnLbyowXUyQBIlHYlX1wasxXqv/qFWwQxAzfphwA=
+github.com/mochi-mqtt/server/v2 v2.4.6 h1:3iaQLG4hD/2vSh0Rwu4+h//KUcWR2zAKQIxhJuoJmCg=
+github.com/mochi-mqtt/server/v2 v2.4.6/go.mod h1:M1lZnLbyowXUyQBIlHYlX1wasxXqv/qFWwQxAzfphwA=
 github.com/oklog/ulid/v2 v2.1.0 h1:+9lhoxAP56we25tyYETBBY1YLA2SaoLvUFgrP2miPJU=
 github.com/oklog/ulid/v2 v2.1.0/go.mod h1:rcEKHmBBKfef9DhnvX7y1HZBYxjXb0cP5ExxNsTT1QQ=
 github.com/opencontainers/go-digest v1.0.0 h1:apOUWs51W5PlhuyGyz9FCeeBIOUDA/6nW8Oi/yOhh5U=
