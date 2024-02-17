@@ -43,7 +43,7 @@ func TestMain(m *testing.M) {
 
 	container, err := pool.RunWithOptions(&dockertest.RunOptions{
 		Repository: "postgres",
-		Tag:        "15.1-alpine",
+		Tag:        "16.1-alpine",
 		Env: []string{
 			"POSTGRES_USER=test",
 			"POSTGRES_PASSWORD=test",
@@ -63,11 +63,8 @@ func TestMain(m *testing.M) {
 
 	if err := pool.Retry(func() error {
 		_, err := gorm.Open(postgres.Open(url), &gorm.Config{})
-		if err != nil {
-			return err
-		}
 
-		return nil
+		return err
 	}); err != nil {
 		t.Logf("Could not connect to docker: %s", err)
 		t.FailNow()
