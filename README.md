@@ -10,6 +10,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/0x6flab/mpesaoverlay)](https://goreportcard.com/report/github.com/0x6flab/mpesaoverlay)
 [![Coverage Status](https://coveralls.io/repos/github/0x6flab/mpesaoverlay/badge.svg?branch=main)](https://coveralls.io/github/0x6flab/mpesaoverlay?branch=main)
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/7896/badge)](https://www.bestpractices.dev/projects/7896)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2F0x6flab%2Fmpesaoverlay.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2F0x6flab%2Fmpesaoverlay?ref=badge_shield)
 
 MpesaOverlay is modern, scalable, secure open source and patent-free API overlay for the Daraja API by Safaricom written in Go.
 
@@ -43,3 +44,7 @@ MpesaOverlay platform is comprised of the following services:
 - mpesa-cli Command line interface
 
 ![Mpesa Overlay Architecture](docs/assets/architecture.png)
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2F0x6flab%2Fmpesaoverlay.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2F0x6flab%2Fmpesaoverlay?ref=badge_large)
