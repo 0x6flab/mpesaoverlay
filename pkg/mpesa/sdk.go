@@ -53,7 +53,7 @@ var _ SDK = (*mSDK)(nil)
 
 // SDK contains MpesaOverlay interface API.
 //
-//go:generate mockery --name SDK
+//go:generate mockery --name SDK --output=./mocks --filename SDK.go --quiet --note "Copyright (c) MpesaOverlay. All rights reserved."
 type SDK interface {
 	// GetToken gives you a time bound access token to call allowed APIs.
 	//

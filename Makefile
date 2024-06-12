@@ -82,9 +82,9 @@ lint:
 	golangci-lint run
 
 test:
-	go install github.com/vektra/mockery/v2@latest
+	go install github.com/vektra/mockery/v2@v2.42.0
 	go generate ./...
-	go test -v -race -count 1 -tags test -covermode=atomic -coverprofile cover.out $(shell go list ./... | grep -v 'vendor\|cmd')
+	go test -v -race -covermode=atomic -coverprofile cover.out $(shell go list ./... | grep -v "example|cmd|cli|mocks")
 
 version:
 	standard-version
@@ -102,6 +102,7 @@ proto:
 	sed -i 's,package proto;,package mpesaoverlay.grpc;\noption go_package = "./grpc";,g' grpc/responses.proto
 	sed -i 's/uint8/uint32/g' grpc/responses.proto
 	protoc -I. --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative grpc/*.proto
+
 cert:
 	openssl req -x509 -nodes -days 365 -newkey rsa:4096 -keyout docker/certs/cert.key -out docker/certs/cert.crt -subj "/C=KE/ST=Nairobi/L=Nairobi/O=0x6flab/CN=mpesaoverlay" && \
 	chmod 644 docker/certs/cert.key && \
