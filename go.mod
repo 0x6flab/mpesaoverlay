@@ -7,7 +7,7 @@ require (
 	github.com/caarlos0/env/v9 v9.0.0
 	github.com/choria-io/fisk v0.6.2
 	github.com/eclipse/paho.mqtt.golang v1.4.3
-	github.com/fatih/color v1.16.0
+	github.com/fatih/color v1.17.0
 	github.com/go-kit/kit v0.13.0
 	github.com/hokaccha/go-prettyjson v0.0.0-20211117102719-0474bc63780f
 	github.com/mochi-mqtt/server/v2 v2.4.6
